@@ -1,0 +1,48 @@
+<div>
+    <h>CTML</h>
+    <p>ctml outer structure</p>
+    <?
+        func void recursion(int num, Csv file) {
+            if(num > 10) {
+                return;
+            }
+
+            head(file[0][i]);
+            par(file[1][i]);
+            num = num + 1;
+            recursion(num);
+        }
+
+        {
+            Csv file = load("C://Desktop//file.csv");
+            head("Test");
+            
+            int i = 0;
+
+            while(i < 10) {
+                link(file[0][i], file[1][i]);
+                i = i + 1;
+            }
+
+            Csv file2 = load("C://Desktop//file2.csv")
+            recursion(0, file2);
+
+            String name = "Anthony";
+            String surname = "Kowalsky";
+            float salary = 15000.50;
+
+            Table {
+                Row {
+                    column("Name");
+                    column("Surname");
+                    column("Salary");
+                }
+                Row {
+                    table_item(name);
+                    table_item(surname);
+                    table_item(salary);
+                }
+            }
+        }
+    ?>
+</div>

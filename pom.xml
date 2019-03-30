@@ -24,7 +24,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.tkom.ctml.Main</mainClass>
+                            <mainClass>ctml.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
