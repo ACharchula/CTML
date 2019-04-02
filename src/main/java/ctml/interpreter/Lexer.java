@@ -14,6 +14,7 @@ class Lexer {
     private char tokenChar;
     private int lineCounter = 1;
     private int charCounter = 1;
+    private boolean readCTML = false;
 
 
     Lexer(InputStream inputStream) {
@@ -44,30 +45,69 @@ class Lexer {
         final StringBuilder stringBuilder = new StringBuilder();
         Token token = null;
 
-        if (tokenChar == 0 || Character.isSpaceChar(tokenChar) || tokenChar == '\r' ) {
-            tokenChar = getNextChar();
+        if (!readCTML) {
 
-            while (continueReading()) {
+            if (tokenChar == 0 )
                 tokenChar = getNextChar();
+            else if (inputStream.available() == 0) {
+                stringBuilder.append(tokenChar);
+                return new Token(stringBuilder.toString(), TokenType.END);
+            }
+
+            stringBuilder.append(tokenChar);
+
+            if (tokenChar == '<' ) {
+                if((tokenChar = getNextChar()) == '?') {
+                    readCTML = true;
+                    stringBuilder.append(tokenChar);
+                    tokenChar = getNextChar();
+                    return new Token(stringBuilder.toString(), TokenType.CTML_START);
+                } else {
+                    stringBuilder.append(tokenChar);
+                }
+            }
+
+            tokenChar = getNextChar();
+            return new Token(stringBuilder.toString(), TokenType.HTML_CONTENT);
+
+        } else {
+
+            if (tokenChar == 0 || Character.isSpaceChar(tokenChar) || tokenChar == '\r') {
+                tokenChar = getNextChar();
+
+                while (continueReading()) {
+                    tokenChar = getNextChar();
+                }
+            }
+
+            if (Character.isSpaceChar(tokenChar))
+                return new Token(stringBuilder.toString(), TokenType.UNDEFINED);
+
+            stringBuilder.append(tokenChar);
+
+            if (Character.isDigit(tokenChar)) {
+                token = buildNumberToken(stringBuilder);
+            } else if(tokenChar == '\"'){
+                token = buildString(stringBuilder);
+            } else if (Character.isLetter(tokenChar)) {
+                token = buildIdOrKeyword(stringBuilder);
+            } else {
+                token = buildOperator(stringBuilder);
             }
         }
 
-        if (Character.isSpaceChar(tokenChar))
-            return new Token(stringBuilder.toString(), TokenType.UNDEFINED);
+        return token;
+    }
 
-        stringBuilder.append(tokenChar);
-
-        if(Character.isDigit(tokenChar)) {
-            token = buildNumberToken(stringBuilder);
-        } else if (Character.isLetter(tokenChar)) {
-            token = buildIdOrKeyword(stringBuilder);
-        } else {
-            token = buildOperator(stringBuilder);
+    private Token buildString(StringBuilder stringBuilder) throws Exception {
+        while((tokenChar = getNextChar()) != '\"') {
+            stringBuilder.append(tokenChar);
         }
 
-        return token;
+        stringBuilder.append(tokenChar);
+        tokenChar = getNextChar();
 
-
+        return new Token(stringBuilder.toString(), TokenType.STRING_CONTENT);
     }
 
     private Token buildOperator(StringBuilder stringBuilder) throws Exception {
@@ -80,6 +120,10 @@ class Lexer {
 
         if (inputStream.available() == 0)
             return new Token(stringBuilder.toString(), TokenType.END);
+        else if (tokenType == TokenType.CTML_END) {
+            readCTML = false;
+            return new Token(stringBuilder.toString(), TokenType.CTML_END);
+        }
         else if (tokenType != null)
             return new Token(stringBuilder.toString(), tokenType);
 
@@ -88,7 +132,7 @@ class Lexer {
     }
 
     private Token buildIdOrKeyword(StringBuilder stringBuilder) throws Exception {
-        while (Character.isLetter(tokenChar = getNextChar()) || Character.isDigit(tokenChar)) {
+        while (Character.isLetter(tokenChar = getNextChar()) || Character.isDigit(tokenChar) || tokenChar == '_') {
             stringBuilder.append(tokenChar);
         }
 
@@ -119,7 +163,8 @@ class Lexer {
                 (firstChar == '<' && secondChar == '=') ||
                 (firstChar == '&' && secondChar == '&') ||
                 (firstChar == '|' && secondChar == '|') ||
-                (firstChar == '!' && secondChar == '=')
+                (firstChar == '!' && secondChar == '=') ||
+                (firstChar == '?' && secondChar == '>')
                 );
     }
 }

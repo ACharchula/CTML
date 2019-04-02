@@ -15,9 +15,9 @@ public class Interpreter {
         Token token = null;
         token = lexer.nextToken();
         while(token.getType() != TokenType.END ) {
-            System.out.println(token.getTitle().concat(" "+token.getType().toString()));
+            System.out.printf("%20s %30s \n", token.getTitle(), token.getType().toString());
             token = lexer.nextToken();
         }
-        System.out.println(token.getTitle().concat(" "+token.getType().toString()));
+        System.out.printf("%10s %10s", token.getTitle(), token.getType().toString());
     }
 }

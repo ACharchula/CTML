@@ -34,9 +34,9 @@ public enum TokenType {
     VOID,
     INTEGER_TYPE,
     CSV_TYPE,
-    HEADER_TYPE,
+    HEADER,
     STRING_TYPE,
-    FLOAT,
+    FLOAT_TYPE,
     TABLE,
     ROW,
     COLUMN,
@@ -44,5 +44,13 @@ public enum TokenType {
     PERIOD,
     NEXT_LINE,
     SQUARE_BRACKET_OPEN,
-    SQUARE_BRACKET_CLOSE
+    SQUARE_BRACKET_CLOSE,
+    CTML_START,
+    CTML_END,
+    HTML_CONTENT,
+    STRING_CONTENT,
+    LOAD,
+    PARAGRAPH,
+    LINK,
+    IMAGE
 }
