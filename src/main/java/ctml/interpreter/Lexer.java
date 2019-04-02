@@ -12,9 +12,25 @@ class Lexer {
 
     private InputStream inputStream;
     private char tokenChar;
+
+    public int getLineCounter() {
+        return lineCounter;
+    }
+
+    public int getCharCounter() {
+        return charCounter;
+    }
+
     private int lineCounter = 1;
     private int charCounter = 1;
     private boolean readCTML = false;
+    private boolean lastCharWasEnter = false;
+
+    public boolean isEnd() {
+        return isEnd;
+    }
+
+    private boolean isEnd = false;
 
 
     Lexer(InputStream inputStream) {
@@ -28,11 +44,16 @@ class Lexer {
             nextChar = (char) inputStream.read();
 
             if (nextChar == '\n') {
-                lineCounter++;
-                charCounter = 1;
-                return getNextChar();
-            } else {
                 charCounter++;
+                lastCharWasEnter = true;
+            } else {
+                if(lastCharWasEnter) {
+                    lineCounter++;
+                    charCounter = 1;
+                    lastCharWasEnter = false;
+                } else {
+                    charCounter ++;
+                }
             }
         } catch (IOException e) {
             Logger.error("Cannot get next character in input at line " + lineCounter + " and position " + charCounter);
@@ -50,8 +71,9 @@ class Lexer {
             if (tokenChar == 0 )
                 tokenChar = getNextChar();
             else if (inputStream.available() == 0) {
+                isEnd = true;
                 stringBuilder.append(tokenChar);
-                return new Token(stringBuilder.toString(), TokenType.END);
+                return new Token(stringBuilder.toString(), TokenType.HTML_CONTENT);
             }
 
             stringBuilder.append(tokenChar);
@@ -63,7 +85,7 @@ class Lexer {
                     tokenChar = getNextChar();
                     return new Token(stringBuilder.toString(), TokenType.CTML_START);
                 } else {
-                    stringBuilder.append(tokenChar);
+                    return new Token(stringBuilder.toString(), TokenType.HTML_CONTENT);
                 }
             }
 
@@ -100,8 +122,14 @@ class Lexer {
     }
 
     private Token buildString(StringBuilder stringBuilder) throws Exception {
-        while((tokenChar = getNextChar()) != '\"') {
+        while((tokenChar = getNextChar()) != '\"' && inputStream.available() != 0) {
             stringBuilder.append(tokenChar);
+
+            if (tokenChar == '\\') {
+                //if( (tokenChar = getNextChar()) == '\"') {
+                    stringBuilder.append(tokenChar = getNextChar());
+
+            }
         }
 
         stringBuilder.append(tokenChar);
@@ -118,12 +146,20 @@ class Lexer {
 
         TokenType tokenType = PredefinedTokens.OPERATORS.get(stringBuilder.toString());
 
-        if (inputStream.available() == 0)
-            return new Token(stringBuilder.toString(), TokenType.END);
+        if (inputStream.available() == 0) {
+            isEnd = true;
+            return new Token(stringBuilder.toString(), tokenType);
+        }
         else if (tokenType == TokenType.CTML_END) {
             readCTML = false;
             return new Token(stringBuilder.toString(), TokenType.CTML_END);
-        }
+        } else if (tokenType == TokenType.COMMENT) {
+            while(tokenChar != '\n') {
+                tokenChar = getNextChar();
+            }
+            return nextToken();
+        } else if (tokenType == TokenType.NEXT_LINE)
+            return nextToken();
         else if (tokenType != null)
             return new Token(stringBuilder.toString(), tokenType);
 
@@ -164,7 +200,8 @@ class Lexer {
                 (firstChar == '&' && secondChar == '&') ||
                 (firstChar == '|' && secondChar == '|') ||
                 (firstChar == '!' && secondChar == '=') ||
-                (firstChar == '?' && secondChar == '>')
+                (firstChar == '?' && secondChar == '>') ||
+                (firstChar == '/' && secondChar == '/')
                 );
     }
 }

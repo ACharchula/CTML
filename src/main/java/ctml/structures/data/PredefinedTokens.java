@@ -53,13 +53,13 @@ public class PredefinedTokens {
         put("<", LESS);
         put(">", GREATER);
         put("!=", NOT_EQUALS);
-        put("!", NEGATION);
         put("\"", QUOTATION_MARK);
         put("\n", NEXT_LINE);
         put("[", SQUARE_BRACKET_OPEN);
         put("]", SQUARE_BRACKET_CLOSE);
         put("<?", CTML_START);
         put("?>", CTML_END);
+        put("//", COMMENT);
 
     }};
 

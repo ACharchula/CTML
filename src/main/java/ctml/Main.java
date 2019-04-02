@@ -9,7 +9,6 @@ import java.io.InputStream;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-
         if (args.length != 2) {
             Logger.error("Needed arguments has been not provided!");
             return;

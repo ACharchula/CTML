@@ -30,7 +30,6 @@ public enum TokenType {
     UNDEFINED,
     PARENTHESIS_OPEN,
     PARENTHESIS_CLOSE,
-    NEGATION,
     VOID,
     INTEGER_TYPE,
     CSV_TYPE,
@@ -54,5 +53,6 @@ public enum TokenType {
     LINK,
     IMAGE,
     STRING_FORMATTER,
-    ARRAY_APPEND
+    ARRAY_APPEND,
+    COMMENT
 }
