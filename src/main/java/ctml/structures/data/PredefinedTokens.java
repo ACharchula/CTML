@@ -26,6 +26,8 @@ public class PredefinedTokens {
         put("par", PARAGRAPH);
         put("link", LINK);
         put("img", IMAGE);
+        put("append", ARRAY_APPEND);
+        put("stringFormatter", STRING_FORMATTER);
 
 
     }};

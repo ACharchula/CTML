@@ -52,5 +52,7 @@ public enum TokenType {
     LOAD,
     PARAGRAPH,
     LINK,
-    IMAGE
+    IMAGE,
+    STRING_FORMATTER,
+    ARRAY_APPEND
 }
