@@ -14,7 +14,7 @@ public class Interpreter {
 
         Token token = null;
         token = lexer.nextToken();
-        while(!lexer.isEnd()) {
+        while(token.getType() != TokenType.END) {
             System.out.printf("%20s %30s c:%d l:%d\n", token.getTitle(), token.getType().toString(), lexer.getCharCounter(), lexer.getLineCounter());
             token = lexer.nextToken();
         }

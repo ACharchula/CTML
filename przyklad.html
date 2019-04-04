@@ -4,55 +4,55 @@
     <?
         func void recursion(int num, Csv file) {
             if(num > 10) {
-                return;
-            }
+    return;
+    }
 
-            head(file[0][i]);
-            par(file[1][i]);
-            num = num + 1;
-            recursion(num);
-        }
-    //ciumkaj loczki 1
-        {
-            Csv file = load("C://Desktop//file.csv");
-            head("Test");
-            
-            int i = 0;
+    head(file[0][i]);
+    par(file[1][i]);
+    num = num + 1;
+    recursion(num);
+    }
+    //komentarz 1
+    {
+    Csv file = load("C://Desktop//file.csv");
+    head("Test");
 
-            while(i <= 10) {
-                link(file[0][i], file[1][i]);
-                i = i + 1;
-            }
+    int i = 0;
 
-            Csv file2 = load("C://Desktop//file2.csv")
-            recursion(0, file2);
+    while(i <= 10) {
+    link(file[0][i], file[1][i]);
+    i = i + 1;
+    }
 
-            String name = "Anthony";
-            String surname = "Kowalsky";
-            float salary = 15000.50;
+    Csv file2 = load("C://Desktop//file2.csv")
+    recursion(0, file2);
 
-            Table {
-                Row {
-                    column("Name");
-                    column("Surname");
-                    column("Salary");
-                }
-                Row {
-                    table_item(name);
-                    table_item(surname);
-                    table_item(salary);
-                }
-            }
+    String name = "Anthony";
+    String surname = "Kowalsky";
+    float salary = 15000.50;
 
-            load( file_url );
-            head( variable );
-            par( variable );
-            link( variable1, variable2 );
-            img( variable );
-            int a[] = { 1, 2, 3 };
-            a.append(4,5);
-            String b = stringFormatter("This is number\" one\n: ", 1);
-            < > >= =2 == && || + - * / != !
-        }
+    Table {
+    Row {
+    column("Name");
+    column("Surname");
+    column("Salary");
+    }
+    Row {
+    table_item(name);
+    table_item(surname);
+    table_item(salary);
+    }
+    }
+
+    load( file_url );
+    head( variable );
+    par( variable );
+    link( variable1, variable2 );
+    img( variable );
+    int a[] = { 1, 2, 3 };
+    a.append(4,5);
+    String b = stringFormatter("This is number\" one\n: ", 1);
+    < > >= =2 == && || + - * / !=
+    }
     ?>
 </div>

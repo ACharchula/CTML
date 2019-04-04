@@ -13,28 +13,23 @@ class Lexer {
     private InputStream inputStream;
     private char tokenChar;
 
+    private int lineCounter = 1;
+    private int charCounter = 1;
+    private boolean readCTML = false;
+    private boolean lastCharWasEnter = false;
+    private boolean isEnd = false;
+
+
+    Lexer(InputStream inputStream) {
+        this.inputStream = inputStream;
+    }
+
     public int getLineCounter() {
         return lineCounter;
     }
 
     public int getCharCounter() {
         return charCounter;
-    }
-
-    private int lineCounter = 1;
-    private int charCounter = 1;
-    private boolean readCTML = false;
-    private boolean lastCharWasEnter = false;
-
-    public boolean isEnd() {
-        return isEnd;
-    }
-
-    private boolean isEnd = false;
-
-
-    Lexer(InputStream inputStream) {
-        this.inputStream = inputStream;
     }
 
     private char getNextChar() throws Exception {
@@ -63,73 +58,83 @@ class Lexer {
     }
 
     public Token nextToken() throws Exception {
+        Token token;
+
+        if (!readCTML)
+            token = htmlContent();
+        else
+            token = ctmlContent();
+
+        return token;
+    }
+
+    private Token htmlContent() throws Exception {
         final StringBuilder stringBuilder = new StringBuilder();
-        Token token = null;
 
-        if (!readCTML) {
-
-            if (tokenChar == 0 )
-                tokenChar = getNextChar();
-            else if (inputStream.available() == 0) {
-                isEnd = true;
-                stringBuilder.append(tokenChar);
-                return new Token(stringBuilder.toString(), TokenType.HTML_CONTENT);
-            }
-
-            stringBuilder.append(tokenChar);
-
-            if (tokenChar == '<' ) {
-                if((tokenChar = getNextChar()) == '?') {
-                    readCTML = true;
-                    stringBuilder.append(tokenChar);
-                    tokenChar = getNextChar();
-                    return new Token(stringBuilder.toString(), TokenType.CTML_START);
-                } else {
-                    return new Token(stringBuilder.toString(), TokenType.HTML_CONTENT);
-                }
-            }
-
+        if (tokenChar == 0 && inputStream.available() == 0) //empty file case
+            return new Token("", TokenType.END);
+        else if (tokenChar == 0 )
             tokenChar = getNextChar();
-            return new Token(stringBuilder.toString(), TokenType.HTML_CONTENT);
-
-        } else {
-
-            if (tokenChar == 0 || Character.isSpaceChar(tokenChar) || tokenChar == '\r') {
-                tokenChar = getNextChar();
-
-                while (continueReading()) {
-                    tokenChar = getNextChar();
-                }
-            }
-
-            if (Character.isSpaceChar(tokenChar))
-                return new Token(stringBuilder.toString(), TokenType.UNDEFINED);
-
+        else if (inputStream.available() == 0 && !isEnd) {
+            isEnd = true;
             stringBuilder.append(tokenChar);
+            return new Token(stringBuilder.toString(), TokenType.HTML_CONTENT);
+        } else if (isEnd) {
+            return new Token("", TokenType.END);
+        }
 
-            if (Character.isDigit(tokenChar)) {
-                token = buildNumberToken(stringBuilder);
-            } else if(tokenChar == '\"'){
-                token = buildString(stringBuilder);
-            } else if (Character.isLetter(tokenChar)) {
-                token = buildIdOrKeyword(stringBuilder);
+        stringBuilder.append(tokenChar);
+
+        if (tokenChar == '<' ) {
+            if((tokenChar = getNextChar()) == '?') {
+                readCTML = true;
+                stringBuilder.append(tokenChar);
+                tokenChar = getNextChar();
+                return new Token(stringBuilder.toString(), TokenType.CTML_START);
             } else {
-                token = buildOperator(stringBuilder);
+                return new Token(stringBuilder.toString(), TokenType.HTML_CONTENT);
             }
         }
 
-        return token;
+        tokenChar = getNextChar();
+        return new Token(stringBuilder.toString(), TokenType.HTML_CONTENT);
+    }
+
+    private Token ctmlContent() throws Exception {
+        final StringBuilder stringBuilder = new StringBuilder();
+
+        if (tokenChar == 0 || Character.isSpaceChar(tokenChar) || tokenChar == '\r') {
+            tokenChar = getNextChar();
+
+            while (continueReading()) {
+                tokenChar = getNextChar();
+            }
+        } else if (isEnd) {
+            return new Token("", TokenType.END);
+        }
+
+//        if (Character.isSpaceChar(tokenChar))
+//            return new Token(stringBuilder.toString(), TokenType.UNDEFINED);
+
+        stringBuilder.append(tokenChar);
+
+        if (Character.isDigit(tokenChar)) {
+            return buildNumberToken(stringBuilder);
+        } else if(tokenChar == '\"'){
+            return buildString(stringBuilder);
+        } else if (Character.isLetter(tokenChar)) {
+            return buildIdOrKeyword(stringBuilder);
+        } else {
+            return buildOperator(stringBuilder);
+        }
     }
 
     private Token buildString(StringBuilder stringBuilder) throws Exception {
         while((tokenChar = getNextChar()) != '\"' && inputStream.available() != 0) {
             stringBuilder.append(tokenChar);
 
-            if (tokenChar == '\\') {
-                //if( (tokenChar = getNextChar()) == '\"') {
-                    stringBuilder.append(tokenChar = getNextChar());
-
-            }
+            if (tokenChar == '\\')
+                stringBuilder.append(tokenChar = getNextChar());
         }
 
         stringBuilder.append(tokenChar);
