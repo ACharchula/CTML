@@ -7,7 +7,7 @@ public class Logger {
     }
 
     public static void error(String content) throws Exception {
-        throw new Exception("[ERROR] " + content);
+        throw new Exception("[ERROR] " + content); // usunac wyrzucanie error
     }
 
     public static void warn(String content) {

@@ -113,9 +113,6 @@ class Lexer {
             return new Token("", TokenType.END);
         }
 
-//        if (Character.isSpaceChar(tokenChar))
-//            return new Token(stringBuilder.toString(), TokenType.UNDEFINED);
-
         stringBuilder.append(tokenChar);
 
         if (Character.isDigit(tokenChar)) {
@@ -166,6 +163,7 @@ class Lexer {
         } else if (tokenType == TokenType.NEXT_LINE)
             return nextToken();
         else if (tokenType != null)
+
             return new Token(stringBuilder.toString(), tokenType);
 
         return new Token(stringBuilder.toString(), TokenType.UNDEFINED);
