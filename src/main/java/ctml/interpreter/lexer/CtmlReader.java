@@ -88,7 +88,8 @@ public class CtmlReader implements Reader {
             return read();
 
         if(tokenType == null)
-            throw Logger.error("Undefined token - " + stringBuilder.toString());
+            throw Logger.error("Undefined token - " + stringBuilder.toString() +
+                    " at line: " + getLineCounter() + " character: " + getCharCounter());
 
         return new Token(stringBuilder.toString(), tokenType, getLineCounter(), getCharCounter());
     }
