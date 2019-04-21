@@ -6,8 +6,8 @@ public class Logger {
         System.out.println("[INFO] " + content);
     }
 
-    public static void error(String content) throws Exception {
-        throw new Exception("[ERROR] " + content); // usunac wyrzucanie error
+    public static Exception error(String content) {
+        return new Exception("[ERROR] " + content);
     }
 
     public static void warn(String content) {

@@ -1,5 +1,6 @@
 package ctml.interpreter.lexer;
 
+import ctml.helpers.Logger;
 import ctml.structures.data.PredefinedTokens;
 import ctml.structures.data.Token;
 import ctml.structures.data.TokenType;
@@ -73,7 +74,7 @@ public class CtmlReader implements Reader {
         TokenType tokenType = PredefinedTokens.OPERATORS.get(stringBuilder.toString());
 
         if (getInputStream().available() == 0) {
-             setIsEnd(true);
+             setIsEnd();
         }
         else if (tokenType == TokenType.CTML_END) {
             setNextState();
@@ -85,11 +86,11 @@ public class CtmlReader implements Reader {
             return read();
         } else if (tokenType == TokenType.NEXT_LINE)
             return read();
-        else if (tokenType != null)
-            return new Token(stringBuilder.toString(), tokenType, getLineCounter(), getCharCounter());
 
-        return new Token(stringBuilder.toString(), Objects.requireNonNullElse(tokenType, TokenType.UNDEFINED), getLineCounter(), getCharCounter());
+        if(tokenType == null)
+            throw Logger.error("Undefined token - " + stringBuilder.toString());
 
+        return new Token(stringBuilder.toString(), tokenType, getLineCounter(), getCharCounter());
     }
 
     private Token buildIdOrKeyword(StringBuilder stringBuilder) throws Exception {

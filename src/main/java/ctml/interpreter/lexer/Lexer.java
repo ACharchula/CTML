@@ -8,46 +8,39 @@ import java.io.InputStream;
 
 public class Lexer {
 
-    public static Reader getReader() {
-        return reader;
-    }
-
     private static Reader reader = new HtmlReader();
+    private static InputStream inputStream;
+    private static int lineCounter = 1;
+    private static int charCounter = 1;
+    private static boolean lastCharWasEnter = false;
+    private static boolean isEnd = false;
+
+
+    public Lexer(InputStream inputStream) {
+        Lexer.inputStream = inputStream;
+    }
 
     public static void setLexerState(Reader reader) {
         Lexer.reader = reader;
     }
 
-    public static InputStream getInputStream() {
+    static InputStream getInputStream() {
         return inputStream;
     }
 
-    private static InputStream inputStream;
-
-    private static int lineCounter = 1;
-    private static int charCounter = 1;
-    private static boolean lastCharWasEnter = false;
-
-    public static boolean getIsEnd() {
+    static boolean getIsEnd() {
         return isEnd;
     }
 
-    public static void setIsEnd(boolean isEnd) {
-        Lexer.isEnd = isEnd;
+    static void setIsEnd() {
+        Lexer.isEnd = true;
     }
 
-    private static boolean isEnd = false;
-
-
-    public Lexer(InputStream inputStream) {
-        this.inputStream = inputStream;
-    }
-
-    public static int getLineCounter() {
+    static int getLineCounter() {
         return lineCounter;
     }
 
-    public static int getCharCounter() {
+    static int getCharCounter() {
         return charCounter;
     }
 

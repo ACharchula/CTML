@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 class LexerTests {
@@ -247,12 +248,10 @@ class LexerTests {
     }
 
     @Test
-    void isUndefinedIdentifierRecognized() throws Exception {
+    void isUndefinedIdentifierRecognized() {
         String input = "%";
-        Token token = getTokenFromStringForCtml(input);
 
-        assertEquals(TokenType.UNDEFINED, token.getType());
-        assertEquals(input, token.getContent());
+        assertThrows(Exception.class, () -> getTokenFromStringForCtml(input));
     }
 
     @Test

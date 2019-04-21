@@ -32,7 +32,7 @@ public class PredefinedTokens {
 
     }};
 
-    public static final HashMap<String, TokenType> OPERATORS = new HashMap<String, TokenType>() {{
+    public static final HashMap<String, TokenType> OPERATORS = new HashMap<>() {{
         put("=", ASSIGN);
         put("==", EQUALS);
         put(">=", GREATER_EQUALS);

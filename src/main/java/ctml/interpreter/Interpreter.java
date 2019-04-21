@@ -14,11 +14,16 @@ public class Interpreter {
         lexer = new Lexer(inputStream);
 
         Token token = null;
-        token = lexer.nextToken();
-        while(token.getType() != TokenType.END) {
-            System.out.printf("%20s %30s c:%d l:%d\n", token.getContent(), token.getType().toString(), token.getCharacterNumber(), token.getLineNumber());
+
+        try {
             token = lexer.nextToken();
+            while (token.getType() != TokenType.END) {
+                System.out.printf("%20s %30s c:%d l:%d\n", token.getContent(), token.getType().toString(), token.getCharacterNumber(), token.getLineNumber());
+                token = lexer.nextToken();
+            }
+            System.out.printf("%20s %30s c:%d l:%d\n", token.getContent(), token.getType().toString(), token.getCharacterNumber(), token.getLineNumber());
+        } catch (Exception e) {
+            System.out.println(e);
         }
-        System.out.printf("%20s %30s c:%d l:%d\n", token.getContent(), token.getType().toString(), token.getCharacterNumber(), token.getLineNumber());
     }
 }

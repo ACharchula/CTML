@@ -28,7 +28,7 @@ public class HtmlReader implements Reader {
         else if (tokenChar == 0 )
             tokenChar = getNextChar();
         else if (getInputStream().available() == 0 && !getIsEnd()) {
-            setIsEnd(true);
+            setIsEnd();
             stringBuilder.append(tokenChar);
             return new Token(stringBuilder.toString(), TokenType.HTML_CONTENT, getLineCounter(), getCharCounter());
         } else if (getIsEnd()) {

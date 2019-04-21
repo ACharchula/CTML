@@ -26,7 +26,6 @@ public enum TokenType {
     AND,
     OR,
     END,
-    UNDEFINED,
     PARENTHESIS_OPEN,
     PARENTHESIS_CLOSE,
     VOID,
