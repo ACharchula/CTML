@@ -2,27 +2,34 @@ package ctml.structures.data;
 
 public class Token {
 
-    private String title;
+    private String content;
     private TokenType type;
 
-    public Token(String title, TokenType type) {
-        this.title = title;
+    private int lineNumber;
+    private int characterNumber;
+
+    public Token(String content, TokenType type, int lineNumber, int characterNumber) {
+        this.content = content;
         this.type = type;
+        this.lineNumber = lineNumber;
+        this.characterNumber = ( characterNumber - content.length() );
     }
 
-    public String getTitle() {
-        return title;
+    public String getContent() {
+        return content;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public TokenType getType() {
         return type;
     }
 
-    public void setType(TokenType type) {
-        this.type = type;
+    public int getCharacterNumber() {
+        return this.characterNumber;
+    }
+
+    public int getLineNumber() {
+        return this.lineNumber;
     }
 }
+

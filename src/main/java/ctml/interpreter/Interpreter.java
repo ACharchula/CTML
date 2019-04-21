@@ -1,5 +1,6 @@
 package ctml.interpreter;
 
+import ctml.interpreter.lexer.Lexer;
 import ctml.structures.data.Token;
 import ctml.structures.data.TokenType;
 
@@ -15,9 +16,9 @@ public class Interpreter {
         Token token = null;
         token = lexer.nextToken();
         while(token.getType() != TokenType.END) {
-            System.out.printf("%20s %30s c:%d l:%d\n", token.getTitle(), token.getType().toString(), lexer.getCharCounter(), lexer.getLineCounter());
+            System.out.printf("%20s %30s c:%d l:%d\n", token.getContent(), token.getType().toString(), token.getCharacterNumber(), token.getLineNumber());
             token = lexer.nextToken();
         }
-        System.out.printf("%20s %30s c:%d l:%d\n", token.getTitle(), token.getType().toString(), lexer.getCharCounter(), lexer.getLineCounter());
+        System.out.printf("%20s %30s c:%d l:%d\n", token.getContent(), token.getType().toString(), token.getCharacterNumber(), token.getLineNumber());
     }
 }
