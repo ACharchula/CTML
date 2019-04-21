@@ -22,7 +22,6 @@ public enum TokenType {
     DIVIDE,
     SEMICOLON,
     ASSIGN,
-    QUOTATION_MARK,
     COMMA,
     AND,
     OR,
@@ -54,5 +53,6 @@ public enum TokenType {
     IMAGE,
     STRING_FORMATTER,
     ARRAY_APPEND,
-    COMMENT
+    COMMENT,
+    FLOAT_NUMBER
 }

@@ -5,6 +5,7 @@ import ctml.structures.data.Token;
 import ctml.structures.data.TokenType;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import static ctml.interpreter.lexer.Lexer.*;
 
@@ -73,7 +74,6 @@ public class CtmlReader implements Reader {
 
         if (getInputStream().available() == 0) {
              setIsEnd(true);
-            return new Token(stringBuilder.toString(), tokenType, getLineCounter(), getCharCounter());
         }
         else if (tokenType == TokenType.CTML_END) {
             setNextState();
@@ -86,10 +86,9 @@ public class CtmlReader implements Reader {
         } else if (tokenType == TokenType.NEXT_LINE)
             return read();
         else if (tokenType != null)
-
             return new Token(stringBuilder.toString(), tokenType, getLineCounter(), getCharCounter());
 
-        return new Token(stringBuilder.toString(), TokenType.UNDEFINED, getLineCounter(), getCharCounter());
+        return new Token(stringBuilder.toString(), Objects.requireNonNullElse(tokenType, TokenType.UNDEFINED), getLineCounter(), getCharCounter());
 
     }
 
@@ -109,6 +108,15 @@ public class CtmlReader implements Reader {
 
         while (Character.isDigit(tokenChar = getNextChar()))
             stringBuilder.append(tokenChar);
+
+        if(tokenChar == '.') {
+            stringBuilder.append(tokenChar);
+
+            while (Character.isDigit(tokenChar = getNextChar()))
+                stringBuilder.append(tokenChar);
+
+            return new Token(stringBuilder.toString(), TokenType.FLOAT_NUMBER, getLineCounter(), getCharCounter());
+        }
 
         return new Token(stringBuilder.toString(), TokenType.NUMBER, getLineCounter(), getCharCounter());
     }

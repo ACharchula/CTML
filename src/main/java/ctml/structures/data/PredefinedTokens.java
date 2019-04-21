@@ -14,12 +14,12 @@ public class PredefinedTokens {
         put("return", RETURN);
         put("void", VOID);
         put("int", INTEGER_TYPE);
-        put("Csv", CSV_TYPE);
+        put("csv", CSV_TYPE);
         put("head", HEADER);
-        put("String", STRING_TYPE);
+        put("string", STRING_TYPE);
         put("float", FLOAT_TYPE);
-        put("Table", TABLE);
-        put("Row", ROW);
+        put("table", TABLE);
+        put("row", ROW);
         put("column", COLUMN);
         put("table_item", TABLE_ITEM);
         put("load", LOAD);
@@ -53,7 +53,6 @@ public class PredefinedTokens {
         put("<", LESS);
         put(">", GREATER);
         put("!=", NOT_EQUALS);
-        put("\"", QUOTATION_MARK);
         put("\n", NEXT_LINE);
         put("[", SQUARE_BRACKET_OPEN);
         put("]", SQUARE_BRACKET_CLOSE);

@@ -8,9 +8,13 @@ import java.io.InputStream;
 
 public class Lexer {
 
+    public static Reader getReader() {
+        return reader;
+    }
+
     private static Reader reader = new HtmlReader();
 
-    static void setLexerState(Reader reader) {
+    public static void setLexerState(Reader reader) {
         Lexer.reader = reader;
     }
 
