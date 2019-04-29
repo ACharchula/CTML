@@ -1,7 +1,7 @@
 package ctml.interpreter.lexer;
 
 import ctml.helpers.Logger;
-import ctml.structures.data.Token;
+import ctml.structures.token.Token;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,8 +1,8 @@
 import ctml.interpreter.lexer.CtmlReader;
 import ctml.interpreter.lexer.HtmlReader;
 import ctml.interpreter.lexer.Lexer;
-import ctml.structures.data.Token;
-import ctml.structures.data.TokenType;
+import ctml.structures.token.Token;
+import ctml.structures.token.TokenType;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;

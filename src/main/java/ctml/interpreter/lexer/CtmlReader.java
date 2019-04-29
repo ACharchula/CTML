@@ -1,12 +1,11 @@
 package ctml.interpreter.lexer;
 
 import ctml.helpers.Logger;
-import ctml.structures.data.PredefinedTokens;
-import ctml.structures.data.Token;
-import ctml.structures.data.TokenType;
+import ctml.structures.token.PredefinedTokens;
+import ctml.structures.token.Token;
+import ctml.structures.token.TokenType;
 
 import java.io.IOException;
-import java.util.Objects;
 
 import static ctml.interpreter.lexer.Lexer.*;
 

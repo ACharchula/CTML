@@ -1,8 +1,8 @@
-package ctml.structures.data;
+package ctml.structures.token;
 
 import java.util.HashMap;
 
-import static ctml.structures.data.TokenType.*;
+import static ctml.structures.token.TokenType.*;
 
 public class PredefinedTokens {
 

@@ -1,7 +1,7 @@
 package ctml.interpreter.lexer;
 
-import ctml.structures.data.Token;
-import ctml.structures.data.TokenType;
+import ctml.structures.token.Token;
+import ctml.structures.token.TokenType;
 
 import static ctml.interpreter.lexer.Lexer.*;
 

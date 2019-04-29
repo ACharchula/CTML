@@ -1,6 +1,6 @@
 package ctml.interpreter.lexer;
 
-import ctml.structures.data.Token;
+import ctml.structures.token.Token;
 
 public interface Reader {
     void setNextState();
