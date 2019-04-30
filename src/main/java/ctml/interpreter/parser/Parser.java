@@ -162,13 +162,16 @@ public class Parser {
                 }
 
                 nextToken();
+
                 if(currentToken.getType() == TokenType.EQUALS) {
                     parseVariableInit(variable);
-                } else {
-                    accept(TokenType.SEMICOLON);
                 }
+
+                accept(TokenType.SEMICOLON);
                 nextToken();
 
+            } else {
+                parseStatement();
             }
         }
 
@@ -177,6 +180,21 @@ public class Parser {
 
     private void parseVariableInit(Variable variable) {
 
+    }
+
+    private void parseStatement() {
+        switch(currentToken.getType()) {
+            case IF: ;
+            case WHILE:;
+            case RETURN:;
+            case LINK:;
+            case LOAD:;
+            case HEADER:;
+            case PARAGRAPH:;
+            case IMAGE:;
+            case LIST:;
+            case TABLE:;
+        }
     }
 
 }

@@ -372,6 +372,24 @@ class LexerTests {
     }
 
     @Test
+    void isListRecognized() throws Exception {
+        String input = "list";
+        Token token = getTokenFromStringForCtml(input);
+
+        assertEquals(TokenType.LIST, token.getType());
+        assertEquals(input, token.getContent());
+    }
+
+    @Test
+    void isListItemRecognized() throws Exception {
+        String input = "list_item";
+        Token token = getTokenFromStringForCtml(input);
+
+        assertEquals(TokenType.LIST_ITEM, token.getType());
+        assertEquals(input, token.getContent());
+    }
+
+    @Test
     void isPeriodRecognized() throws Exception {
         String input = ".";
         Token token = getTokenFromStringForCtml(input);

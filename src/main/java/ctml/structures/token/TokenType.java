@@ -53,5 +53,7 @@ public enum TokenType {
     STRING_FORMATTER,
     ARRAY_APPEND,
     COMMENT,
-    FLOAT_NUMBER
+    FLOAT_NUMBER,
+    LIST,
+    LIST_ITEM
 }

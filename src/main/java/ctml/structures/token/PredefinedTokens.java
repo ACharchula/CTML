@@ -28,8 +28,8 @@ public class PredefinedTokens {
         put("img", IMAGE);
         put("append", ARRAY_APPEND);
         put("stringFormatter", STRING_FORMATTER);
-
-
+        put("list", LIST);
+        put("list_item", LIST_ITEM);
     }};
 
     public static final HashMap<String, TokenType> OPERATORS = new HashMap<>() {{
