@@ -3,6 +3,7 @@ package ctml.interpreter.parser;
 import ctml.helpers.Logger;
 import ctml.interpreter.lexer.Lexer;
 import ctml.structures.model.Block;
+import ctml.structures.model.Expression;
 import ctml.structures.model.Function;
 import ctml.structures.model.Variable;
 import ctml.structures.token.Token;
@@ -12,6 +13,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static ctml.structures.token.TokenType.*;
 
 public class Parser {
 
@@ -31,7 +34,7 @@ public class Parser {
     }
 
     public void parseProgram() throws Exception {
-        while(currentToken.getType() != TokenType.END) {
+        while(currentToken.getType() != END) {
 
             if (!parseCtml) {
                 if(currentToken.getType() == TokenType.HTML_CONTENT) { //pass to output file in the future
@@ -107,14 +110,14 @@ public class Parser {
                 accept(TokenType.COMMA);
                 nextToken();
             }
-            variableList.add(parseVariable());
+            variableList.add(parseVariableDeclaration());
             nextToken();
         }
 
         return variableList;
     }
 
-    private Variable parseVariable() throws Exception {
+    private Variable parseVariableDeclaration() throws Exception {
 
         acceptOneOfMany(new ArrayList<>(Arrays.asList(TokenType.INTEGER_TYPE, TokenType.STRING_TYPE, TokenType.FLOAT_TYPE, TokenType.CSV_TYPE)));
         Variable variable = new Variable();
@@ -152,7 +155,7 @@ public class Parser {
                 int line = currentToken.getLineNumber();
                 int character = currentToken.getCharacterNumber();
 
-                Variable variable = parseVariable();
+                Variable variable = parseVariableDeclaration();
 
                 try {
                     block.addVariable(variable);
@@ -178,13 +181,19 @@ public class Parser {
         return block;
     }
 
-    private void parseVariableInit(Variable variable) {
-
+    private void parseVariableInit(Variable variable) throws Exception {
+        nextToken();
+        parseExpression();
     }
 
-    private void parseStatement() {
+    private void parseStatement() throws Exception {
         switch(currentToken.getType()) {
-            case IF: ;
+            case IF:
+                acceptNextToken(PARENTHESIS_OPEN);
+                parseExpression();
+                accept(PARENTHESIS_CLOSE);
+                nextToken();
+                ///
             case WHILE:;
             case RETURN:;
             case LINK:;
@@ -194,7 +203,133 @@ public class Parser {
             case IMAGE:;
             case LIST:;
             case TABLE:;
+            case ID: ;
         }
     }
+
+    private Expression parseExpression() throws Exception {
+        nextToken();
+        Expression expression = new Expression();
+        expression.addOperand(parseAndExpression());
+        while (currentToken.getType() == OR) {
+            nextToken();
+            expression.setOperator(OR);
+            expression.addOperand(parseAndExpression());
+        }
+
+        return expression;
+    }
+
+    private Expression parseAndExpression() throws Exception {
+        Expression andExpression = new Expression();
+        andExpression.addOperand(parseEqualityExpression());
+        while(currentToken.getType() == AND) {
+            nextToken();
+            andExpression.setOperator(AND);
+            andExpression.addOperand(parseEqualityExpression());
+        }
+
+        return andExpression;
+    }
+
+    private Expression parseEqualityExpression() throws Exception {
+        Expression equalityExpression = new Expression();
+        equalityExpression.addOperand(parseRelation());
+        while(currentToken.getType() == EQUALS || currentToken.getType() == NOT_EQUALS) {
+            equalityExpression.setOperator(currentToken.getType());
+            nextToken();
+            equalityExpression.addOperand(parseRelation());
+        }
+
+        return equalityExpression;
+    }
+
+    private Expression parseRelation() throws Exception {
+        Expression relationExpression = new Expression();
+        relationExpression.addOperand(parsePrimaryExpression());
+        while(isOneOfType(new ArrayList<>(Arrays.asList(LESS, LESS_EQUALS, GREATER, GREATER_EQUALS)))) {
+            relationExpression.setOperator(currentToken.getType());
+            nextToken();
+            relationExpression.addOperand(parsePrimaryExpression());
+        }
+
+        return relationExpression;
+    }
+
+    private Expression parsePrimaryExpression() throws Exception {
+        Expression expression = new Expression();
+        if (currentToken.getType() == PARENTHESIS_OPEN) {
+            expression.addOperand(parseExpression());
+            acceptNextToken(PARENTHESIS_CLOSE);
+        } else {
+            expression.addOperand(parseSimpleExpression());
+        }
+
+        return expression;
+    }
+
+    private Expression parseSimpleExpression() throws Exception {
+        Expression expression = new Expression();
+        expression.addOperand(parseMultiplication());
+        while(currentToken.getType() == ADD || currentToken.getType() == SUBTRACT) {
+            expression.setOperator(currentToken.getType());
+            nextToken();
+            expression.addOperand(parseMultiplication());
+        }
+
+        return expression;
+    }
+
+    private Expression parseMultiplication() throws Exception {
+        Expression expression = new Expression();
+        expression.addOperand(parseFactor());
+        while(currentToken.getType() == MULTIPLY || currentToken.getType() == DIVIDE) {
+            expression.setOperator(currentToken.getType());
+            nextToken();
+            expression.addOperand(parseFactor());
+        }
+
+        return expression;
+    }
+
+    private Expression parseFactor() throws Exception {
+        Expression expression = new Expression();
+
+        if (currentToken.getType() == PARENTHESIS_OPEN) {
+            expression.addOperand(parseExpression());
+            acceptNextToken(PARENTHESIS_CLOSE);
+        } else if (currentToken.getType() == ID) {
+            parseVariable();
+        } else {
+            parseLiteral();
+        }
+
+        return expression;
+    }
+
+    private Variable parseVariable() throws Exception { /////sprawdzic czy jesli jest csv to dwa brackety
+        accept(ID);
+        nextToken();
+
+        if(currentToken.getType() == SQUARE_BRACKET_OPEN) {
+            acceptNextToken(NUMBER);
+            acceptNextToken(SQUARE_BRACKET_CLOSE);
+            nextToken();
+            if(currentToken.getType() == SQUARE_BRACKET_OPEN) {
+                acceptNextToken(NUMBER);
+                acceptNextToken(SQUARE_BRACKET_CLOSE);
+            }
+        }
+
+        return null; ///!!
+    }
+
+    private Variable parseLiteral() throws Exception {
+        acceptOneOfMany(new ArrayList<>(Arrays.asList(STRING_CONTENT, NUMBER, FLOAT_NUMBER)));
+        nextToken();
+        return null;
+    }
+
+
 
 }
