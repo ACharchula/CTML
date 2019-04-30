@@ -48,6 +48,7 @@ public class Parser {
                     parseBlock();
 
                 acceptNextToken(TokenType.CTML_END);
+                parseCtml = false;
             }
 
             nextToken();
@@ -83,6 +84,7 @@ public class Parser {
         acceptNextToken(TokenType.PARENTHESIS_OPEN);
         function.setParameters(parseParameters());
         function.setBlock(parseBlock());
+
     }
 
     private TokenType parseReturnType() throws Exception {
@@ -105,35 +107,76 @@ public class Parser {
                 accept(TokenType.COMMA);
                 nextToken();
             }
-
-            if(acceptOneOfMany(new ArrayList<>(Arrays.asList(TokenType.INTEGER_TYPE, TokenType.STRING_TYPE, TokenType.FLOAT_TYPE, TokenType.CSV_TYPE)))) {
-                Variable variable = new Variable();
-                variable.setType(currentToken.getType());
-
-                if(currentToken.getType() == TokenType.CSV_TYPE)
-                    variable.setIsCsv(true);
-
-                nextToken();
-                if(currentToken.getType() == TokenType.SQUARE_BRACKET_OPEN) {
-                    acceptNextToken(TokenType.SQUARE_BRACKET_CLOSE);
-                    variable.setId(parseID());
-                    variable.setIsTable(true);
-                } else {
-                    accept(TokenType.ID);
-                    variable.setId(currentToken.getContent());
-                }
-
-                variableList.add(variable);
-                nextToken();
-            }
-
+            variableList.add(parseVariable());
+            nextToken();
         }
 
         return variableList;
     }
 
-    private Block parseBlock() {
-        return null;
+    private Variable parseVariable() throws Exception {
+
+        acceptOneOfMany(new ArrayList<>(Arrays.asList(TokenType.INTEGER_TYPE, TokenType.STRING_TYPE, TokenType.FLOAT_TYPE, TokenType.CSV_TYPE)));
+        Variable variable = new Variable();
+        variable.setType(currentToken.getType());
+
+        if(currentToken.getType() == TokenType.CSV_TYPE)
+            variable.setIsCsv(true);
+
+        nextToken();
+        if(currentToken.getType() == TokenType.SQUARE_BRACKET_OPEN) {
+            acceptNextToken(TokenType.SQUARE_BRACKET_CLOSE);
+            variable.setId(parseID());
+            variable.setIsTable(true);
+        } else {
+            accept(TokenType.ID);
+            variable.setId(currentToken.getContent());
+        }
+
+        return variable;
+
+    }
+
+    private boolean isOneOfType(List<TokenType> tokenTypeList) {
+        return tokenTypeList.contains(currentToken.getType());
+    }
+
+    private Block parseBlock() throws Exception {
+        acceptNextToken(TokenType.BRACKET_OPEN);
+
+        Block block = new Block();
+
+        nextToken();
+        while(currentToken.getType() != TokenType.BRACKET_CLOSE) {
+            if(isOneOfType(new ArrayList<>(Arrays.asList(TokenType.INTEGER_TYPE, TokenType.STRING_TYPE, TokenType.FLOAT_TYPE, TokenType.CSV_TYPE)))) {
+                int line = currentToken.getLineNumber();
+                int character = currentToken.getCharacterNumber();
+
+                Variable variable = parseVariable();
+
+                try {
+                    block.addVariable(variable);
+                } catch (Exception e) {
+                    throw Logger.error("Error at line " + line + " char: " + character + ".\n" +
+                            "Variable with id: " + variable.getId() + " has already been defined!");
+                }
+
+                nextToken();
+                if(currentToken.getType() == TokenType.EQUALS) {
+                    parseVariableInit(variable);
+                } else {
+                    accept(TokenType.SEMICOLON);
+                }
+                nextToken();
+
+            }
+        }
+
+        return block;
+    }
+
+    private void parseVariableInit(Variable variable) {
+
     }
 
 }
