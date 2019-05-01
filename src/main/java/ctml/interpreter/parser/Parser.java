@@ -51,9 +51,10 @@ public class Parser {
                 if(currentToken.getType() == TokenType.BRACKET_OPEN) {
                     parseBlock(false);
                     accept(BRACKET_CLOSE);
+                    nextToken();
                 }
 
-                acceptNextToken(TokenType.CTML_END);
+                accept(TokenType.CTML_END);
                 parseCtml = false;
             }
 
@@ -575,12 +576,15 @@ public class Parser {
         Variable variable = new Variable();
 
         if(currentToken.getType() == SQUARE_BRACKET_OPEN) {
+            nextToken();
             acceptOneOfMany(NUMBER, ID);
             acceptNextToken(SQUARE_BRACKET_CLOSE);
             nextToken();
             if(currentToken.getType() == SQUARE_BRACKET_OPEN) {
+                nextToken();
                 acceptOneOfMany(NUMBER, ID);
                 acceptNextToken(SQUARE_BRACKET_CLOSE);
+                nextToken();
             }
             variable.setType(NUMBER);
         } else if (currentToken.getType() == PARENTHESIS_OPEN) {
