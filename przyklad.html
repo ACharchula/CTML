@@ -1,8 +1,56 @@
 <div>
     <?
-        func void siemanokolano(int[] a, string b, csv c, float[] d) {
-            int e;
-            if (a && b + 2 || 4 == 2)
+        func void recursion(int num, csv file) {
+            if(num > 10) {
+                return;
+            }
+            head(file[0][i]);
+            par(file[1][i]);
+            num = num + 1;
+            recursion(num);
+        }
+
+        func int fff(int[] a) {
+            return a;
+        }
+        {
+            csv file = load("C://Desktop//file.csv");
+            head("Test");
+            int i = 0;
+            while(i < 10) {
+                link(file[0][i], file[1][i]);
+                i = i + 1;
+            }
+            csv file2 = load("C://Desktop//file2.csv");
+            recursion(a, file2);
+            string name = "Anthony";
+            string surname = "Kowalsky";
+            float salary = 15000.50;
+            float[] a = {1.0, b, 3.0};
+            a.append(5.6);
+            string b = stringFormatter(1234);
+            int h = 1 + 1*2/6;
+            if(a > 0) {
+                a = a + 1;
+            } else {
+                a = 0;
+            }
+            table {
+                row {
+                    column(l[9]);
+                    column("Surname");
+                    column("Salary");
+                }
+                row {
+                    table_item(name);
+                    table_item(surname);
+                    table_item(salary);
+                }
+            }
+            list {
+                list_item(i);
+                list_item("siemanko");
+            }
         }
     ?>
 </div>

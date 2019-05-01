@@ -2,10 +2,7 @@ package ctml.interpreter.parser;
 
 import ctml.helpers.Logger;
 import ctml.interpreter.lexer.Lexer;
-import ctml.structures.model.Block;
-import ctml.structures.model.Expression;
-import ctml.structures.model.Function;
-import ctml.structures.model.Variable;
+import ctml.structures.model.*;
 import ctml.structures.token.Token;
 import ctml.structures.token.TokenType;
 
@@ -44,11 +41,17 @@ public class Parser {
                 }
             } else {
 
-                while(currentToken.getType() == TokenType.FUNCTION)
-                    parseFunction();
+                acceptOneOfMany(FUNCTION, BRACKET_OPEN);
 
-                if(currentToken.getType() == TokenType.BRACKET_OPEN)
-                    parseBlock();
+                while(currentToken.getType() == TokenType.FUNCTION) {
+                    parseFunction();
+                    nextToken();
+                }
+
+                if(currentToken.getType() == TokenType.BRACKET_OPEN) {
+                    parseBlock(false);
+                    accept(BRACKET_CLOSE);
+                }
 
                 acceptNextToken(TokenType.CTML_END);
                 parseCtml = false;
@@ -63,10 +66,8 @@ public class Parser {
         accept(tokenType);
     }
 
-    private boolean accept(TokenType tokenType) throws Exception {
-        if(currentToken.getType().equals(tokenType)) {
-            return true;
-        } else {
+    private void accept(TokenType tokenType) throws Exception {
+        if(!currentToken.getType().equals(tokenType)) {
             throw Logger.error("Unexpected token: " + currentToken.getType() + " in line: " + currentToken.getLineNumber() +
                     " char: " + currentToken.getCharacterNumber() + "\n Expected: " + tokenType);
         }
@@ -80,19 +81,37 @@ public class Parser {
         }
     }
 
+    private void acceptOneOfMany(TokenType ... tokenTypes) throws Exception {
+
+        if(!checkIfIsOneOfTokenTypes(tokenTypes)) {
+            throw Logger.error("Error at line " + currentToken.getLineNumber() + " char " + currentToken.getCharacterNumber() +
+                    " - expected one of TokenTypes: " + Arrays.toString(tokenTypes) + " but was: " + currentToken.getType());
+        }
+    }
+
+    private boolean checkIfIsOneOfTokenTypes(TokenType... tokenTypes) {
+        for (TokenType tokenType : tokenTypes) {
+            if(currentToken.getType() == tokenType) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void parseFunction() throws Exception {
         Function function = new Function();
         function.setReturnType(parseReturnType());
         function.setId(parseID());
         acceptNextToken(TokenType.PARENTHESIS_OPEN);
         function.setParameters(parseParameters());
+        accept(PARENTHESIS_CLOSE);
         function.setBlock(parseBlock());
 
     }
 
     private TokenType parseReturnType() throws Exception {
         nextToken();
-        acceptOneOfMany(new ArrayList<>(Arrays.asList(TokenType.INTEGER_TYPE, TokenType.STRING_TYPE, TokenType.FLOAT_TYPE, TokenType.CSV_TYPE, TokenType.VOID)));
+        acceptOneOfMany(INTEGER_TYPE, STRING_TYPE, FLOAT_TYPE, CSV_TYPE, VOID);
         return currentToken.getType();
     }
 
@@ -119,7 +138,7 @@ public class Parser {
 
     private Variable parseVariableDeclaration() throws Exception {
 
-        acceptOneOfMany(new ArrayList<>(Arrays.asList(TokenType.INTEGER_TYPE, TokenType.STRING_TYPE, TokenType.FLOAT_TYPE, TokenType.CSV_TYPE)));
+        acceptOneOfMany(INTEGER_TYPE, STRING_TYPE, FLOAT_TYPE, CSV_TYPE);
         Variable variable = new Variable();
         variable.setType(currentToken.getType());
 
@@ -145,13 +164,18 @@ public class Parser {
     }
 
     private Block parseBlock() throws Exception {
-        acceptNextToken(TokenType.BRACKET_OPEN);
+        return parseBlock(true);
+    }
+
+    private Block parseBlock(boolean a) throws Exception {
+        if(a)
+            acceptNextToken(TokenType.BRACKET_OPEN);
 
         Block block = new Block();
 
         nextToken();
         while(currentToken.getType() != TokenType.BRACKET_CLOSE) {
-            if(isOneOfType(new ArrayList<>(Arrays.asList(TokenType.INTEGER_TYPE, TokenType.STRING_TYPE, TokenType.FLOAT_TYPE, TokenType.CSV_TYPE)))) {
+            if(checkIfIsOneOfTokenTypes(INTEGER_TYPE, STRING_TYPE, FLOAT_TYPE, CSV_TYPE)) {
                 int line = currentToken.getLineNumber();
                 int character = currentToken.getCharacterNumber();
 
@@ -166,7 +190,7 @@ public class Parser {
 
                 nextToken();
 
-                if(currentToken.getType() == TokenType.EQUALS) {
+                if(currentToken.getType() == ASSIGN) {
                     parseVariableInit(variable);
                 }
 
@@ -183,32 +207,269 @@ public class Parser {
 
     private void parseVariableInit(Variable variable) throws Exception {
         nextToken();
-        parseExpression();
+        if (currentToken.getType() == LOAD) {
+            if (variable.getType() != CSV_TYPE) {
+                throw Logger.error("Error at line... Cannot use load function with other variable than of csv type ");
+            }
+            parseLoad();
+        } else if(currentToken.getType() == BRACKET_OPEN){
+            parseArrayArgumentList();
+            nextToken();
+        } else if(currentToken.getType()== STRING_FORMATTER) {
+            acceptNextToken(PARENTHESIS_OPEN);
+            parseArgumentList();
+            accept(PARENTHESIS_CLOSE);
+            nextToken();
+        } else {
+            parseSimpleExpression();
+        }
+
+        accept(SEMICOLON);
+    }
+
+    private List<Argument> parseArgumentList() throws Exception {
+
+        nextToken();
+        int i = 0;
+        while(currentToken.getType() != PARENTHESIS_CLOSE) {
+            if( i>0) {
+                accept(COMMA);
+                nextToken();
+            }
+            parseArgument();
+            ++i;
+        }
+        return null;
+    }
+
+    private List<Argument> parseArrayArgumentList() throws Exception {
+
+        nextToken();
+        int i = 0;
+        while(currentToken.getType() != BRACKET_CLOSE) {
+            if( i>0) {
+                accept(COMMA);
+                nextToken();
+            }
+            parseArgument();
+            ++i;
+        }
+        return null;
+    }
+
+    private void parseArgument() throws Exception {
+        acceptOneOfMany(NUMBER, FLOAT_NUMBER, STRING_CONTENT, ID);
+        if(currentToken.getType() == ID) {
+            nextToken();
+            if(currentToken.getType() == SQUARE_BRACKET_OPEN) {
+                nextToken();
+                acceptOneOfMany(NUMBER, ID);
+                acceptNextToken(SQUARE_BRACKET_CLOSE);
+                nextToken();
+                if(currentToken.getType() == SQUARE_BRACKET_OPEN) {
+                    nextToken();
+                    acceptOneOfMany(NUMBER, ID);
+                    acceptNextToken(SQUARE_BRACKET_CLOSE);
+                    nextToken();
+                }
+            }
+        } else {
+            nextToken();
+        }
     }
 
     private void parseStatement() throws Exception {
         switch(currentToken.getType()) {
             case IF:
-                acceptNextToken(PARENTHESIS_OPEN);
-                parseExpression();
-                accept(PARENTHESIS_CLOSE);
+                parseIf();
+                break;
+            case WHILE:
+                parseWhile();
+                break;
+            case RETURN:
+                parseReturn();
+                break;
+            case LINK:
+                parseLink();
+                break;
+            case HEADER:
+                parseHeader();
+                break;
+            case PARAGRAPH:
+                parseParagraph();
+                break;
+            case IMAGE:
+                parseImage();
+                break;
+            case LIST:
+                parseList();
+                break;
+            case TABLE:
+                parseTable();
+                break;
+            case ID:
+                parseMethodCallOrAssignment();
                 nextToken();
-                ///
-            case WHILE:;
-            case RETURN:;
-            case LINK:;
-            case LOAD:;
-            case HEADER:;
-            case PARAGRAPH:;
-            case IMAGE:;
-            case LIST:;
-            case TABLE:;
-            case ID: ;
+                break;
+        }
+    }
+
+    private void parseIf() throws Exception {
+        acceptNextToken(PARENTHESIS_OPEN);
+        parseExpression();
+        accept(PARENTHESIS_CLOSE);
+        parseBlock();
+        nextToken();
+        if(currentToken.getType() == ELSE) {
+            parseBlock();
+            nextToken();
+        }
+    }
+
+    private void parseWhile() throws Exception {
+        acceptNextToken(PARENTHESIS_OPEN);
+        parseExpression();
+        accept(PARENTHESIS_CLOSE);
+        parseBlock();
+        nextToken();
+    }
+
+    private void parseReturn() throws Exception {
+        nextToken();
+        if(currentToken.getType() != SEMICOLON)
+            parseExpressionNext(false);
+        accept(SEMICOLON);
+        nextToken();
+    }
+
+    private void parseLink() throws Exception {
+        acceptNextToken(PARENTHESIS_OPEN);
+        nextToken();
+        parseArgument();
+        accept(COMMA);
+        nextToken();
+        parseArgument();
+        accept(PARENTHESIS_CLOSE);
+        acceptNextToken(SEMICOLON);
+        nextToken();
+    }
+
+    private void parseLoad() throws Exception { ///needs to be added to variable initializer
+        accept(LOAD);
+        acceptNextToken(PARENTHESIS_OPEN);
+        nextToken();
+        parseArgument();
+        accept(PARENTHESIS_CLOSE);
+        acceptNextToken(SEMICOLON);
+    }
+
+    private void parseHeader() throws Exception {
+        accept(HEADER);
+        acceptNextToken(PARENTHESIS_OPEN);
+        nextToken();
+        parseArgument();
+        accept(PARENTHESIS_CLOSE);
+        acceptNextToken(SEMICOLON);
+        nextToken();
+    }
+
+    private void parseParagraph() throws Exception {
+        accept(PARAGRAPH);
+        acceptNextToken(PARENTHESIS_OPEN);
+        nextToken();
+        parseArgument();
+        accept(PARENTHESIS_CLOSE);
+        acceptNextToken(SEMICOLON);
+        nextToken();
+    }
+
+    private void parseImage() throws Exception {
+        accept(IMAGE);
+        acceptNextToken(PARENTHESIS_OPEN);
+        nextToken();
+        parseArgument();
+        accept(PARENTHESIS_CLOSE);
+        acceptNextToken(SEMICOLON);
+        nextToken();
+    }
+
+    private void parseList() throws Exception {
+        acceptNextToken(BRACKET_OPEN);
+        nextToken();
+        while (currentToken.getType() == LIST_ITEM) {
+            acceptNextToken(PARENTHESIS_OPEN);
+            nextToken();
+            parseArgument();
+            accept(PARENTHESIS_CLOSE);
+            acceptNextToken(SEMICOLON);
+            nextToken();
+        }
+
+        accept(BRACKET_CLOSE);
+        nextToken();
+    }
+
+    private void parseTable() throws Exception {
+        acceptNextToken(BRACKET_OPEN);
+        nextToken();
+        while (currentToken.getType() == ROW) {
+            parseRow();
+        }
+        accept(BRACKET_CLOSE);
+        nextToken();
+    }
+
+    //add accept of many in else to throw exception - not only here
+    private void parseRow() throws Exception {
+        acceptNextToken(BRACKET_OPEN);
+        nextToken();
+        while(checkIfIsOneOfTokenTypes(COLUMN, TABLE_ITEM)) {
+            acceptOneOfMany(COLUMN, TABLE_ITEM);
+            if (currentToken.getType() == COLUMN) {
+                acceptNextToken(PARENTHESIS_OPEN);
+                nextToken();
+                parseArgument();
+                accept(PARENTHESIS_CLOSE);
+            } else if (currentToken.getType() == TABLE_ITEM) {
+                acceptNextToken(PARENTHESIS_OPEN);
+                nextToken();
+                parseArgument();
+                accept(PARENTHESIS_CLOSE);
+
+            }
+            acceptNextToken(SEMICOLON);
+            nextToken();
+        }
+        accept(BRACKET_CLOSE);
+        nextToken();
+    }
+
+    private void parseMethodCallOrAssignment() throws Exception {
+        Variable variable = parseVariableOrMethodCall();
+        if (variable.getType() == NUMBER) {
+            acceptOneOfMany(PERIOD, ASSIGN);
+            if(currentToken.getType() == PERIOD) {
+                acceptNextToken(ARRAY_APPEND);
+                acceptNextToken(PARENTHESIS_OPEN);
+                parseArgumentList();
+                accept(PARENTHESIS_CLOSE);
+                acceptNextToken(SEMICOLON);
+            } else if(currentToken.getType() == ASSIGN) {
+                parseVariableInit(null);
+            }
+        } else {
+            acceptNextToken(SEMICOLON);
         }
     }
 
     private Expression parseExpression() throws Exception {
-        nextToken();
+        return parseExpressionNext(true);
+
+    }
+
+    private Expression parseExpressionNext(boolean next) throws Exception {
+        if(next)
+            nextToken();
         Expression expression = new Expression();
         expression.addOperand(parseAndExpression());
         while (currentToken.getType() == OR) {
@@ -299,7 +560,7 @@ public class Parser {
             expression.addOperand(parseExpression());
             acceptNextToken(PARENTHESIS_CLOSE);
         } else if (currentToken.getType() == ID) {
-            parseVariable();
+            parseVariableOrMethodCall();
         } else {
             parseLiteral();
         }
@@ -307,29 +568,36 @@ public class Parser {
         return expression;
     }
 
-    private Variable parseVariable() throws Exception { /////sprawdzic czy jesli jest csv to dwa brackety
+    private Variable parseVariableOrMethodCall() throws Exception { /////sprawdzic czy jesli jest csv to dwa brackety
         accept(ID);
         nextToken();
 
+        Variable variable = new Variable();
+
         if(currentToken.getType() == SQUARE_BRACKET_OPEN) {
-            acceptNextToken(NUMBER);
+            acceptOneOfMany(NUMBER, ID);
             acceptNextToken(SQUARE_BRACKET_CLOSE);
             nextToken();
             if(currentToken.getType() == SQUARE_BRACKET_OPEN) {
-                acceptNextToken(NUMBER);
+                acceptOneOfMany(NUMBER, ID);
                 acceptNextToken(SQUARE_BRACKET_CLOSE);
             }
+            variable.setType(NUMBER);
+        } else if (currentToken.getType() == PARENTHESIS_OPEN) {
+
+            parseArgumentList();
+            accept(PARENTHESIS_CLOSE);
+            variable.setType(FUNCTION);
+        } else {
+            variable.setType(NUMBER);
         }
 
-        return null; ///!!
+        return variable;
     }
 
     private Variable parseLiteral() throws Exception {
-        acceptOneOfMany(new ArrayList<>(Arrays.asList(STRING_CONTENT, NUMBER, FLOAT_NUMBER)));
+        acceptOneOfMany(STRING_CONTENT, NUMBER, FLOAT_NUMBER);
         nextToken();
         return null;
     }
-
-
-
 }
