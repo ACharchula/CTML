@@ -2,6 +2,7 @@ package ctml.structures.model;
 
 import ctml.structures.token.TokenType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Variable {
@@ -14,6 +15,35 @@ public class Variable {
 
     private String value;
     private List tableValues;
+
+    public void setFunctionArguments(List<Variable> functionArguments) {
+        this.functionArguments = functionArguments;
+    }
+
+    public List<Variable> functionArguments = null;
+
+    public List<Variable> getFunctionArguments() {
+        return functionArguments;
+    }
+
+    public void addFunctionArgument(Variable variable) {
+        if(functionArguments == null)
+            functionArguments = new ArrayList<>();
+
+        functionArguments.add(variable);
+    }
+
+    public void setIndex1(Variable index) {
+        this.index1 = index;
+    }
+
+    private Variable index1 = null;
+
+    public void setIndex2(Variable index2) {
+        this.index2 = index2;
+    }
+
+    private Variable index2 = null;
 
     public TokenType getType() {
         return type;

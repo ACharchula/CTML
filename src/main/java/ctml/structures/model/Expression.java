@@ -5,10 +5,11 @@ import ctml.structures.token.TokenType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Expression {
+public class Expression implements Executable {
 
     private TokenType operator;
     private List<Expression> operands = new ArrayList<>();
+    private List<Variable> variables = new ArrayList<>();
 
     public void setOperator(TokenType operator) {
         this.operator = operator;
@@ -18,4 +19,12 @@ public class Expression {
         operands.add(expression);
     }
 
+    public void addVariable(Variable variable) {
+        variables.add(variable);
+    }
+
+    @Override
+    public void execute(Block block) {
+
+    }
 }
