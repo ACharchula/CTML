@@ -26,11 +26,11 @@ public class Parser {
         program = new Program();
     }
 
-    private void nextToken() throws Exception {
+    public void nextToken() throws Exception {
         currentToken = lexer.nextToken();
     }
 
-    public void parseProgram() throws Exception {
+    public Program parseProgram() throws Exception {
         while(currentToken.getType() != END) {
 
             if (!parseCtml) {
@@ -59,6 +59,8 @@ public class Parser {
 
             nextToken();
         }
+
+        return program;
     }
 
     private void acceptNextToken(TokenType tokenType) throws Exception {

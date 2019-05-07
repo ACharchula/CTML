@@ -75,4 +75,13 @@ public class Lexer {
     public Token nextToken() throws Exception {
         return reader.read();
     }
+
+    public static void reset() {
+        reader = new HtmlReader();
+        lineCounter = 1;
+        charCounter = 1;
+        isEnd = false;
+        lastCharWasEnter = false;
+
+    }
 }

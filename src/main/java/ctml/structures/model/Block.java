@@ -8,6 +8,14 @@ public class Block {
 
     private HashMap<String, Variable> variables = new HashMap<>();
 
+    public HashMap<String, Variable> getVariables() {
+        return variables;
+    }
+
+    public List<Executable> getInstructions() {
+        return instructions;
+    }
+
     private List<Executable> instructions = new ArrayList<>();
 
     public void addVariable(Variable variable) throws Exception {

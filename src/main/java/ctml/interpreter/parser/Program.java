@@ -31,4 +31,14 @@ public class Program {
         }
         return false;
     }
+
+    public List<Function> getFunctionList() {
+        return functionList;
+    }
+
+    public List<Block> getBlockList() {
+        return blockList;
+    }
+
+
 }
