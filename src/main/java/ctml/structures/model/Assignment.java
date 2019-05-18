@@ -16,7 +16,10 @@ public class Assignment implements Executable {
     @Override
     public void execute(CtmlBlock ctmlBlock) throws Exception {
         Variable v = ctmlBlock.getVariable(variable.getId());
-        v.setValue(executable.getResult(ctmlBlock).getValue());
+        if(v.isCsv())
+            v.setTableValues(executable.getResult(ctmlBlock).getTableValues());
+        else
+            v.setValue(executable.getResult(ctmlBlock).getValue());
     }
 
 

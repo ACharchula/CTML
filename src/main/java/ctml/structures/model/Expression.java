@@ -82,10 +82,10 @@ class Literal {
     private String value;
     private boolean isBool = false;
 
-    public void setValue(String  value) {
+    void setValue(String value) {
         this.value = value;
     }
-    public void setValue(float result) {
+    private void setValue(float result) {
         this.value = Float.toString(result);
     }
 
@@ -97,32 +97,32 @@ class Literal {
         return isBool;
     }
 
-    public String getValue() {
+    String getValue() {
         return value;
     }
 
-    public void plus(String second) {
+    void plus(String second) {
         float a = Float.parseFloat(value);
         float b = Float.parseFloat(second);
 
         setValue(a+b);
     }
 
-    public void minus(String second) {
+    void minus(String second) {
         float a = Float.parseFloat(value);
         float b = Float.parseFloat(second);
 
         setValue(a-b);
     }
 
-    public void multi(String second) {
+    void multi(String second) {
         float a = Float.parseFloat(value);
         float b = Float.parseFloat(second);
 
         setValue(a*b);
     }
 
-    public void div(String second) {
+    void div(String second) {
         float a = Float.parseFloat(value);
         float b = Float.parseFloat(second);
 
