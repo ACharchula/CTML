@@ -100,6 +100,11 @@ public class Variable {
     }
 
     public void setValue(String value) {
+        if(type == TokenType.INTEGER_TYPE) {
+            float result = Float.parseFloat(value);
+            value = Integer.toString(Math.round(result));
+        }
+
         this.value = value;
     }
 
