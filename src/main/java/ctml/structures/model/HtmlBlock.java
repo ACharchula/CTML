@@ -1,8 +1,18 @@
 package ctml.structures.model;
 
+import ctml.interpreter.Interpreter;
+
 public class HtmlBlock implements Node {
 
+    String htmlContent;
 
+    public String getHtmlContent() {
+        return htmlContent;
+    }
+
+    public void setHtmlContent(String htmlContent) {
+        this.htmlContent = htmlContent;
+    }
 
     @Override
     public String getStructure() {
@@ -11,6 +21,6 @@ public class HtmlBlock implements Node {
 
     @Override
     public void execute() {
-
+        Interpreter.writer.print(htmlContent);
     }
 }

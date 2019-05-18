@@ -35,7 +35,7 @@ public class Parser {
 
             if (!parseCtml) {
                 if(currentToken.getType() == TokenType.HTML_CONTENT) { //pass to output file in the future
-
+                    program.addBlock(parseHtmlBlock());
                 } else if (currentToken.getType() == TokenType.CTML_START) {
                     parseCtml = true;
                 }
@@ -61,6 +61,23 @@ public class Parser {
         }
 
         return program;
+    }
+
+    private HtmlBlock parseHtmlBlock() throws Exception {
+        HtmlBlock htmlBlock = new HtmlBlock();
+        StringBuilder stringBuilder = new StringBuilder();
+
+        while(currentToken.getType() != CTML_START && currentToken.getType() != END) {
+            stringBuilder.append(currentToken.getContent());
+            nextToken();
+        }
+
+        htmlBlock.setHtmlContent(stringBuilder.toString());
+
+        if(currentToken.getType() == CTML_START)
+            parseCtml = true;
+
+        return htmlBlock;
     }
 
     private void acceptNextToken(TokenType tokenType) throws Exception {
