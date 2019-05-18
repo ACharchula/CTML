@@ -9,7 +9,7 @@ public class Function {
 
     private List<Variable> parameters = new ArrayList<>();
     private TokenType returnType;
-    private Block block;
+    private CtmlBlock ctmlBlock;
     private String id;
 
     public String getId() {
@@ -36,11 +36,11 @@ public class Function {
         this.returnType = returnType;
     }
 
-    public Block getBlock() {
-        return block;
+    public CtmlBlock getCtmlBlock() {
+        return ctmlBlock;
     }
 
-    public void setBlock(Block block) {
-        this.block = block;
+    public void setCtmlBlock(CtmlBlock ctmlBlock) {
+        this.ctmlBlock = ctmlBlock;
     }
 }

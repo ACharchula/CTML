@@ -18,6 +18,6 @@ public class Main {
         Logger.info("File output URL: " + args[1]);
 
         final InputStream inputStream = FileHelper.getInputStreamFromHtmlFile(args[0]);
-        Interpreter.run(inputStream);
+        Interpreter.run(inputStream, args[1]);
     }
 }

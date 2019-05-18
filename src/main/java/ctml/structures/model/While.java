@@ -8,14 +8,14 @@ public class While implements Executable {
         this.expression = expression;
     }
 
-    public void setBlock(Block block) {
-        this.block = block;
+    public void setCtmlBlock(CtmlBlock ctmlBlock) {
+        this.ctmlBlock = ctmlBlock;
     }
 
-    private Block block;
+    private CtmlBlock ctmlBlock;
 
     @Override
-    public void execute(Block block) {
+    public void execute(CtmlBlock ctmlBlock) {
 
     }
 }

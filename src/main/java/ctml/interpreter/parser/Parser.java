@@ -100,7 +100,7 @@ public class Parser {
         function.setParameters(parseParameters());
         accept(PARENTHESIS_CLOSE);
         nextToken();
-        function.setBlock(parseBlock());
+        function.setCtmlBlock(parseBlock());
         return function;
     }
 
@@ -154,10 +154,10 @@ public class Parser {
 
     }
 
-    private Block parseBlock() throws Exception {
+    private CtmlBlock parseBlock() throws Exception {
         accept(TokenType.BRACKET_OPEN);
 
-        Block block = new Block();
+        CtmlBlock ctmlBlock = new CtmlBlock();
         nextToken();
         while(currentToken.getType() != TokenType.BRACKET_CLOSE) {
             if(checkIfIsOneOfTokenTypes(INTEGER_TYPE, STRING_TYPE, FLOAT_TYPE, CSV_TYPE)) {
@@ -167,7 +167,7 @@ public class Parser {
                 Variable variable = parseVariableDeclaration();
 
                 try {
-                    block.addVariable(variable);
+                    ctmlBlock.addVariable(variable);
                 } catch (Exception e) {
                     throw Logger.error("Error at line " + line + " char: " + character + ".\n" +
                             "Variable with id: " + variable.getId() + " has already been defined!");
@@ -176,16 +176,16 @@ public class Parser {
                 nextToken();
 
                 if(currentToken.getType() == ASSIGN)
-                    block.addInstruction(parseVariableInit(variable));
+                    ctmlBlock.addInstruction(parseVariableInit(variable));
 
                 accept(TokenType.SEMICOLON);
                 nextToken();
             } else {
-                block.addInstruction(parseStatement());
+                ctmlBlock.addInstruction(parseStatement());
             }
         }
 
-        return block;
+        return ctmlBlock;
     }
 
     private Assignment parseVariableInit(Variable variable) throws Exception {
@@ -314,11 +314,11 @@ public class Parser {
         ifStatement.setExpression(parseExpression());
         accept(PARENTHESIS_CLOSE);
         nextToken();
-        ifStatement.setBlock(parseBlock());
+        ifStatement.setCtmlBlock(parseBlock());
         nextToken();
         if(currentToken.getType() == ELSE) {
             nextToken();
-            ifStatement.setElseBlock(parseBlock());
+            ifStatement.setElseCtmlBlock(parseBlock());
             nextToken();
         }
         return ifStatement;
@@ -331,7 +331,7 @@ public class Parser {
         whileStatement.setExpression(parseExpression());
         accept(PARENTHESIS_CLOSE);
         nextToken();
-        whileStatement.setBlock(parseBlock());
+        whileStatement.setCtmlBlock(parseBlock());
         nextToken();
         return whileStatement;
     }

@@ -1,8 +1,7 @@
 package ctml.interpreter.parser;
 
-
-import ctml.structures.model.Block;
 import ctml.structures.model.Function;
+import ctml.structures.model.Node;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,18 +9,18 @@ import java.util.List;
 public class Program {
 
     private List<Function> functionList = new ArrayList<>();
-    private List<Block> blockList = new ArrayList<>();
+    private List<Node> nodes = new ArrayList<>();
 
     public void execute() {
-        blockList.forEach(Block::execute);
+        nodes.forEach(Node::execute);
     }
 
     public void addFunction(Function function) {
         functionList.add(function);
     }
 
-    public void addBlock(Block block) {
-        blockList.add(block);
+    public void addBlock(Node node) {
+        nodes.add(node);
     }
 
     public boolean checkIfFunctionExsists(String id) {
@@ -36,8 +35,8 @@ public class Program {
         return functionList;
     }
 
-    public List<Block> getBlockList() {
-        return blockList;
+    public List<Node> getNodes() {
+        return nodes;
     }
 
 

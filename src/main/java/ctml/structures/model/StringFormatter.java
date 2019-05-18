@@ -12,7 +12,7 @@ public class StringFormatter implements Executable {
     List<Variable> variableList = new ArrayList<>();
 
     @Override
-    public void execute(Block block) {
+    public void execute(CtmlBlock ctmlBlock) {
 
     }
 }

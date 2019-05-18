@@ -8,7 +8,7 @@ public class TableItem implements Executable {
     Variable variable;
 
     @Override
-    public void execute(Block block) {
+    public void execute(CtmlBlock ctmlBlock) {
 
     }
 }

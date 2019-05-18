@@ -8,7 +8,7 @@ public class Return implements Executable {
     Expression expression = null;
 
     @Override
-    public void execute(Block block) {
+    public void execute(CtmlBlock ctmlBlock) {
 
     }
 }

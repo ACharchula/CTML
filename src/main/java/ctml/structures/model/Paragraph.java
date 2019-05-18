@@ -8,7 +8,7 @@ public class Paragraph implements Executable{
     private Variable text;
 
     @Override
-    public void execute(Block block) {
+    public void execute(CtmlBlock ctmlBlock) {
 
     }
 }

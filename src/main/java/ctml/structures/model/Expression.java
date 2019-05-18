@@ -24,7 +24,7 @@ public class Expression implements Executable {
     }
 
     @Override
-    public void execute(Block block) {
+    public void execute(CtmlBlock ctmlBlock) {
 
     }
 }

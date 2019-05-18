@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Block {
+public class CtmlBlock implements Node{
 
     private HashMap<String, Variable> variables = new HashMap<>();
 
@@ -29,10 +29,16 @@ public class Block {
         instructions.add(executable);
     }
 
+    @Override
     public void execute() {
         for(Executable instruction : instructions) {
             instruction.execute(this);
         }
+    }
+
+    @Override
+    public String getStructure() {
+        return "";
     }
 
 }

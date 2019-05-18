@@ -14,7 +14,7 @@ public class Assignment implements Executable {
     private Executable executable;
 
     @Override
-    public void execute(Block block) {
+    public void execute(CtmlBlock ctmlBlock) {
 
     }
 

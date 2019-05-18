@@ -3,24 +3,24 @@ package ctml.structures.model;
 public class If implements Executable {
 
     private Expression expression;
-    private Block block;
+    private CtmlBlock ctmlBlock;
 
     public void setExpression(Expression expression) {
         this.expression = expression;
     }
 
-    public void setBlock(Block block) {
-        this.block = block;
+    public void setCtmlBlock(CtmlBlock ctmlBlock) {
+        this.ctmlBlock = ctmlBlock;
     }
 
-    public void setElseBlock(Block elseBlock) {
-        this.elseBlock = elseBlock;
+    public void setElseCtmlBlock(CtmlBlock elseCtmlBlock) {
+        this.elseCtmlBlock = elseCtmlBlock;
     }
 
-    private Block elseBlock = null;
+    private CtmlBlock elseCtmlBlock = null;
 
     @Override
-    public void execute(Block block) {
+    public void execute(CtmlBlock ctmlBlock) {
 
     }
 }
