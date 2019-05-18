@@ -10,7 +10,13 @@ public class Header implements Executable {
     private Variable text;
 
     @Override
-    public void execute(CtmlBlock ctmlBlock) {
-        Interpreter.writer.println("<h1>" + text.getValue() + "</h1>");
+    public void execute(CtmlBlock ctmlBlock) throws Exception {
+        String value = null;
+        if(text.getValue() == null && text.getId() != null) {
+            value = ctmlBlock.getVariable(text.getId()).getValue();
+        } else {
+            value = text.getValue();
+        }
+        Interpreter.writer.println("<h1>" + value + "</h1>");
     }
 }

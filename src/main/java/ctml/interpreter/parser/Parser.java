@@ -514,7 +514,7 @@ public class Parser {
         expression.addOperand(parseAndExpression());
         while (currentToken.getType() == OR) {
             nextToken();
-            expression.setOperator(OR);
+            expression.addOperator(OR);
             expression.addOperand(parseAndExpression());
         }
 
@@ -526,7 +526,7 @@ public class Parser {
         andExpression.addOperand(parseEqualityExpression());
         while(currentToken.getType() == AND) {
             nextToken();
-            andExpression.setOperator(AND);
+            andExpression.addOperator(AND);
             andExpression.addOperand(parseEqualityExpression());
         }
 
@@ -537,7 +537,7 @@ public class Parser {
         Expression equalityExpression = new Expression();
         equalityExpression.addOperand(parseRelation());
         while(currentToken.getType() == EQUALS || currentToken.getType() == NOT_EQUALS) {
-            equalityExpression.setOperator(currentToken.getType());
+            equalityExpression.addOperator(currentToken.getType());
             nextToken();
             equalityExpression.addOperand(parseRelation());
         }
@@ -549,7 +549,7 @@ public class Parser {
         Expression relationExpression = new Expression();
         relationExpression.addOperand(parsePrimaryExpression());
         while(checkIfIsOneOfTokenTypes(LESS, LESS_EQUALS, GREATER, GREATER_EQUALS)) {
-            relationExpression.setOperator(currentToken.getType());
+            relationExpression.addOperator(currentToken.getType());
             nextToken();
             relationExpression.addOperand(parsePrimaryExpression());
         }
@@ -574,7 +574,7 @@ public class Parser {
         Expression expression = new Expression();
         expression.addOperand(parseMultiplication());
         while(currentToken.getType() == ADD || currentToken.getType() == SUBTRACT) {
-            expression.setOperator(currentToken.getType());
+            expression.addOperator(currentToken.getType());
             nextToken();
             expression.addOperand(parseMultiplication());
         }
@@ -586,7 +586,7 @@ public class Parser {
         Expression expression = new Expression();
         expression.addOperand(parseFactor());
         while(currentToken.getType() == MULTIPLY || currentToken.getType() == DIVIDE) {
-            expression.setOperator(currentToken.getType());
+            expression.addOperator(currentToken.getType());
             nextToken();
             expression.addOperand(parseFactor());
         }
@@ -600,7 +600,8 @@ public class Parser {
         if (currentToken.getType() == PARENTHESIS_OPEN) {
             nextToken();
             expression.addOperand(parseExpression());
-            acceptNextToken(PARENTHESIS_CLOSE);
+            accept(PARENTHESIS_CLOSE);
+            nextToken();
         } else if (currentToken.getType() == ID) {
             expression.addVariable(parseVariableOrMethodCall());
         } else {
