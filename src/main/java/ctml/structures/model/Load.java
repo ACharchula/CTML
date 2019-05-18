@@ -15,7 +15,7 @@ public class Load extends ReturnExecutable{
     }
 
     @Override
-    Variable getResult() throws Exception {
+    Variable getResult(CtmlBlock ctmlBlock) throws Exception {
         return null;
     }
 }

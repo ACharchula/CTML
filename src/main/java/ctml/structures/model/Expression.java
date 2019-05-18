@@ -29,15 +29,20 @@ public class Expression extends ReturnExecutable {
     }
 
     @Override
-    Variable getResult() throws Exception {
+    Variable getResult(CtmlBlock ctmlBlock) throws Exception {
         final Literal literal = new Literal();
 
-        if (operands.size() == 0){
-            if (variables.size() != 0)
-                return variables.get(0);
+        if (operands.size() == 0){ //obsluzyc wywolanie funkcji?
+            if (variables.size() != 0) {
+                if (variables.get(0).getId() == null)
+                    return variables.get(0);
+                else {
+                    return ctmlBlock.getVariable(variables.get(0).getId());
+                }
+            }
         }
 
-        literal.setValue(operands.get(0).getResult().getValue());
+        literal.setValue(operands.get(0).getResult(ctmlBlock).getValue());
 //        if(operators.size() == 0) {
 //            Variable v = new Variable();
 //            v.setValue(literal.getValue());
@@ -49,13 +54,13 @@ public class Expression extends ReturnExecutable {
                 index ++;
 
                 if (op == TokenType.ADD) {
-                    literal.plus(operand.getResult().getValue());
+                    literal.plus(operand.getResult(ctmlBlock).getValue());
                 } else if (op == TokenType.SUBTRACT) {
-                    literal.minus(operand.getResult().getValue());
+                    literal.minus(operand.getResult(ctmlBlock).getValue());
                 } else if (op == TokenType.MULTIPLY) {
-                    literal.multi(operand.getResult().getValue());
+                    literal.multi(operand.getResult(ctmlBlock).getValue());
                 } else if (op == TokenType.DIVIDE) {
-                    literal.div(operand.getResult().getValue());
+                    literal.div(operand.getResult(ctmlBlock).getValue());
                 }
             }
 

@@ -16,11 +16,14 @@ public class Variable {
     private String value;
     private List tableValues;
 
+    public List<Variable> functionArguments = null;
+
+    private Variable index1 = null;
+    private Variable index2 = null;
+
     public void setFunctionArguments(List<Variable> functionArguments) {
         this.functionArguments = functionArguments;
     }
-
-    public List<Variable> functionArguments = null;
 
     public List<Variable> getFunctionArguments() {
         return functionArguments;
@@ -37,13 +40,9 @@ public class Variable {
         this.index1 = index;
     }
 
-    private Variable index1 = null;
-
     public void setIndex2(Variable index2) {
         this.index2 = index2;
     }
-
-    private Variable index2 = null;
 
     public TokenType getType() {
         return type;
