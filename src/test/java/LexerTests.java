@@ -506,13 +506,13 @@ class LexerTests {
 
     private Token getTokenFromStringForCtml(String string) throws Exception {
         Lexer lexer = new Lexer(convertStringToInputStreamReader(string));
-        Lexer.setLexerState(new CtmlReader());
+        lexer.setLexerState(new CtmlReader(lexer));
         return lexer.nextToken();
     }
 
     private Token getTokenFromStringForHtml(String string) throws Exception {
         Lexer lexer = new Lexer(convertStringToInputStreamReader(string));
-        Lexer.setLexerState(new HtmlReader());
+        lexer.setLexerState(new HtmlReader(lexer));
         return lexer.nextToken();
     }
 

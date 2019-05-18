@@ -1,4 +1,3 @@
-import ctml.interpreter.lexer.Lexer;
 import ctml.interpreter.parser.Parser;
 import ctml.interpreter.parser.Program;
 import ctml.structures.model.Executable;
@@ -9,7 +8,6 @@ import ctml.structures.token.TokenType;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -75,7 +73,6 @@ public class ParserTests {
     private Program parse(String content) throws Exception {
         String ctmlContent = "<div> <? " + content + " ?> </div>";
         Parser parser = new Parser(new ByteArrayInputStream(ctmlContent.getBytes()));
-        Lexer.reset();
         parser.nextToken();
         return parser.parseProgram();
     }

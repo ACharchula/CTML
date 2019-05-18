@@ -7,15 +7,18 @@ import ctml.structures.token.TokenType;
 
 import java.io.IOException;
 
-import static ctml.interpreter.lexer.Lexer.*;
-
 public class CtmlReader implements Reader {
 
     private char tokenChar;
+    private Lexer lexer;
+
+    public CtmlReader(Lexer lexer) {
+        this.lexer = lexer;
+    }
 
     @Override
     public void setNextState() {
-        setLexerState(new HtmlReader());
+        lexer.setLexerState(new HtmlReader(lexer));
     }
 
     @Override
@@ -28,13 +31,13 @@ public class CtmlReader implements Reader {
         final StringBuilder stringBuilder = new StringBuilder();
 
         if (tokenChar == 0 || Character.isSpaceChar(tokenChar) || tokenChar == '\r') {
-            tokenChar = getNextChar();
+            tokenChar = lexer.getNextChar();
 
             while (continueReading()) {
-                tokenChar = getNextChar();
+                tokenChar = lexer.getNextChar();
             }
-        } else if (getIsEnd()) {
-            return new Token("", TokenType.END, getLineCounter(), getCharCounter());
+        } else if (lexer.getIsEnd()) {
+            return new Token("", TokenType.END, lexer.getLineCounter(), lexer.getCharCounter());
         }
 
         stringBuilder.append(tokenChar);
@@ -51,36 +54,36 @@ public class CtmlReader implements Reader {
     }
 
     private Token buildString(StringBuilder stringBuilder) throws Exception {
-        while((tokenChar = getNextChar()) != '\"' && getInputStream().available() != 0) {
+        while((tokenChar = lexer.getNextChar()) != '\"' && lexer.getInputStream().available() != 0) {
             stringBuilder.append(tokenChar);
 
             if (tokenChar == '\\')
-                stringBuilder.append(tokenChar = getNextChar());
+                stringBuilder.append(tokenChar = lexer.getNextChar());
         }
 
         stringBuilder.append(tokenChar);
-        tokenChar = getNextChar();
+        tokenChar = lexer.getNextChar();
 
-        return new Token(stringBuilder.toString(), TokenType.STRING_CONTENT, getLineCounter(), getCharCounter());
+        return new Token(stringBuilder.toString(), TokenType.STRING_CONTENT, lexer.getLineCounter(), lexer.getCharCounter());
     }
 
     private Token buildOperator(StringBuilder stringBuilder) throws Exception {
-        if(isOperatorWithDoubleChar(tokenChar, tokenChar = getNextChar())) {
+        if(isOperatorWithDoubleChar(tokenChar, tokenChar = lexer.getNextChar())) {
             stringBuilder.append(tokenChar);
-            tokenChar = getNextChar();
+            tokenChar = lexer.getNextChar();
         }
 
         TokenType tokenType = PredefinedTokens.OPERATORS.get(stringBuilder.toString());
 
-        if (getInputStream().available() == 0) {
-             setIsEnd();
+        if (lexer.getInputStream().available() == 0) {
+            lexer.setIsEnd();
         }
         else if (tokenType == TokenType.CTML_END) {
             setNextState();
-            return new Token(stringBuilder.toString(), TokenType.CTML_END, getLineCounter(), getCharCounter());
+            return new Token(stringBuilder.toString(), TokenType.CTML_END, lexer.getLineCounter(), lexer.getCharCounter());
         } else if (tokenType == TokenType.COMMENT) {
             while(tokenChar != '\n') {
-                tokenChar = getNextChar();
+                tokenChar = lexer.getNextChar();
             }
             return read();
         } else if (tokenType == TokenType.NEXT_LINE)
@@ -88,42 +91,43 @@ public class CtmlReader implements Reader {
 
         if(tokenType == null)
             throw Logger.error("Undefined token - " + stringBuilder.toString() +
-                    " at line: " + getLineCounter() + " character: " + getCharCounter());
+                    " at line: " + lexer.getLineCounter() + " character: " + lexer.getCharCounter());
 
-        return new Token(stringBuilder.toString(), tokenType, getLineCounter(), getCharCounter());
+        return new Token(stringBuilder.toString(), tokenType, lexer.getLineCounter(), lexer.getCharCounter());
     }
 
     private Token buildIdOrKeyword(StringBuilder stringBuilder) throws Exception {
-        while (Character.isLetter(tokenChar = getNextChar()) || Character.isDigit(tokenChar) || tokenChar == '_') {
+        while (Character.isLetter(tokenChar = lexer.getNextChar()) || Character.isDigit(tokenChar) || tokenChar == '_') {
             stringBuilder.append(tokenChar);
         }
 
         if (PredefinedTokens.KEYWORDS.containsKey(stringBuilder.toString())) {
-            return new Token(stringBuilder.toString(), PredefinedTokens.KEYWORDS.get(stringBuilder.toString()), getLineCounter(), getCharCounter());
+            return new Token(stringBuilder.toString(), PredefinedTokens.KEYWORDS.get(stringBuilder.toString()),
+                    lexer.getLineCounter(), lexer.getCharCounter());
         }
 
-        return new Token(stringBuilder.toString(), TokenType.ID, getLineCounter(), getCharCounter());
+        return new Token(stringBuilder.toString(), TokenType.ID, lexer.getLineCounter(), lexer.getCharCounter());
     }
 
     private Token buildNumberToken(StringBuilder stringBuilder) throws Exception {
 
-        while (Character.isDigit(tokenChar = getNextChar()))
+        while (Character.isDigit(tokenChar = lexer.getNextChar()))
             stringBuilder.append(tokenChar);
 
         if(tokenChar == '.') {
             stringBuilder.append(tokenChar);
 
-            while (Character.isDigit(tokenChar = getNextChar()))
+            while (Character.isDigit(tokenChar = lexer.getNextChar()))
                 stringBuilder.append(tokenChar);
 
-            return new Token(stringBuilder.toString(), TokenType.FLOAT_NUMBER, getLineCounter(), getCharCounter());
+            return new Token(stringBuilder.toString(), TokenType.FLOAT_NUMBER, lexer.getLineCounter(), lexer.getCharCounter());
         }
 
-        return new Token(stringBuilder.toString(), TokenType.NUMBER, getLineCounter(), getCharCounter());
+        return new Token(stringBuilder.toString(), TokenType.NUMBER, lexer.getLineCounter(), lexer.getCharCounter());
     }
 
     private boolean continueReading() throws IOException {
-        return getInputStream().available() != 0 && Character.isSpaceChar(tokenChar);
+        return lexer.getInputStream().available() != 0 && Character.isSpaceChar(tokenChar);
 
     }
 

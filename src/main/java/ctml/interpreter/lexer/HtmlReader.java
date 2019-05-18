@@ -8,10 +8,15 @@ import static ctml.interpreter.lexer.Lexer.*;
 public class HtmlReader implements Reader {
 
     private char tokenChar;
+    private Lexer lexer;
+
+    public HtmlReader(Lexer lexer) {
+        this.lexer = lexer;
+    }
 
     @Override
     public void setNextState() {
-        setLexerState(new CtmlReader());
+        lexer.setLexerState(new CtmlReader(lexer));
     }
 
     @Override
@@ -23,35 +28,35 @@ public class HtmlReader implements Reader {
     public Token read() throws Exception {
         final StringBuilder stringBuilder = new StringBuilder();
 
-        if (tokenChar == 0 && getInputStream().available() == 0) //empty file case
-            return new Token("", TokenType.END, getLineCounter(), getCharCounter());
+        if (tokenChar == 0 && lexer.getInputStream().available() == 0) //empty file case
+            return new Token("", TokenType.END, lexer.getLineCounter(), lexer.getCharCounter());
         else if (tokenChar == 0 )
-            tokenChar = getNextChar();
-        else if (getInputStream().available() == 0 && !getIsEnd()) {
-            setIsEnd();
+            tokenChar = lexer.getNextChar();
+        else if (lexer.getInputStream().available() == 0 && !lexer.getIsEnd()) {
+            lexer.setIsEnd();
             stringBuilder.append(tokenChar);
-            return new Token(stringBuilder.toString(), TokenType.HTML_CONTENT, getLineCounter(), getCharCounter());
-        } else if (getIsEnd()) {
-            return new Token("", TokenType.END, getLineCounter(), getCharCounter());
+            return new Token(stringBuilder.toString(), TokenType.HTML_CONTENT, lexer.getLineCounter(), lexer.getCharCounter());
+        } else if (lexer.getIsEnd()) {
+            return new Token("", TokenType.END, lexer.getLineCounter(), lexer.getCharCounter());
         }
 
         stringBuilder.append(tokenChar);
 
-        int line = getLineCounter();
-        int character = getCharCounter();
+        int line = lexer.getLineCounter();
+        int character = lexer.getCharCounter();
 
         if (tokenChar == '<' ) {
-            if((tokenChar = getNextChar()) == '?') {
+            if((tokenChar = lexer.getNextChar()) == '?') {
                 setNextState();
                 stringBuilder.append(tokenChar);
-                tokenChar = getNextChar();
-                return new Token(stringBuilder.toString(), TokenType.CTML_START, getLineCounter(), getCharCounter());
+                tokenChar = lexer.getNextChar();
+                return new Token(stringBuilder.toString(), TokenType.CTML_START, lexer.getLineCounter(), lexer.getCharCounter());
             } else {
                 return new Token(stringBuilder.toString(), TokenType.HTML_CONTENT, line, character);
             }
         }
 
-        tokenChar = getNextChar();
+        tokenChar = lexer.getNextChar();
         return new Token(stringBuilder.toString(), TokenType.HTML_CONTENT, line, character);
     }
 
