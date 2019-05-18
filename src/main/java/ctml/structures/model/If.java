@@ -20,7 +20,8 @@ public class If implements Executable {
     private CtmlBlock elseCtmlBlock = null;
 
     @Override
-    public void execute(CtmlBlock ctmlBlock) {
-
+    public void execute(CtmlBlock parentCtmlBlock) {
+//        ctmlBlock.setParentCtmlBlock(parentCtmlBlock);
+//        ctmlBlock.execute(); //only test
     }
 }

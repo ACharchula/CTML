@@ -2,7 +2,7 @@ package ctml.structures.model;
 
 import ctml.interpreter.Interpreter;
 
-public class HtmlBlock implements Node {
+public class HtmlBlock implements Block {
 
     String htmlContent;
 

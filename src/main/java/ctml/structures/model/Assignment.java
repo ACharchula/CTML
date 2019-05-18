@@ -7,15 +7,16 @@ public class Assignment implements Executable {
 
     private Variable variable;
 
-    public void setExecutable(Executable executable) {
+    public void setExecutable(ReturnExecutable executable) {
         this.executable = executable;
     }
 
-    private Executable executable;
+    private ReturnExecutable executable;
 
     @Override
-    public void execute(CtmlBlock ctmlBlock) {
-
+    public void execute(CtmlBlock ctmlBlock) throws Exception {
+        Variable v = ctmlBlock.getVariable(variable.getId());
+        v.setValue(executable.getResult().getValue());
     }
 
 

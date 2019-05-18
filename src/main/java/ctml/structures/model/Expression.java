@@ -5,7 +5,7 @@ import ctml.structures.token.TokenType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Expression implements Executable {
+public class Expression extends ReturnExecutable {
 
     private TokenType operator;
     private List<Expression> operands = new ArrayList<>();
@@ -26,5 +26,16 @@ public class Expression implements Executable {
     @Override
     public void execute(CtmlBlock ctmlBlock) {
 
+    }
+
+    @Override
+    Variable getResult() throws Exception {
+
+        if (operands.size() == 0){
+            if (variables.get(0).getType() == TokenType.STRING_CONTENT)
+                return variables.get(0);
+        }
+
+        return operands.get(0).getResult();
     }
 }

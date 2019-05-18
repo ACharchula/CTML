@@ -56,7 +56,7 @@ public class ParserTests {
 //        String content = "{ int a; } ";
 //        Program program = parse(content);
 //
-//        assertEquals(1, program.getNodes().size());
+//        assertEquals(1, program.getBlocks().size());
 //    }
 //
 //    @Test
@@ -64,7 +64,7 @@ public class ParserTests {
 //        String content = "{ if (a == b) { a = 10; } }";
 //        Program program = parse(content);
 //
-//        Executable instruction = program.getNodes().get(0).getInstructions().get(0);
+//        Executable instruction = program.getBlocks().get(0).getInstructions().get(0);
 //        assertEquals(If.class, instruction.getClass());
 //    }
 
