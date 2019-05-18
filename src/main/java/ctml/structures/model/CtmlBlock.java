@@ -52,6 +52,21 @@ public class CtmlBlock implements Block {
         return variable;
     }
 
+    public String getValue(Variable v) throws Exception {
+        if(v.getValue() == null && v.getId() != null) {
+            Variable found = getVariable(v.getId());
+            if(v.getIndex2() != null) {
+                return found.getValue(Integer.parseInt(v.getIndex1().getValue()), Integer.parseInt(v.getIndex2().getValue()));
+            } else if(v.getIndex1() != null) {
+                return found.getValue(Integer.parseInt(v.getIndex1().getValue()), 0);
+            } else {
+                return found.getValue();
+            }
+        } else {
+            return v.getValue();
+        }
+    }
+
     @Override
     public void execute() throws Exception {
         for(Executable instruction : instructions) {

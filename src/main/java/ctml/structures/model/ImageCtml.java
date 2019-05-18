@@ -11,12 +11,7 @@ public class ImageCtml implements Executable{
 
     @Override
     public void execute(CtmlBlock ctmlBlock) throws Exception {
-        String value = null;
-        if(link.getValue() == null && link.getId() != null) {
-            value = ctmlBlock.getVariable(link.getId()).getValue();
-        } else {
-            value = link.getValue();
-        }
+        String value = ctmlBlock.getValue(link);
 
         Interpreter.writer.println("<img src=\"" + value + "\">");
     }

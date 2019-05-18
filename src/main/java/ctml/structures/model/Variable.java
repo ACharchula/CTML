@@ -36,6 +36,14 @@ public class Variable {
         functionArguments.add(variable);
     }
 
+    public Variable getIndex1() {
+        return index1;
+    }
+
+    public Variable getIndex2() {
+        return index2;
+    }
+
     public void setIndex1(Variable index) {
         this.index1 = index;
     }
@@ -79,6 +87,16 @@ public class Variable {
 
     public String getValue() {
         return value;
+    }
+
+    public String getValue(int i1, int i2) { //maybe need to add ctmlblock to find ex. tab[a]
+        if(isCsv()) {
+            return ((List<String>) getTableValues().get(i1)).get(i2);
+        } else if (isTable()) {
+            return (String) getTableValues().get(i1);
+        }
+
+        return null;
     }
 
     public void setValue(String value) {

@@ -1,5 +1,7 @@
 package ctml.structures.model;
 
+import ctml.interpreter.Interpreter;
+
 public class Paragraph implements Executable{
     public void setText(Variable text) {
         this.text = text;
@@ -8,7 +10,8 @@ public class Paragraph implements Executable{
     private Variable text;
 
     @Override
-    public void execute(CtmlBlock ctmlBlock) {
-
+    public void execute(CtmlBlock ctmlBlock) throws Exception {
+        String value = ctmlBlock.getValue(text);
+        Interpreter.writer.println("<p>" + value + "</hp>");
     }
 }

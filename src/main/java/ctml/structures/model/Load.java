@@ -25,12 +25,7 @@ public class Load extends ReturnExecutable{
 
     @Override
     Variable getResult(CtmlBlock ctmlBlock) throws Exception {
-        String value;
-        if(variable.getValue() == null && variable.getId() != null) {
-            value = ctmlBlock.getVariable(variable.getId()).getValue();
-        } else {
-            value = variable.getValue();
-        }
+        String value = ctmlBlock.getValue(variable);
 
         List<List<String>> data = new ArrayList<>(new ArrayList<>());
         Path path = Paths.get(value);
