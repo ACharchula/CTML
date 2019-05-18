@@ -1,5 +1,7 @@
 package ctml.structures.model;
 
+import ctml.interpreter.Interpreter;
+
 public class ImageCtml implements Executable{
     private Variable link;
 
@@ -9,6 +11,6 @@ public class ImageCtml implements Executable{
 
     @Override
     public void execute(CtmlBlock ctmlBlock) {
-
+        Interpreter.writer.println("<img src=\"" + link.getValue() + "\">");
     }
 }

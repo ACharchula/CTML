@@ -45,7 +45,7 @@ public class CtmlReader implements Reader {
         if (Character.isDigit(tokenChar)) {
             return buildNumberToken(stringBuilder);
         } else if(tokenChar == '\"'){
-            return buildString(stringBuilder);
+            return buildString();
         } else if (Character.isLetter(tokenChar)) {
             return buildIdOrKeyword(stringBuilder);
         } else {
@@ -53,15 +53,17 @@ public class CtmlReader implements Reader {
         }
     }
 
-    private Token buildString(StringBuilder stringBuilder) throws Exception {
+    private Token buildString() throws Exception {
+        StringBuilder stringBuilder = new StringBuilder();
         while((tokenChar = lexer.getNextChar()) != '\"' && lexer.getInputStream().available() != 0) {
-            stringBuilder.append(tokenChar);
-
-            if (tokenChar == '\\')
+            if (tokenChar == '\\') {
                 stringBuilder.append(tokenChar = lexer.getNextChar());
+                continue;
+            }
+
+            stringBuilder.append(tokenChar);
         }
 
-        stringBuilder.append(tokenChar);
         tokenChar = lexer.getNextChar();
 
         return new Token(stringBuilder.toString(), TokenType.STRING_CONTENT, lexer.getLineCounter(), lexer.getCharCounter());

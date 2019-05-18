@@ -1,5 +1,7 @@
 package ctml.structures.model;
 
+import ctml.interpreter.Interpreter;
+
 public class Header implements Executable {
     public void setText(Variable text) {
         this.text = text;
@@ -9,6 +11,6 @@ public class Header implements Executable {
 
     @Override
     public void execute(CtmlBlock ctmlBlock) {
-
+        Interpreter.writer.println("<h1>" + text.getValue() + "</h1>");
     }
 }

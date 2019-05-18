@@ -431,7 +431,7 @@ class LexerTests {
         Token token = getTokenFromStringForCtml(input);
 
         assertEquals(TokenType.STRING_CONTENT, token.getType());
-        assertEquals(input, token.getContent());
+        assertEquals("content", token.getContent());
     }
 
     @Test
@@ -493,7 +493,7 @@ class LexerTests {
         String input = "\"content\ncontent\"";
         Token token = getTokenFromStringForCtml(input);
 
-        assertEquals(input, token.getContent());
+        assertEquals("content\ncontent", token.getContent());
     }
 
     @Test
@@ -501,7 +501,7 @@ class LexerTests {
         String input = "\"content\\\"content\\\"content\"";
         Token token = getTokenFromStringForCtml(input);
 
-        assertEquals(input, token.getContent());
+        assertEquals("content\"content\"content", token.getContent());
     }
 
     private Token getTokenFromStringForCtml(String string) throws Exception {
