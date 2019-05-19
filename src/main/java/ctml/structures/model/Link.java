@@ -1,5 +1,7 @@
 package ctml.structures.model;
 
+import ctml.interpreter.Interpreter;
+
 public class Link implements Executable{
     private Variable link;
 
@@ -14,7 +16,9 @@ public class Link implements Executable{
     private Variable text;
 
     @Override
-    public void execute(CtmlBlock ctmlBlock) {
-
+    public void execute(CtmlBlock ctmlBlock) throws Exception {
+        String linkValue = ctmlBlock.getValue(link);
+        String textValue = ctmlBlock.getValue(text);
+        Interpreter.writer.println("<a href=" + linkValue + ">" + textValue + "</a>");
     }
 }

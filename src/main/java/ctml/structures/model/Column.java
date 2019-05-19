@@ -1,5 +1,7 @@
 package ctml.structures.model;
 
+import ctml.interpreter.Interpreter;
+
 public class Column implements Executable{
     private Variable variable;
 
@@ -8,7 +10,8 @@ public class Column implements Executable{
     }
 
     @Override
-    public void execute(CtmlBlock ctmlBlock) {
-
+    public void execute(CtmlBlock ctmlBlock) throws Exception {
+        String value = ctmlBlock.getValue(variable);
+        Interpreter.writer.println("<th>" + value + "</th>");
     }
 }

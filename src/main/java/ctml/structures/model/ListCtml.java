@@ -1,6 +1,8 @@
 package ctml.structures.model;
 
 
+import ctml.interpreter.Interpreter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +18,14 @@ public class ListCtml implements Executable {
     }
 
     @Override
-    public void execute(CtmlBlock ctmlBlock) {
+    public void execute(CtmlBlock ctmlBlock) throws Exception {
+        Interpreter.writer.println("<ul>");
 
+        for (Variable v : variableList) {
+            String value = ctmlBlock.getValue(v);
+            Interpreter.writer.println("<li>" + value + "</li>");
+        }
+
+        Interpreter.writer.println("</ul>");
     }
 }

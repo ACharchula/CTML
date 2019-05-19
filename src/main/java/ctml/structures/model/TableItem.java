@@ -1,5 +1,7 @@
 package ctml.structures.model;
 
+import ctml.interpreter.Interpreter;
+
 public class TableItem implements Executable {
     public void setVariable(Variable variable) {
         this.variable = variable;
@@ -8,7 +10,8 @@ public class TableItem implements Executable {
     Variable variable;
 
     @Override
-    public void execute(CtmlBlock ctmlBlock) {
-
+    public void execute(CtmlBlock ctmlBlock) throws Exception {
+        String value = ctmlBlock.getValue(variable);
+        Interpreter.writer.println("<td>" + value + "</td>");
     }
 }

@@ -1,7 +1,11 @@
 <div>
     <?
         func int funkcja(int a) {
-            return a;
+            return fun2();
+        }
+
+        func int fun2() {
+            return 5;
         }
 
         {
@@ -17,6 +21,23 @@
             funkcja(3);
             int e = funkcja(2333);
             head(e);
+            table {
+                row {
+                    column("id");
+                    column("Surname");
+                    column("Salary");
+                }
+                row {
+                    table_item(1);
+                    table_item("Charchula");
+                    table_item(2000000);
+                }
+            }
+            link("https://www.google.pl", "stronka");
+            list {
+                list_item(c);
+                list_item(e);
+            }
         }
     ?>
     <div>siemanko mowi Kuba!</div>
