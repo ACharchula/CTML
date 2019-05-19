@@ -5,6 +5,8 @@ import ctml.structures.token.TokenType;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ctml.structures.token.TokenType.*;
+
 public class Expression extends ReturnExecutable {
 
     private List<TokenType> operators = new ArrayList<>();
@@ -32,11 +34,11 @@ public class Expression extends ReturnExecutable {
     Variable getResult(CtmlBlock ctmlBlock) throws Exception {
         final Literal literal = new Literal();
 
-        if (operands.size() == 0){ //obsluzyc wywolanie funkcji?
+        if (operands.size() == 0){
             if (variables.size() != 0) {
                 if (variables.get(0).getId() == null)
                     return variables.get(0);
-                else if(variables.get(0).getType() != TokenType.FUNCTION) {
+                else if(variables.get(0).getType() != FUNCTION) {
                     return ctmlBlock.getVariable(variables.get(0).getId());
                 } else {
                     FunctionCall functionCall = new FunctionCall();
@@ -47,24 +49,26 @@ public class Expression extends ReturnExecutable {
             }
         }
 
-        literal.setValue(operands.get(0).getResult(ctmlBlock).getValue());
-//        if(operators.size() == 0) {
-//            Variable v = new Variable();
-//            v.setValue(literal.getValue());
-//            return v;
-//        } else {
+        if(operators.size() != 0 && (operators.get(0) == OR || operators.get(0) == AND || operators.get(0) == EQUALS || operators.get(0) == NOT_EQUALS
+                || operators.get(0) == GREATER || operators.get(0) == GREATER_EQUALS || operators.get(0) == LESS_EQUALS
+                || operators.get(0) == LESS)) {
+            return executeCondition(ctmlBlock);
+        } else {
+
+            literal.setValue(operands.get(0).getResult(ctmlBlock).getValue());
+
             int index = 0;
             for (TokenType op : operators) {
                 Expression operand = operands.get(index + 1);
-                index ++;
+                index++;
 
-                if (op == TokenType.ADD) {
+                if (op == ADD) {
                     literal.plus(operand.getResult(ctmlBlock).getValue());
-                } else if (op == TokenType.SUBTRACT) {
+                } else if (op == SUBTRACT) {
                     literal.minus(operand.getResult(ctmlBlock).getValue());
-                } else if (op == TokenType.MULTIPLY) {
+                } else if (op == MULTIPLY) {
                     literal.multi(operand.getResult(ctmlBlock).getValue());
-                } else if (op == TokenType.DIVIDE) {
+                } else if (op == DIVIDE) {
                     literal.div(operand.getResult(ctmlBlock).getValue());
                 }
             }
@@ -72,34 +76,111 @@ public class Expression extends ReturnExecutable {
             Variable v = new Variable();
             v.setValue(literal.getValue());
             return v;
-        //}
+        }
+    }
 
-//        if (operands.size() == 0){
-//            if (variables.get(0).getType() == TokenType.STRING_CONTENT)
-//                return variables.get(0);
-//        }
-//
-//        return operands.get(0).getResult();
+    public Variable executeCondition(CtmlBlock ctmlBlock) throws Exception {
+        final Variable result = new Variable();
+        switch (operators.get(0)) {
+            case OR:
+                for (final Expression operand : operands) {
+                    if (operand.getResult(ctmlBlock).getValue().equals("1")) {
+                        result.setValue("1");
+                        return result;
+                    }
+                }
+                result.setValue("0");
+                return result;
+            case AND:
+                for (final Expression operand : operands) {
+                    if (!operand.getResult(ctmlBlock).getValue().equals("1")) {
+                        result.setValue("0");
+                        return result;
+                    }
+                }
+                result.setValue("1");
+                return result;
+            case EQUALS:
+                Variable left = operands.get(0).getResult(ctmlBlock);
+                Variable right = operands.get(1).getResult(ctmlBlock);
+                if (left.getValue().equals(right.getValue()))
+                    result.setValue("1");
+                else
+                    result.setValue("0");
+                break;
+            case NOT_EQUALS:
+                left = operands.get(0).getResult(ctmlBlock);
+                right = operands.get(1).getResult(ctmlBlock);
+                if (left.getValue().equals(right.getValue()))
+                    result.setValue("0");
+                else
+                    result.setValue("1");
+                break;
+            case LESS:
+                left = operands.get(0).getResult(ctmlBlock);
+                right = operands.get(1).getResult(ctmlBlock);
+
+                float leftSide = Float.parseFloat(left.getValue());
+                float righSide = Float.parseFloat(right.getValue());
+
+                if(leftSide < righSide)
+                    result.setValue("1");
+                else
+                    result.setValue("0");
+
+                break;
+            case LESS_EQUALS:
+                left = operands.get(0).getResult(ctmlBlock);
+                right = operands.get(1).getResult(ctmlBlock);
+
+                leftSide = Float.parseFloat(left.getValue());
+                righSide = Float.parseFloat(right.getValue());
+
+                if(leftSide <= righSide)
+                    result.setValue("1");
+                else
+                    result.setValue("0");
+
+                break;
+            case GREATER:
+                left = operands.get(0).getResult(ctmlBlock);
+                right = operands.get(1).getResult(ctmlBlock);
+
+                leftSide = Float.parseFloat(left.getValue());
+                righSide = Float.parseFloat(right.getValue());
+
+                if(leftSide > righSide)
+                    result.setValue("1");
+                else
+                    result.setValue("0");
+
+                break;
+            case GREATER_EQUALS:
+                left = operands.get(0).getResult(ctmlBlock);
+                right = operands.get(1).getResult(ctmlBlock);
+
+                leftSide = Float.parseFloat(left.getValue());
+                righSide = Float.parseFloat(right.getValue());
+
+                if(leftSide >= righSide)
+                    result.setValue("1");
+                else
+                    result.setValue("0");
+
+                break;
+        }
+        return result;
     }
 }
 
 class Literal {
     private String value;
-    private boolean isBool = false;
 
     void setValue(String value) {
         this.value = value;
     }
     private void setValue(float result) {
         this.value = Float.toString(result);
-    }
-
-    public void setIsBool(boolean isBool) {
-        this.isBool = isBool;
-    }
-
-    public boolean isBool() {
-        return isBool;
     }
 
     String getValue() {

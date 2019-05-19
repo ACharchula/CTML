@@ -20,8 +20,19 @@ public class If implements Executable {
     private CtmlBlock elseCtmlBlock = null;
 
     @Override
-    public void execute(CtmlBlock parentCtmlBlock) {
-//        ctmlBlock.setParentCtmlBlock(parentCtmlBlock);
-//        ctmlBlock.execute(); //only test
+    public void execute(CtmlBlock parentCtmlBlock) throws Exception {
+        ctmlBlock.setParentCtmlBlock(parentCtmlBlock);
+
+        if(elseCtmlBlock != null) {
+            elseCtmlBlock.setParentCtmlBlock(parentCtmlBlock);
+        }
+
+        if(expression.getResult(ctmlBlock).getValue().equals("1")) {
+            ctmlBlock.execute();
+        } else if (expression.getResult(ctmlBlock).getValue().equals("0")) {
+            if(elseCtmlBlock != null) {
+                elseCtmlBlock.execute();
+            }
+        }
     }
 }
