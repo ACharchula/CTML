@@ -504,7 +504,7 @@ public class Parser {
         FunctionCall functionCall = new FunctionCall();
         functionCall.setId(variable.getId());
         functionCall.setArguments(variable.getFunctionArguments());
-        acceptNextToken(SEMICOLON);
+        accept(SEMICOLON);
         return functionCall;
 
     }
@@ -628,6 +628,7 @@ public class Parser {
             variable.setType(FUNCTION);
             variable.setFunctionArguments(parseArgumentList(PARENTHESIS_CLOSE));
             accept(PARENTHESIS_CLOSE);
+            nextToken();
         }
 
         return variable;

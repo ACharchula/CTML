@@ -116,5 +116,21 @@ public class Variable {
         this.tableValues = tableValues;
     }
 
+//    public Variable cloneVariable() {
+//        Variable v = new Variable();
+//
+//        v.setTableValues(tableValues);
+//        v.setValue(value);
+//        v.setIsCsv(csv);
+//        v.setType(type);
+//        v.setId(id);
+//        v.setIndex2(index1.cloneVariable());
+//        v.setIndex1(index2.cloneVariable());
+//        v.setIsTable(table);
+//        v.setFunctionArguments(functionArguments);
+//
+//        return v;
+//    }
+
 
 }

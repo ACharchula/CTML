@@ -2,14 +2,17 @@ package ctml.interpreter.parser;
 
 import ctml.structures.model.Block;
 import ctml.structures.model.Function;
+import ctml.structures.model.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class Program {
 
-    private List<Function> functionList = new ArrayList<>();
+    private static List<Function> functionList = new ArrayList<>();
     private List<Block> blocks = new ArrayList<>();
+    private static Stack<List<Variable>> stack = new Stack<>();
 
     public void execute() throws Exception {
         for (Block block : blocks) {
@@ -33,13 +36,30 @@ public class Program {
         return false;
     }
 
-    public List<Function> getFunctionList() {
+    public static List<Function> getFunctionList() {
         return functionList;
+    }
+
+    public static Function getFunction(String id) throws CloneNotSupportedException {
+        for( Function f : functionList) {
+            if(f.getId().equals(id)) {
+                return f; //should be clone cause of the variable changes
+            }
+        }
+
+        return null;
     }
 
     public List<Block> getBlocks() {
         return blocks;
     }
 
+    public static void push(List<Variable> variables) {
+        stack.push(variables);
+    }
+
+    public static List<Variable> pop() {
+        return stack.pop();
+    }
 
 }

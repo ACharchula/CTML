@@ -1,5 +1,7 @@
 package ctml.structures.model;
 
+import ctml.interpreter.parser.Program;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +22,13 @@ public class FunctionCall implements Executable {
     }
 
     @Override
-    public void execute(CtmlBlock ctmlBlock) {
+    public void execute(CtmlBlock ctmlBlock) throws Exception {
+        executeFunction(ctmlBlock);
+    }
 
+    public Variable executeFunction(CtmlBlock ctmlBlock) throws Exception {
+        Program.push(arguments);
+        Function function = Program.getFunction(id);
+        return function.getResult(ctmlBlock);
     }
 }

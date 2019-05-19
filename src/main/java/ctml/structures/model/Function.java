@@ -1,11 +1,12 @@
 package ctml.structures.model;
 
+import ctml.interpreter.parser.Program;
 import ctml.structures.token.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Function {
+public class Function extends ReturnExecutable {
 
     private List<Variable> parameters = new ArrayList<>();
     private TokenType returnType;
@@ -43,4 +44,52 @@ public class Function {
     public void setCtmlBlock(CtmlBlock ctmlBlock) {
         this.ctmlBlock = ctmlBlock;
     }
+
+    public void addParameter(Variable v) {
+        parameters.add(v);
+    }
+
+    @Override
+    Variable getResult(CtmlBlock outerCtmlBlock) throws Exception {
+        List<Variable> arguments = Program.pop();
+
+        if(arguments.size() != parameters.size()) //sprawdzic czy sa dobrego typu
+            throw new Exception("Wrong amount of arguments!");
+
+        for(int i = 0; i < arguments.size(); ++i) {
+            Variable v = parameters.get(i);
+
+            v.setValue(outerCtmlBlock.getValue(arguments.get(i)));
+            ctmlBlock.addVariable(v);
+        }
+
+        Variable v = ctmlBlock.executeFunction();
+
+        for(Variable var : parameters) { //clean arguments
+            ctmlBlock.getVariables().remove(var.getId());
+        }
+
+        return v;
+    }
+
+    @Override
+    public void execute(CtmlBlock ctmlBlock) throws Exception {
+
+    }
+
+//    public Function cloneFunction() {
+//        Function function = new Function();
+//
+//        function.setReturnType(returnType);
+//
+//        for(Variable v: parameters) {
+//            function.addParameter(v.cloneVariable());
+//        }
+//
+//        function.setId(id);
+//
+//
+//
+//        return function;
+//    }
 }

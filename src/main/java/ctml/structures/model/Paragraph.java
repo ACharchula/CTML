@@ -12,6 +12,6 @@ public class Paragraph implements Executable{
     @Override
     public void execute(CtmlBlock ctmlBlock) throws Exception {
         String value = ctmlBlock.getValue(text);
-        Interpreter.writer.println("<p>" + value + "</hp>");
+        Interpreter.writer.println("<p>" + value + "</p>");
     }
 }

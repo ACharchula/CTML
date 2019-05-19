@@ -20,6 +20,8 @@ public class CtmlBlock implements Block {
 
     private List<Executable> instructions = new ArrayList<>();
 
+    private Variable result;
+
     public void addVariable(Variable variable) throws Exception {
 
         if(variables.putIfAbsent(variable.getId(), variable) != null) {
@@ -37,6 +39,10 @@ public class CtmlBlock implements Block {
 
     public void setParentCtmlBlock(CtmlBlock parentCtmlBlock) {
         this.parentCtmlBlock = parentCtmlBlock;
+    }
+
+    public void setResult(Variable result) {
+        this.result = result;
     }
 
     public Variable getVariable(String id) throws Exception {
@@ -77,6 +83,18 @@ public class CtmlBlock implements Block {
     @Override
     public String getStructure() {
         return "";
+    }
+
+    public Variable executeFunction() throws Exception {
+
+        for(Executable instruction : instructions) {
+            instruction.execute(this);
+
+            if(instruction.getClass() == Return.class)
+                break;
+        }
+
+        return result;
     }
 
 }

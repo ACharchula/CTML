@@ -8,7 +8,7 @@ public class Return implements Executable {
     Expression expression = null;
 
     @Override
-    public void execute(CtmlBlock ctmlBlock) {
-
+    public void execute(CtmlBlock ctmlBlock) throws Exception {
+        ctmlBlock.setResult(expression.getResult(ctmlBlock));
     }
 }

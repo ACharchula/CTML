@@ -36,8 +36,13 @@ public class Expression extends ReturnExecutable {
             if (variables.size() != 0) {
                 if (variables.get(0).getId() == null)
                     return variables.get(0);
-                else {
+                else if(variables.get(0).getType() != TokenType.FUNCTION) {
                     return ctmlBlock.getVariable(variables.get(0).getId());
+                } else {
+                    FunctionCall functionCall = new FunctionCall();
+                    functionCall.setArguments(variables.get(0).getFunctionArguments());
+                    functionCall.setId(variables.get(0).getId());
+                    return functionCall.executeFunction(ctmlBlock);
                 }
             }
         }
