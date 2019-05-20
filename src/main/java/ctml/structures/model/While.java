@@ -19,7 +19,7 @@ public class While implements Executable {
         ctmlBlock.setParentCtmlBlock(outerCtmlBlock);
 
         while(expression.getResult(ctmlBlock).getValue().equals("1")) {
-            ctmlBlock.execute();
+            outerCtmlBlock.setResult(ctmlBlock.executeFunction());
         }
     }
 }
