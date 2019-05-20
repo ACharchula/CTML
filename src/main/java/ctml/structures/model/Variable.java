@@ -99,13 +99,40 @@ public class Variable {
         return null;
     }
 
-    public void setValue(String value) {
-        if(type == TokenType.INTEGER_TYPE) {
-            float result = Float.parseFloat(value);
-            value = Integer.toString(Math.round(result));
+    public void setValue(String value) throws Exception {
+        if(id == null) {
+            this.value = value;
+            return;
         }
 
-        this.value = value;
+        this.value = verifyIfValueHasProperType(value);
+    }
+
+    public String verifyIfValueHasProperType(String value) throws Exception {
+        float floatValue;
+
+        try {
+            floatValue = Float.parseFloat(value);
+        } catch (Exception e) {
+            if(!(type == TokenType.STRING_TYPE))
+                throw new Exception("Wrong assignment type to variable of id : " + id + " type: " + type);
+            else {
+                return value;
+            }
+        }
+
+        if(type == TokenType.STRING_TYPE)
+            throw new Exception("Wrong assignment type to variable of id : " + id + " type: " + type);
+
+        if(type == TokenType.INTEGER_TYPE) {
+            value = Integer.toString(Math.round(floatValue));
+        }
+
+        return value;
+    }
+
+    public void addTableValue(String value) throws Exception {
+        getTableValues().add(verifyIfValueHasProperType(value));
     }
 
     public List getTableValues() {
@@ -115,6 +142,16 @@ public class Variable {
     public void setTableValues(List tableValues) {
         this.tableValues = tableValues;
     }
+
+    public void setAndVerifyTableValues(List tableValues) throws Exception {
+
+        for(String v : (List<String>) tableValues) {
+            verifyIfValueHasProperType(v);
+        }
+
+        this.tableValues = tableValues;
+    }
+
 
     public Variable cloneParameter() {
         Variable v = new Variable();

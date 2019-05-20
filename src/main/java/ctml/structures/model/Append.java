@@ -23,7 +23,7 @@ public class Append implements Executable {
             throw new Exception("You cannot append to csv type or none table types");
 
         for(Variable arg: arguments) { //sprawdzanie jaki typ to jest i w razie koniecznosci odrzucic
-            v.getTableValues().add(arg.getValue());
+            v.addTableValue(arg.getValue());
         }
     }
 }
