@@ -28,10 +28,10 @@ public class If implements Executable {
         }
 
         if(expression.getResult(ctmlBlock).getValue().equals("1")) {
-            ctmlBlock.execute();
+            parentCtmlBlock.setResult(ctmlBlock.executeFunction());
         } else if (expression.getResult(ctmlBlock).getValue().equals("0")) {
             if(elseCtmlBlock != null) {
-                elseCtmlBlock.execute();
+                parentCtmlBlock.setResult(elseCtmlBlock.executeFunction());
             }
         }
     }
