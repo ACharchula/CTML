@@ -40,10 +40,10 @@ public class Program {
         return functionList;
     }
 
-    public static Function getFunction(String id) throws CloneNotSupportedException {
+    public static Function getFunction(String id) throws Exception {
         for( Function f : functionList) {
             if(f.getId().equals(id)) {
-                return f; //should be clone cause of the variable changes
+                return f.cloneFunction();
             }
         }
 

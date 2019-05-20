@@ -25,7 +25,7 @@ public class CtmlBlock implements Block {
     public void addVariable(Variable variable) throws Exception {
 
         if(variables.putIfAbsent(variable.getId(), variable) != null) {
-            throw new Exception();
+            throw new Exception("There is already variable of id: " + variable.getId());
         }
     }
 
@@ -98,6 +98,21 @@ public class CtmlBlock implements Block {
         }
 
         return result;
+    }
+
+    public CtmlBlock cloneCtmlBlock() throws Exception {
+        CtmlBlock ctmlBlock = new CtmlBlock();
+
+        for(Variable v: variables.values()) {
+            ctmlBlock.addVariable(v.cloneParameter());
+        }
+
+        for(Executable ex : instructions) {
+            ctmlBlock.addInstruction(ex);
+        }
+
+        return ctmlBlock;
+
     }
 
 }

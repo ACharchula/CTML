@@ -77,19 +77,19 @@ public class Function extends ReturnExecutable {
 
     }
 
-//    public Function cloneFunction() {
-//        Function function = new Function();
-//
-//        function.setReturnType(returnType);
-//
-//        for(Variable v: parameters) {
-//            function.addParameter(v.cloneVariable());
-//        }
-//
-//        function.setId(id);
-//
-//
-//
-//        return function;
-//    }
+    public Function cloneFunction() throws Exception {
+        Function function = new Function();
+
+        function.setReturnType(returnType);
+
+        for(Variable v: parameters) {
+            function.addParameter(v.cloneParameter());
+        }
+
+        function.setId(id);
+
+        function.setCtmlBlock(ctmlBlock.cloneCtmlBlock());
+
+        return function;
+    }
 }
