@@ -90,8 +90,11 @@ public class CtmlBlock implements Block {
         for(Executable instruction : instructions) {
             instruction.execute(this);
 
-            if(instruction.getClass() == Return.class)
+            if(result != null)
                 break;
+
+//            if(instruction.getClass() == Return.class)
+//                break;
         }
 
         return result;
