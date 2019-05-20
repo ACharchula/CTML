@@ -15,7 +15,11 @@ public class While implements Executable {
     private CtmlBlock ctmlBlock;
 
     @Override
-    public void execute(CtmlBlock ctmlBlock) {
+    public void execute(CtmlBlock outerCtmlBlock) throws Exception {
+        ctmlBlock.setParentCtmlBlock(outerCtmlBlock);
 
+        while(expression.getResult(ctmlBlock).getValue().equals("1")) {
+            ctmlBlock.execute();
+        }
     }
 }
