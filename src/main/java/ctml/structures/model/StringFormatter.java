@@ -17,6 +17,11 @@ public class StringFormatter extends ReturnExecutable {
     }
 
     @Override
+    public Executable cloneExecutable() throws Exception {
+        return null;
+    }
+
+    @Override
     Variable getResult(CtmlBlock ctmlBlock) throws Exception {
         return null;
     }

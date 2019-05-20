@@ -14,4 +14,9 @@ public class Paragraph implements Executable{
         String value = ctmlBlock.getValue(text);
         Interpreter.writer.println("<p>" + value + "</p>");
     }
+
+    @Override
+    public Executable cloneExecutable() throws Exception {
+        return null;
+    }
 }

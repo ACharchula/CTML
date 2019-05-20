@@ -31,6 +31,11 @@ public class Expression extends ReturnExecutable {
     }
 
     @Override
+    public Executable cloneExecutable() throws Exception {
+        return this;
+    }
+
+    @Override
     Variable getResult(CtmlBlock ctmlBlock) throws Exception {
         final Literal literal = new Literal();
 

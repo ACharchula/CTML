@@ -26,4 +26,20 @@ public class Append implements Executable {
             v.addTableValue(arg.getValue());
         }
     }
+
+    @Override
+    public Executable cloneExecutable() throws Exception {
+        Append append = new Append();
+        append.setVariable(variable.cloneWholeVariable());
+
+        List<Variable> arg = new ArrayList<>();
+
+        for(Variable v : arguments) {
+            arg.add(v.cloneWholeVariable());
+        }
+
+        append.setArguments(arg);
+
+        return append;
+    }
 }

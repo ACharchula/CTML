@@ -14,4 +14,9 @@ public class TableItem implements Executable {
         String value = ctmlBlock.getValue(variable);
         Interpreter.writer.println("<td>" + value + "</td>");
     }
+
+    @Override
+    public Executable cloneExecutable() throws Exception {
+        return null;
+    }
 }

@@ -22,4 +22,9 @@ public class While implements Executable {
             outerCtmlBlock.setResult(ctmlBlock.executeFunction());
         }
     }
+
+    @Override
+    public Executable cloneExecutable() throws Exception {
+        return null;
+    }
 }

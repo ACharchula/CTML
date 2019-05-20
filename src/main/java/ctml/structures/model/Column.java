@@ -14,4 +14,11 @@ public class Column implements Executable{
         String value = ctmlBlock.getValue(variable);
         Interpreter.writer.println("<th>" + value + "</th>");
     }
+
+    @Override
+    public Executable cloneExecutable() throws Exception {
+        Column column = new Column();
+        column.setVariable(variable.cloneWholeVariable());
+        return column;
+    }
 }

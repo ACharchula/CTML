@@ -15,4 +15,11 @@ public class ImageCtml implements Executable{
 
         Interpreter.writer.println("<img src=\"" + value + "\">");
     }
+
+    @Override
+    public Executable cloneExecutable() throws Exception {
+        ImageCtml imageCtml = new ImageCtml();
+        imageCtml.setLink(link.cloneWholeVariable());
+        return imageCtml;
+    }
 }

@@ -17,6 +17,21 @@ public class ArrayInit extends ReturnExecutable {
     }
 
     @Override
+    public Executable cloneExecutable() throws Exception {
+        ArrayInit arrayInit = new ArrayInit();
+
+        List<Variable> list = new ArrayList<>();
+
+        for(Variable v : variableList) {
+            list.add(v.cloneWholeVariable());
+        }
+
+        arrayInit.setVariableList(list);
+
+        return arrayInit;
+    }
+
+    @Override
     Variable getResult(CtmlBlock ctmlBlock) throws Exception {
         List<String> tableValues = new ArrayList<>();
 

@@ -105,6 +105,9 @@ public class Variable {
             return;
         }
 
+        if(value == null)
+            return;
+
         this.value = verifyIfValueHasProperType(value);
     }
 
@@ -160,6 +163,37 @@ public class Variable {
         v.setType(type);
         v.setId(id);
         v.setIsTable(table);
+
+        return v;
+    }
+
+    public Variable cloneWholeVariable() throws Exception {
+        Variable v = new Variable();
+
+        v.setId(id);
+        v.setType(type);
+        v.setIsCsv(csv);
+        v.setIsTable(table);
+        v.setValue(value);
+
+        if(functionArguments != null) {
+            for(Variable var : functionArguments) {
+                v.addFunctionArgument(var.cloneWholeVariable());
+            }
+        } else
+            v.setFunctionArguments(null);
+        if(index1 != null)
+            v.setIndex1(index1.cloneWholeVariable());
+        if(index2 != null)
+            v.setIndex2(index2.cloneWholeVariable());
+
+        if(v.isCsv()) {
+            v.setTableValues(tableValues);
+        } else if (v.isTable()) {
+            List<String> table = new ArrayList<>((List<String>) tableValues);
+            v.setTableValues(table);
+        } else
+            v.setTableValues(null);
 
         return v;
     }

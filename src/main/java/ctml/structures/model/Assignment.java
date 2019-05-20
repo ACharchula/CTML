@@ -25,5 +25,13 @@ public class Assignment implements Executable {
             v.setValue(executable.getResult(ctmlBlock).getValue());
     }
 
+    @Override
+    public Executable cloneExecutable() throws Exception {
+        Assignment assignment = new Assignment();
+        assignment.setVariable(variable.cloneWholeVariable());
+        assignment.setExecutable((ReturnExecutable) executable.cloneExecutable());
+        return assignment;
+    }
+
 
 }

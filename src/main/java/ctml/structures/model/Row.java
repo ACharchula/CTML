@@ -25,4 +25,9 @@ public class Row implements Executable {
         }
         Interpreter.writer.println("</tr>");
     }
+
+    @Override
+    public Executable cloneExecutable() throws Exception {
+        return null;
+    }
 }

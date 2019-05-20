@@ -24,6 +24,11 @@ public class Load extends ReturnExecutable{
     }
 
     @Override
+    public Executable cloneExecutable() throws Exception {
+        return null;
+    }
+
+    @Override
     Variable getResult(CtmlBlock ctmlBlock) throws Exception {
         String value = ctmlBlock.getValue(variable);
 

@@ -1,5 +1,6 @@
 package ctml.structures.model;
 
+import com.sun.jdi.connect.spi.TransportService;
 import ctml.interpreter.Interpreter;
 
 public class Link implements Executable{
@@ -20,5 +21,13 @@ public class Link implements Executable{
         String linkValue = ctmlBlock.getValue(link);
         String textValue = ctmlBlock.getValue(text);
         Interpreter.writer.println("<a href=" + linkValue + ">" + textValue + "</a>");
+    }
+
+    @Override
+    public Executable cloneExecutable() throws Exception {
+        Link linkCl = new Link();
+        linkCl.setText(text.cloneWholeVariable());
+        linkCl.setLink(link.cloneWholeVariable());
+        return linkCl;
     }
 }

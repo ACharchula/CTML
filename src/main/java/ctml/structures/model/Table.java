@@ -24,4 +24,9 @@ public class Table implements Executable{
         }
         Interpreter.writer.println("</table>");
     }
+
+    @Override
+    public Executable cloneExecutable() throws Exception {
+        return null;
+    }
 }

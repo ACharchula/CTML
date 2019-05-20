@@ -77,6 +77,11 @@ public class Function extends ReturnExecutable {
 
     }
 
+    @Override
+    public Executable cloneExecutable() throws Exception {
+        return null;
+    }
+
     public Function cloneFunction() throws Exception {
         Function function = new Function();
 

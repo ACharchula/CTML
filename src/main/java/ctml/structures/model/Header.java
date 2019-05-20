@@ -14,4 +14,11 @@ public class Header implements Executable {
         String value = ctmlBlock.getValue(text);
         Interpreter.writer.println("<h1>" + value + "</h1>");
     }
+
+    @Override
+    public Executable cloneExecutable() throws Exception {
+        Header header = new Header();
+        header.setText(text.cloneWholeVariable());
+        return header;
+    }
 }

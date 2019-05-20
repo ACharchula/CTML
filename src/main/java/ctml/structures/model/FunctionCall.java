@@ -26,6 +26,21 @@ public class FunctionCall implements Executable {
         executeFunction(ctmlBlock);
     }
 
+    @Override
+    public Executable cloneExecutable() throws Exception {
+        FunctionCall functionCall = new FunctionCall();
+        functionCall.setId(id);
+
+        List<Variable> variableList = new ArrayList<>();
+
+        for( Variable v : arguments) {
+            variableList.add(v.cloneWholeVariable());
+        }
+
+        return functionCall;
+
+    }
+
     public Variable executeFunction(CtmlBlock ctmlBlock) throws Exception {
         Program.push(arguments);
         Function function = Program.getFunction(id);

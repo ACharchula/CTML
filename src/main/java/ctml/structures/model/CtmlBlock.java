@@ -108,7 +108,7 @@ public class CtmlBlock implements Block {
         }
 
         for(Executable ex : instructions) {
-            ctmlBlock.addInstruction(ex);
+            ctmlBlock.addInstruction(ex.cloneExecutable());
         }
 
         return ctmlBlock;

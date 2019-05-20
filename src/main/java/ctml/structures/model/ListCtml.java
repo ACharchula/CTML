@@ -28,4 +28,9 @@ public class ListCtml implements Executable {
 
         Interpreter.writer.println("</ul>");
     }
+
+    @Override
+    public Executable cloneExecutable() throws Exception {
+        return null;
+    }
 }
