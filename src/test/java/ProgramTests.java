@@ -169,7 +169,13 @@ public class ProgramTests {
         assertThrows(Exception.class, () -> runInterpreter("<? { int[] a = {\"a\", \"b\"}; } ?>"));
     }
 
-    
+    @Test
+    void isRecursionWorking() throws Exception {
+        runInterpreter("<? func int s(int a) { if(a == 0) { return 1; } " +
+                "else { int j = a - 1; int r = s(j); int ret = a * r; return ret; } } " +
+                "{ int a = s(4); par(a); } ?>");
+        assertTrue(getResult().contains("<p>24</p>"));
+    }
 
     private static InputStream convertStringToInputStreamReader(String string) {
         return new ByteArrayInputStream(string.getBytes());
