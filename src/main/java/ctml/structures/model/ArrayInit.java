@@ -18,6 +18,16 @@ public class ArrayInit extends ReturnExecutable {
 
     @Override
     Variable getResult(CtmlBlock ctmlBlock) throws Exception {
-        return null;
+        List<String> tableValues = new ArrayList<>();
+
+        for(Variable v : variableList) {
+            String value = ctmlBlock.getValue(v);
+            tableValues.add(value);
+        }
+
+        Variable result = new Variable();
+        result.setTableValues(tableValues);
+
+        return result;
     }
 }
