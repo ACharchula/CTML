@@ -138,6 +138,16 @@ public class Variable {
         return value;
     }
 
+    public void setAndVerifyCsvAssignment(List list) throws Exception {
+        try {
+            ((List<String>) list.get(0)).get(0);
+        } catch (Exception e) {
+            throw new Exception("Wrong assignment to csv variable");
+        }
+
+        this.tableValues = list;
+    }
+
     public void addTableValue(String value) throws Exception {
         getTableValues().add(verifyIfValueHasProperType(value));
     }

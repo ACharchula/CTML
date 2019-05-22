@@ -20,7 +20,7 @@ public class Assignment implements Executable {
         if(!v.isCsv() && v.isTable())
             v.setAndVerifyTableValues(executable.getResult(ctmlBlock).getTableValues());
         else if(v.isCsv())
-            v.setTableValues(executable.getResult(ctmlBlock).getTableValues());
+            v.setAndVerifyCsvAssignment(executable.getResult(ctmlBlock).getTableValues());
         else
             v.setValue(executable.getResult(ctmlBlock).getValue());
     }

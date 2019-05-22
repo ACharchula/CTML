@@ -357,6 +357,33 @@ public class ProgramTests {
         assertThrows(Exception.class, () -> runInterpreter("<? func int f() { return \"a\"; } { f(); } ?>"));
     }
 
+    @Test
+    void testWhileStatement() throws Exception {
+        runInterpreter("<? { int a = 3; while(a != 0) {par(a); a=a-1;} } ?>");
+        assertTrue(getResult().contains("<p>3</p>\n<p>2</p>\n<p>1</p>"), getResult());
+    }
+
+    @Test
+    void doesInnerIfSeesVariablesInMainBody() throws Exception {
+        runInterpreter("<? { int a = 1; if(1) { if(1) {par(\"a\");} } } ?>");
+        assertTrue(getResult().contains("<p>a</p>"), getResult());
+    }
+
+    @Test
+    void isExceptionThrownWhenAssigningDifferentTypeToCsv() {
+        assertThrows(Exception.class, () -> runInterpreter("<? { csv a = 1; } ?>"));
+    }
+
+    @Test
+    void isExceptionThrownWhenAssigningDifferentTypeToTable() {
+        assertThrows(Exception.class, () -> runInterpreter("<? { int[] a = 1; } ?>"));
+    }
+
+    @Test
+    void testLoadToCsv() throws Exception {
+        runInterpreter("<? { csv a = load(\"testCSV.csv\"); par(a[0][0]); par(a[1][0]); } ?>");
+        assertTrue(getResult().contains("<p>test00</p>\n<p>test10</p>"), getResult());
+    }
 
     private static InputStream convertStringToInputStreamReader(String string) {
         return new ByteArrayInputStream(string.getBytes());
