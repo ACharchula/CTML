@@ -562,7 +562,8 @@ public class Parser {
         if (currentToken.getType() == PARENTHESIS_OPEN) {
             nextToken();
             expression.addOperand(parseExpression());
-            acceptNextToken(PARENTHESIS_CLOSE);
+            accept(PARENTHESIS_CLOSE); //acceptNExtToken
+            nextToken();;
         } else {
             expression.addOperand(parseSimpleExpression());
         }
@@ -599,7 +600,7 @@ public class Parser {
 
         if (currentToken.getType() == PARENTHESIS_OPEN) {
             nextToken();
-            expression.addOperand(parseExpression());
+            expression.addOperand(parseSimpleExpression()); //parseExpression
             accept(PARENTHESIS_CLOSE);
             nextToken();
         } else if (currentToken.getType() == ID) {

@@ -131,9 +131,6 @@ public class Variable {
             }
         }
 
-        if(type == TokenType.STRING_TYPE)
-            throw new Exception("Wrong assignment type to variable of id : " + id + " type: " + type);
-
         if(type == TokenType.INTEGER_TYPE) {
             value = Integer.toString(Math.round(floatValue));
         }

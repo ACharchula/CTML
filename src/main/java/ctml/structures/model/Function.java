@@ -72,6 +72,10 @@ public class Function extends ReturnExecutable {
 //        for(Variable var : parameters) { //clean arguments
 //            ctmlBlock.getVariables().remove(var.getId());
 //        }
+        if(v != null) {
+            v.setType(returnType);
+            v.verifyIfValueHasProperType(v.getValue());
+        }
 
         return v;
     }

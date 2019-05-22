@@ -18,6 +18,9 @@ public class Program {
         for (Block block : blocks) {
             block.execute();
         }
+
+        functionList.clear();
+        stack.clear();
     }
 
     public void addFunction(Function function) {
