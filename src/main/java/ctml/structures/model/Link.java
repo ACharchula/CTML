@@ -1,6 +1,5 @@
 package ctml.structures.model;
 
-import com.sun.jdi.connect.spi.TransportService;
 import ctml.interpreter.Interpreter;
 
 public class Link implements Executable{

@@ -17,6 +17,8 @@ public class Paragraph implements Executable{
 
     @Override
     public Executable cloneExecutable() throws Exception {
-        return null;
+        Paragraph paragraph = new Paragraph();
+        paragraph.setText(text.cloneWholeVariable());
+        return paragraph;
     }
 }

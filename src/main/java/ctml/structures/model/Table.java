@@ -27,6 +27,12 @@ public class Table implements Executable{
 
     @Override
     public Executable cloneExecutable() throws Exception {
-        return null;
+        Table table = new Table();
+
+        for(Executable row : tableRows) {
+            table.addRow((Row) row.cloneExecutable());
+        }
+
+        return table;
     }
 }

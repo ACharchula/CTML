@@ -31,6 +31,12 @@ public class ListCtml implements Executable {
 
     @Override
     public Executable cloneExecutable() throws Exception {
-        return null;
+        ListCtml listCtml = new ListCtml();
+
+        for(Variable v : variableList) {
+            listCtml.addVariable(v.cloneWholeVariable());
+        }
+
+        return listCtml;
     }
 }

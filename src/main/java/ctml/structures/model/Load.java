@@ -25,7 +25,9 @@ public class Load extends ReturnExecutable{
 
     @Override
     public Executable cloneExecutable() throws Exception {
-        return null;
+        Load load = new Load();
+        load.setVariable(variable.cloneWholeVariable());
+        return load;
     }
 
     @Override

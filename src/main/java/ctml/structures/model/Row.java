@@ -28,6 +28,12 @@ public class Row implements Executable {
 
     @Override
     public Executable cloneExecutable() throws Exception {
-        return null;
+        Row row = new Row();
+
+        for(Executable tableItem : tableItems) {
+            row.addTableItem(tableItem.cloneExecutable());
+        }
+
+        return row;
     }
 }

@@ -17,6 +17,8 @@ public class TableItem implements Executable {
 
     @Override
     public Executable cloneExecutable() throws Exception {
-        return null;
+        TableItem tableItem = new TableItem();
+        tableItem.setVariable(variable.cloneWholeVariable());
+        return tableItem;
     }
 }
