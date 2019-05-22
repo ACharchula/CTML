@@ -73,6 +73,11 @@ public class CtmlBlock implements Block {
         }
     }
 
+    public List getTableValue(Variable v) throws Exception {
+        Variable found = getVariable(v.getId());
+        return found.getTableValues();
+    }
+
     @Override
     public void execute() throws Exception {
         for(Executable instruction : instructions) {

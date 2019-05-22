@@ -177,6 +177,8 @@ public class ProgramTests {
         assertTrue(getResult().contains("<p>24</p>"));
     }
 
+
+
     private static InputStream convertStringToInputStreamReader(String string) {
         return new ByteArrayInputStream(string.getBytes());
     }

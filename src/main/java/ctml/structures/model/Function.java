@@ -59,15 +59,19 @@ public class Function extends ReturnExecutable {
         for(int i = 0; i < arguments.size(); ++i) {
             Variable v = parameters.get(i);
 
-            v.setValue(outerCtmlBlock.getValue(arguments.get(i)));
+            if(v.isTable())
+                v.setTableValues(outerCtmlBlock.getTableValue(arguments.get(i)));
+            else
+                v.setValue(outerCtmlBlock.getValue(arguments.get(i)));
+
             ctmlBlock.addVariable(v);
         }
 
         Variable v = ctmlBlock.executeFunction();
 
-        for(Variable var : parameters) { //clean arguments
-            ctmlBlock.getVariables().remove(var.getId());
-        }
+//        for(Variable var : parameters) { //clean arguments
+//            ctmlBlock.getVariables().remove(var.getId());
+//        }
 
         return v;
     }

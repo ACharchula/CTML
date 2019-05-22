@@ -44,7 +44,13 @@ public class Expression extends ReturnExecutable {
                 if (variables.get(0).getId() == null)
                     return variables.get(0);
                 else if(variables.get(0).getType() != FUNCTION) {
-                    return ctmlBlock.getVariable(variables.get(0).getId());
+
+                    if(variables.get(0).getIndex1() != null) {
+                        Variable found = new Variable();
+                        found.setValue(ctmlBlock.getValue(variables.get(0)));
+                        return found;
+                    } else
+                        return ctmlBlock.getVariable(variables.get(0).getId());
                 } else {
                     FunctionCall functionCall = new FunctionCall();
                     functionCall.setArguments(variables.get(0).getFunctionArguments());
@@ -60,7 +66,7 @@ public class Expression extends ReturnExecutable {
             return executeCondition(ctmlBlock);
         } else {
 
-            literal.setValue(operands.get(0).getResult(ctmlBlock).getValue());
+            literal.setValue(operands.get(0).getResult(ctmlBlock).getValue(ctmlBlock));
 
             int index = 0;
             for (TokenType op : operators) {
