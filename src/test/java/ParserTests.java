@@ -1,5 +1,5 @@
 import ctml.interpreter.parser.Parser;
-import ctml.interpreter.parser.Program;
+import ctml.interpreter.program.Program;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;

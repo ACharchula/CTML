@@ -1,7 +1,7 @@
 package ctml.interpreter;
 
 import ctml.interpreter.parser.Parser;
-import ctml.interpreter.parser.Program;
+import ctml.interpreter.program.Program;
 
 
 import java.io.FileWriter;

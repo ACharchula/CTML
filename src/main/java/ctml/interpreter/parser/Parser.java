@@ -2,6 +2,7 @@ package ctml.interpreter.parser;
 
 import ctml.helpers.Logger;
 import ctml.interpreter.lexer.Lexer;
+import ctml.interpreter.program.Program;
 import ctml.structures.model.*;
 import ctml.structures.token.Token;
 import ctml.structures.token.TokenType;

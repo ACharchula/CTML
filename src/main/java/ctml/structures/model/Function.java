@@ -1,6 +1,6 @@
 package ctml.structures.model;
 
-import ctml.interpreter.parser.Program;
+import ctml.interpreter.program.Program;
 import ctml.structures.token.TokenType;
 
 import java.util.ArrayList;

@@ -1,16 +1,17 @@
-package ctml.interpreter.parser;
+package ctml.interpreter.program;
 
 import ctml.structures.model.Block;
 import ctml.structures.model.Function;
 import ctml.structures.model.Variable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
 public class Program {
 
-    private static List<Function> functionList = new ArrayList<>();
+    private static HashMap<String, Function> functions = new HashMap<>();
     private List<Block> blocks = new ArrayList<>();
     private static Stack<List<Variable>> stack = new Stack<>();
 
@@ -19,38 +20,27 @@ public class Program {
             block.execute();
         }
 
-        functionList.clear();
+        functions.clear();
         stack.clear();
     }
 
-    public void addFunction(Function function) {
-        functionList.add(function);
+    public void addFunction(Function function) throws Exception {
+        if(functions.putIfAbsent(function.getId(), function) != null) {
+            throw new Exception("There is already function of id: " + function.getId());
+        }
     }
 
     public void addBlock(Block block) {
         blocks.add(block);
     }
 
-    public boolean checkIfFunctionExsists(String id) {
-        for(Function function : functionList) {
-            if(function.getId().equals(id))
-                return true;
-        }
-        return false;
-    }
-
-    public static List<Function> getFunctionList() {
-        return functionList;
-    }
-
     public static Function getFunction(String id) throws Exception {
-        for( Function f : functionList) {
-            if(f.getId().equals(id)) {
-                return f.cloneFunction();
-            }
-        }
+        Function function = functions.get(id);
 
-        return null;
+        if(function == null)
+            throw new Exception("There is no function of id: " + id);
+
+        return function.cloneFunction();
     }
 
     public List<Block> getBlocks() {
