@@ -1,13 +1,17 @@
-package ctml.structures.model;
+package ctml.structures.model.ctmlObjects;
 
 import ctml.interpreter.Interpreter;
+import ctml.structures.model.CtmlBlock;
+import ctml.structures.model.Executable;
+import ctml.structures.model.Variable;
 
-public class Paragraph implements Executable{
+public class Paragraph implements Executable {
+
+    private Variable text;
+
     public void setText(Variable text) {
         this.text = text;
     }
-
-    private Variable text;
 
     @Override
     public void execute(CtmlBlock ctmlBlock) throws Exception {
@@ -18,7 +22,7 @@ public class Paragraph implements Executable{
     @Override
     public Executable cloneExecutable() throws Exception {
         Paragraph paragraph = new Paragraph();
-        paragraph.setText(text.cloneWholeVariable());
+        paragraph.setText(text.cloneVariable());
         return paragraph;
     }
 }

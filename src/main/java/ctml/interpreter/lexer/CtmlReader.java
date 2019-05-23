@@ -1,6 +1,5 @@
 package ctml.interpreter.lexer;
 
-import ctml.helpers.Logger;
 import ctml.structures.token.PredefinedTokens;
 import ctml.structures.token.Token;
 import ctml.structures.token.TokenType;
@@ -19,11 +18,6 @@ public class CtmlReader implements Reader {
     @Override
     public void setNextState() {
         lexer.setLexerState(new HtmlReader(lexer));
-    }
-
-    @Override
-    public void printState() {
-        System.out.println("Reader state - CtmlReader");
     }
 
     @Override
@@ -92,7 +86,7 @@ public class CtmlReader implements Reader {
             return read();
 
         if(tokenType == null)
-            throw Logger.error("Undefined token - " + stringBuilder.toString() +
+            throw new Exception("Undefined token - " + stringBuilder.toString() +
                     " at line: " + lexer.getLineCounter() + " character: " + lexer.getCharCounter());
 
         return new Token(stringBuilder.toString(), tokenType, lexer.getLineCounter(), lexer.getCharCounter());

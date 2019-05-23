@@ -1,17 +1,16 @@
-package ctml.structures.model;
+package ctml.structures.model.ctmlObjects;
 
 
 import ctml.interpreter.Interpreter;
+import ctml.structures.model.CtmlBlock;
+import ctml.structures.model.Executable;
+import ctml.structures.model.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListCtml implements Executable {
-    List<Variable> variableList = new ArrayList<>();
-
-    public void setVariableList(List<Variable> variableList) {
-        this.variableList = variableList;
-    }
+    private List<Variable> variableList = new ArrayList<>();
 
     public void addVariable(Variable variable) {
         variableList.add(variable);
@@ -34,7 +33,7 @@ public class ListCtml implements Executable {
         ListCtml listCtml = new ListCtml();
 
         for(Variable v : variableList) {
-            listCtml.addVariable(v.cloneWholeVariable());
+            listCtml.addVariable(v.cloneVariable());
         }
 
         return listCtml;

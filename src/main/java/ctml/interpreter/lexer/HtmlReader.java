@@ -20,11 +20,6 @@ public class HtmlReader implements Reader {
     }
 
     @Override
-    public void printState() {
-        System.out.println("Reader state - HtmlReader");
-    }
-
-    @Override
     public Token read() throws Exception {
         final StringBuilder stringBuilder = new StringBuilder();
 

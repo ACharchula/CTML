@@ -1,9 +1,9 @@
 package ctml.interpreter.parser;
 
-import ctml.helpers.Logger;
 import ctml.interpreter.lexer.Lexer;
 import ctml.interpreter.program.Program;
 import ctml.structures.model.*;
+import ctml.structures.model.ctmlObjects.*;
 import ctml.structures.token.Token;
 import ctml.structures.token.TokenType;
 
@@ -35,7 +35,7 @@ public class Parser {
         while(currentToken.getType() != END) {
 
             if (!parseCtml) {
-                if(currentToken.getType() == TokenType.HTML_CONTENT) { //pass to output file in the future
+                if(currentToken.getType() == TokenType.HTML_CONTENT) {
                     program.addBlock(parseHtmlBlock());
                 } else if (currentToken.getType() == TokenType.CTML_START) {
                     parseCtml = true;
@@ -88,7 +88,7 @@ public class Parser {
 
     private void accept(TokenType tokenType) throws Exception {
         if(!currentToken.getType().equals(tokenType)) {
-            throw Logger.error("Unexpected token: " + currentToken.getType() + " in line: " + currentToken.getLineNumber() +
+            throw new Exception("Unexpected token: " + currentToken.getType() + " in line: " + currentToken.getLineNumber() +
                     " char: " + currentToken.getCharacterNumber() + "\n Expected: " + tokenType);
         }
     }
@@ -96,7 +96,7 @@ public class Parser {
     private void acceptOneOfMany(TokenType ... tokenTypes) throws Exception {
 
         if(!checkIfIsOneOfTokenTypes(tokenTypes)) {
-            throw Logger.error("Error at line " + currentToken.getLineNumber() + " char " + currentToken.getCharacterNumber() +
+            throw new Exception("Error at line " + currentToken.getLineNumber() + " char " + currentToken.getCharacterNumber() +
                     " - expected one of TokenTypes: " + Arrays.toString(tokenTypes) + " but was: " + currentToken.getType());
         }
     }
@@ -187,7 +187,7 @@ public class Parser {
                 try {
                     ctmlBlock.addVariable(variable);
                 } catch (Exception e) {
-                    throw Logger.error("Error at line " + line + " char: " + character + ".\n" +
+                    throw new Exception("Error at line " + line + " char: " + character + ".\n" +
                             "Variable with id: " + variable.getId() + " has already been defined!");
                 }
 
@@ -212,18 +212,15 @@ public class Parser {
         assignment.setVariable(variable);
 
         if (currentToken.getType() == LOAD) {
-//            if (variable.getType() != CSV_TYPE) {
-//                throw Logger.error("Error at line... Cannot use load function with other variable than csv type");
-//            }
-            assignment.setExecutable(parseLoad());
+            assignment.setReturnExecutable(parseLoad());
         } else if(currentToken.getType() == BRACKET_OPEN){
-            assignment.setExecutable(arrayInitialization());
+            assignment.setReturnExecutable(arrayInitialization());
             nextToken();
         } else if(currentToken.getType()== STRING_FORMATTER) {
-            assignment.setExecutable(parseStringFormatter());
+            assignment.setReturnExecutable(parseStringFormatter());
             nextToken();
         } else {
-            assignment.setExecutable(parseSimpleExpression());
+            assignment.setReturnExecutable(parseSimpleExpression());
         }
 
         accept(SEMICOLON);
@@ -281,7 +278,7 @@ public class Parser {
         nextToken();
         Variable index1 = new Variable();
         acceptOneOfMany(NUMBER, ID);
-        index1.setValue(currentToken.getContent());
+        setIndexValue(index1);
         variable.setIndex1(index1);
         acceptNextToken(SQUARE_BRACKET_CLOSE);
         nextToken();
@@ -289,11 +286,18 @@ public class Parser {
             Variable index2 = new Variable();
             nextToken();
             acceptOneOfMany(NUMBER, ID);
-            index2.setValue(currentToken.getContent());
+            setIndexValue(index2);
             variable.setIndex2(index2);
             acceptNextToken(SQUARE_BRACKET_CLOSE);
             nextToken();
         }
+    }
+
+    private void setIndexValue(Variable index) throws Exception {
+        if(currentToken.getType() == ID) {
+            index.setId(currentToken.getContent());
+        } else
+            index.setValue(currentToken.getContent());
     }
 
     private Executable parseStatement() throws Exception {
@@ -465,7 +469,7 @@ public class Parser {
                 Column column = new Column();
                 acceptNextToken(PARENTHESIS_OPEN);
                 nextToken();
-                column.setVariable(parseArgument());
+                column.setText(parseArgument());
                 accept(PARENTHESIS_CLOSE);
                 row.addTableItem(column);
             } else if (currentToken.getType() == TABLE_ITEM) {
@@ -623,10 +627,6 @@ public class Parser {
         if(currentToken.getType() == SQUARE_BRACKET_OPEN) {
             parseIndex(variable);
         } else if (currentToken.getType() == PARENTHESIS_OPEN) {
-//            if(!program.checkIfFunctionExsists(id)) { //not working when recursion - needs to be changed
-//                throw new Exception("Error at line " + currentToken.getLineNumber() + " character " +currentToken.getCharacterNumber() +
-//                        ".\nThe function with id - " + id + " is not defined");
-//            }
             variable.setType(FUNCTION);
             variable.setFunctionArguments(parseArgumentList(PARENTHESIS_CLOSE));
             accept(PARENTHESIS_CLOSE);

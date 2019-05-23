@@ -1,16 +1,15 @@
-package ctml.structures.model;
+package ctml.structures.model.ctmlObjects;
 
 import ctml.interpreter.Interpreter;
+import ctml.structures.model.CtmlBlock;
+import ctml.structures.model.Executable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Table implements Executable{
-    List<Executable> tableRows = new ArrayList<>();
+public class Table implements Executable {
 
-    public void setTableRows(List<Executable> tableItems) {
-        this.tableRows = tableItems;
-    }
+    private List<Executable> tableRows = new ArrayList<>();
 
     public void addRow(Row row) {
         tableRows.add(row);

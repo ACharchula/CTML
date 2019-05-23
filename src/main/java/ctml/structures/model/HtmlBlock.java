@@ -4,19 +4,10 @@ import ctml.interpreter.Interpreter;
 
 public class HtmlBlock implements Block {
 
-    String htmlContent;
-
-    public String getHtmlContent() {
-        return htmlContent;
-    }
+    private String htmlContent;
 
     public void setHtmlContent(String htmlContent) {
         this.htmlContent = htmlContent;
-    }
-
-    @Override
-    public String getStructure() {
-        return "";
     }
 
     @Override

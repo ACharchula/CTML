@@ -395,6 +395,25 @@ class ProgramTests {
         assertTrue(getResult().contains("<div>div1</div>\n<p>2</p>\n<div>div2</div>\n<p>3</p>"), getResult());
     }
 
+    @Test
+    void testIndexAsVariableInCsvTable() throws Exception {
+        runInterpreter("<? { csv d = load(\"testCSV.csv\");\n" +
+                "            int a = 1;\n" +
+                "            int b = 1;\n" +
+                "            string e = d[a][b];\n" +
+                "            par(e); } ?>");
+        assertTrue(getResult().contains("<p>test11</p>"), getResult());
+    }
+
+    @Test
+    void testIndexAsVariableInOneDimTable() throws Exception {
+        runInterpreter("<? { int[] a = {1, 2, 3};\n" +
+                "            int b = 1;\n" +
+                "            int c = a[b];\n" +
+                "            par(c); } ?>");
+        assertTrue(getResult().contains("<p>2</p>"), getResult());
+    }
+
     private static InputStream convertStringToInputStreamReader(String string) {
         return new ByteArrayInputStream(string.getBytes());
     }

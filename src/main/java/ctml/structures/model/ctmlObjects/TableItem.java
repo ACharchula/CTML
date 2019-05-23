@@ -1,13 +1,17 @@
-package ctml.structures.model;
+package ctml.structures.model.ctmlObjects;
 
 import ctml.interpreter.Interpreter;
+import ctml.structures.model.CtmlBlock;
+import ctml.structures.model.Executable;
+import ctml.structures.model.Variable;
 
 public class TableItem implements Executable {
+
+    private Variable variable;
+
     public void setVariable(Variable variable) {
         this.variable = variable;
     }
-
-    Variable variable;
 
     @Override
     public void execute(CtmlBlock ctmlBlock) throws Exception {
@@ -18,7 +22,7 @@ public class TableItem implements Executable {
     @Override
     public Executable cloneExecutable() throws Exception {
         TableItem tableItem = new TableItem();
-        tableItem.setVariable(variable.cloneWholeVariable());
+        tableItem.setVariable(variable.cloneVariable());
         return tableItem;
     }
 }

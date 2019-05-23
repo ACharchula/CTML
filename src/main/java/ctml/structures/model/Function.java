@@ -6,7 +6,7 @@ import ctml.structures.token.TokenType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Function extends ReturnExecutable {
+public class Function implements ReturnExecutable {
 
     private List<Variable> parameters = new ArrayList<>();
     private TokenType returnType;
@@ -21,16 +21,8 @@ public class Function extends ReturnExecutable {
         this.id = id;
     }
 
-    public List<Variable> getParameters() {
-        return parameters;
-    }
-
     public void setParameters(List<Variable> parameters) {
         this.parameters = parameters;
-    }
-
-    public TokenType getReturnType() {
-        return returnType;
     }
 
     public void setReturnType(TokenType returnType) {
@@ -45,15 +37,15 @@ public class Function extends ReturnExecutable {
         this.ctmlBlock = ctmlBlock;
     }
 
-    public void addParameter(Variable v) {
+    private void addParameter(Variable v) {
         parameters.add(v);
     }
 
     @Override
-    Variable getResult(CtmlBlock outerCtmlBlock) throws Exception {
+    public Variable getResult(CtmlBlock outerCtmlBlock) throws Exception {
         List<Variable> arguments = Program.pop();
 
-        if(arguments.size() != parameters.size()) //sprawdzic czy sa dobrego typu
+        if(arguments.size() != parameters.size())
             throw new Exception("Wrong amount of arguments!");
 
         for(int i = 0; i < arguments.size(); ++i) {
@@ -69,9 +61,6 @@ public class Function extends ReturnExecutable {
 
         Variable v = ctmlBlock.executeFunction();
 
-//        for(Variable var : parameters) { //clean arguments
-//            ctmlBlock.getVariables().remove(var.getId());
-//        }
         if(v != null) {
             v.setType(returnType);
             v.verifyIfValueHasProperType(v.getValue());
@@ -81,27 +70,20 @@ public class Function extends ReturnExecutable {
     }
 
     @Override
-    public void execute(CtmlBlock ctmlBlock) throws Exception {
-
-    }
-
-    @Override
-    public Executable cloneExecutable() throws Exception {
-        return null;
+    public ReturnExecutable cloneReturnExecutable() throws Exception {
+        throw new Exception("Function should not be cloned with this function!");
     }
 
     public Function cloneFunction() throws Exception {
         Function function = new Function();
 
         function.setReturnType(returnType);
+        function.setId(id);
+        function.setCtmlBlock(ctmlBlock.cloneCtmlBlock());
 
         for(Variable v: parameters) {
-            function.addParameter(v.cloneParameter());
+            function.addParameter(v.cloneVariable());
         }
-
-        function.setId(id);
-
-        function.setCtmlBlock(ctmlBlock.cloneCtmlBlock());
 
         return function;
     }

@@ -9,29 +9,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Load extends ReturnExecutable{
+public class Load implements ReturnExecutable{
+
+    private Variable variable;
 
     public void setVariable(Variable variable) {
         this.variable = variable;
     }
 
-    private Variable variable;
-
-
     @Override
-    public void execute(CtmlBlock ctmlBlock) {
-
-    }
-
-    @Override
-    public Executable cloneExecutable() throws Exception {
+    public ReturnExecutable cloneReturnExecutable() throws Exception {
         Load load = new Load();
-        load.setVariable(variable.cloneWholeVariable());
+        load.setVariable(variable.cloneVariable());
         return load;
     }
 
     @Override
-    Variable getResult(CtmlBlock ctmlBlock) throws Exception {
+    public Variable getResult(CtmlBlock ctmlBlock) throws Exception {
         String value = ctmlBlock.getValue(variable);
 
         List<List<String>> data = new ArrayList<>(new ArrayList<>());

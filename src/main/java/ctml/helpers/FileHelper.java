@@ -12,8 +12,7 @@ public class FileHelper {
         try {
             return new FileInputStream(file);
         } catch (FileNotFoundException e) {
-            Logger.error("Input file not loaded");
-            return null;
+            throw new Exception("Input file not loaded");
         }
     }
 

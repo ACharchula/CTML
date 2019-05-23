@@ -22,7 +22,7 @@ public class Append implements Executable {
         if(v.isCsv() || !v.isTable())
             throw new Exception("You cannot append to csv type or none table types");
 
-        for(Variable arg: arguments) { //sprawdzanie jaki typ to jest i w razie koniecznosci odrzucic
+        for(Variable arg: arguments) {
             v.addTableValue(arg.getValue());
         }
     }
@@ -30,12 +30,12 @@ public class Append implements Executable {
     @Override
     public Executable cloneExecutable() throws Exception {
         Append append = new Append();
-        append.setVariable(variable.cloneWholeVariable());
+        append.setVariable(variable.cloneVariable());
 
         List<Variable> arg = new ArrayList<>();
 
         for(Variable v : arguments) {
-            arg.add(v.cloneWholeVariable());
+            arg.add(v.cloneVariable());
         }
 
         append.setArguments(arg);

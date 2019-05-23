@@ -1,6 +1,6 @@
 package ctml.structures.model;
 
-public abstract class ReturnExecutable implements Executable{
-
-    abstract Variable getResult(CtmlBlock ctmlBlock) throws Exception;
+public interface ReturnExecutable {
+    Variable getResult(CtmlBlock ctmlBlock) throws Exception;
+    ReturnExecutable cloneReturnExecutable() throws Exception;
 }

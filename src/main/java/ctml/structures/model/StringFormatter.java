@@ -3,26 +3,22 @@ package ctml.structures.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StringFormatter extends ReturnExecutable {
+//This class is not used.
+public class StringFormatter implements ReturnExecutable {
 
     public void setVariableList(List<Variable> variableList) {
         this.variableList = variableList;
     }
 
-    List<Variable> variableList = new ArrayList<>();
+    private List<Variable> variableList = new ArrayList<>();
 
     @Override
-    public void execute(CtmlBlock ctmlBlock) {
-
-    }
-
-    @Override
-    public Executable cloneExecutable() throws Exception {
+    public ReturnExecutable cloneReturnExecutable() {
         return null;
     }
 
     @Override
-    Variable getResult(CtmlBlock ctmlBlock) throws Exception {
+    public Variable getResult(CtmlBlock ctmlBlock) {
         return null;
     }
 }

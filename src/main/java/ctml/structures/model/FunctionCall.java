@@ -13,7 +13,7 @@ public class FunctionCall implements Executable {
         this.id = id;
     }
 
-    public void addArgument(Variable variable) {
+    private void addArgument(Variable variable) {
         arguments.add(variable);
     }
 
@@ -31,17 +31,14 @@ public class FunctionCall implements Executable {
         FunctionCall functionCall = new FunctionCall();
         functionCall.setId(id);
 
-        List<Variable> variableList = new ArrayList<>();
-
         for( Variable v : arguments) {
-            variableList.add(v.cloneWholeVariable());
+            functionCall.addArgument(v.cloneVariable());
         }
 
         return functionCall;
-
     }
 
-    public Variable executeFunction(CtmlBlock ctmlBlock) throws Exception {
+    Variable executeFunction(CtmlBlock ctmlBlock) throws Exception {
         Program.push(arguments);
         Function function = Program.getFunction(id);
         return function.getResult(ctmlBlock);

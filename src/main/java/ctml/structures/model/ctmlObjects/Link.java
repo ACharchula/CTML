@@ -1,9 +1,13 @@
-package ctml.structures.model;
+package ctml.structures.model.ctmlObjects;
 
 import ctml.interpreter.Interpreter;
+import ctml.structures.model.CtmlBlock;
+import ctml.structures.model.Executable;
+import ctml.structures.model.Variable;
 
-public class Link implements Executable{
+public class Link implements Executable {
     private Variable link;
+    private Variable text;
 
     public void setLink(Variable link) {
         this.link = link;
@@ -12,8 +16,6 @@ public class Link implements Executable{
     public void setText(Variable text) {
         this.text = text;
     }
-
-    private Variable text;
 
     @Override
     public void execute(CtmlBlock ctmlBlock) throws Exception {
@@ -24,9 +26,9 @@ public class Link implements Executable{
 
     @Override
     public Executable cloneExecutable() throws Exception {
-        Link linkCl = new Link();
-        linkCl.setText(text.cloneWholeVariable());
-        linkCl.setLink(link.cloneWholeVariable());
-        return linkCl;
+        Link linkCtml = new Link();
+        linkCtml.setText(text.cloneVariable());
+        linkCtml.setLink(link.cloneVariable());
+        return linkCtml;
     }
 }

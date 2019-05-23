@@ -26,7 +26,7 @@ public class While implements Executable {
     @Override
     public Executable cloneExecutable() throws Exception {
         While whileSt = new While();
-        whileSt.setExpression((Expression) expression.cloneExecutable());
+        whileSt.setExpression((Expression) expression.cloneReturnExecutable());
         whileSt.setCtmlBlock(ctmlBlock.cloneCtmlBlock());
         return whileSt;
     }

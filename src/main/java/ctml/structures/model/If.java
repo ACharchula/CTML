@@ -39,7 +39,7 @@ public class If implements Executable {
     @Override
     public Executable cloneExecutable() throws Exception {
         If ifSt = new If();
-        ifSt.setExpression((Expression) expression.cloneExecutable());
+        ifSt.setExpression((Expression) expression.cloneReturnExecutable());
         ifSt.setCtmlBlock(ctmlBlock.cloneCtmlBlock());
         ifSt.setElseCtmlBlock(elseCtmlBlock.cloneCtmlBlock());
         return ifSt;

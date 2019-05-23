@@ -1,11 +1,12 @@
 package ctml.structures.model;
 
 public class Return implements Executable {
+
+    private Expression expression;
+
     public void setExpression(Expression expression) {
         this.expression = expression;
     }
-
-    Expression expression = null;
 
     @Override
     public void execute(CtmlBlock ctmlBlock) throws Exception {
@@ -13,9 +14,9 @@ public class Return implements Executable {
     }
 
     @Override
-    public Executable cloneExecutable() throws Exception {
+    public Executable cloneExecutable() {
         Return ret= new Return();
-        ret.setExpression((Expression) expression.cloneExecutable());
+        ret.setExpression((Expression) expression.cloneReturnExecutable());
         return ret;
     }
 }

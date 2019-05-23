@@ -16,7 +16,7 @@ public class Variable {
     private String value;
     private List tableValues;
 
-    public List<Variable> functionArguments = null;
+    private List<Variable> functionArguments = null;
 
     private Variable index1 = null;
     private Variable index2 = null;
@@ -29,18 +29,18 @@ public class Variable {
         return functionArguments;
     }
 
-    public void addFunctionArgument(Variable variable) {
+    private void addFunctionArgument(Variable variable) {
         if(functionArguments == null)
             functionArguments = new ArrayList<>();
 
         functionArguments.add(variable);
     }
 
-    public Variable getIndex1() {
+    Variable getIndex1() {
         return index1;
     }
 
-    public Variable getIndex2() {
+    Variable getIndex2() {
         return index2;
     }
 
@@ -76,7 +76,7 @@ public class Variable {
         this.table = table;
     }
 
-    public boolean isCsv() {
+    boolean isCsv() {
         return csv;
     }
 
@@ -96,7 +96,7 @@ public class Variable {
             return value;
     }
 
-    public String getValue(int i1, int i2) { //maybe need to add ctmlblock to find ex. tab[a]
+    public String getValue(int i1, int i2) {
         if(isCsv()) {
             return ((List<String>) getTableValues().get(i1)).get(i2);
         } else if (isTable()) {
@@ -118,7 +118,7 @@ public class Variable {
         this.value = verifyIfValueHasProperType(value);
     }
 
-    public String verifyIfValueHasProperType(String value) throws Exception {
+    String verifyIfValueHasProperType(String value) throws Exception {
         float floatValue;
 
         try {
@@ -138,7 +138,7 @@ public class Variable {
         return value;
     }
 
-    public void setAndVerifyCsvAssignment(List list) throws Exception {
+    void setAndVerifyCsvAssignment(List list) throws Exception {
         try {
             ((List<String>) list.get(0)).get(0);
         } catch (Exception e) {
@@ -148,19 +148,19 @@ public class Variable {
         this.tableValues = list;
     }
 
-    public void addTableValue(String value) throws Exception {
+    void addTableValue(String value) throws Exception {
         getTableValues().add(verifyIfValueHasProperType(value));
     }
 
-    public List getTableValues() {
+    List getTableValues() {
         return tableValues;
     }
 
-    public void setTableValues(List tableValues) {
+    void setTableValues(List tableValues) {
         this.tableValues = tableValues;
     }
 
-    public void setAndVerifyTableValues(List tableValues) throws Exception {
+    void setAndVerifyTableValues(List tableValues) throws Exception {
 
         for(String v : (List<String>) tableValues) {
             verifyIfValueHasProperType(v);
@@ -169,19 +169,7 @@ public class Variable {
         this.tableValues = tableValues;
     }
 
-
-    public Variable cloneParameter() {
-        Variable v = new Variable();
-
-        v.setIsCsv(csv);
-        v.setType(type);
-        v.setId(id);
-        v.setIsTable(table);
-
-        return v;
-    }
-
-    public Variable cloneWholeVariable() throws Exception {
+    public Variable cloneVariable() throws Exception {
         Variable v = new Variable();
 
         v.setId(id);
@@ -192,18 +180,18 @@ public class Variable {
 
         if(functionArguments != null) {
             for(Variable var : functionArguments) {
-                v.addFunctionArgument(var.cloneWholeVariable());
+                v.addFunctionArgument(var.cloneVariable());
             }
         } else
             v.setFunctionArguments(null);
         if(index1 != null)
-            v.setIndex1(index1.cloneWholeVariable());
+            v.setIndex1(index1.cloneVariable());
         if(index2 != null)
-            v.setIndex2(index2.cloneWholeVariable());
+            v.setIndex2(index2.cloneVariable());
 
         if(v.isCsv()) {
             v.setTableValues(tableValues);
-        } else if (v.isTable()) {
+        } else if (v.isTable() && tableValues != null) {
             List<String> table = new ArrayList<>((List<String>) tableValues);
             v.setTableValues(table);
         } else

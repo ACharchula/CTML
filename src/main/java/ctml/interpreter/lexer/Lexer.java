@@ -1,6 +1,5 @@
 package ctml.interpreter.lexer;
 
-import ctml.helpers.Logger;
 import ctml.structures.token.Token;
 
 import java.io.IOException;
@@ -66,7 +65,7 @@ public class Lexer {
                 }
             }
         } catch (IOException e) {
-            Logger.error("Cannot get next character in input at line " + lineCounter + " and position " + charCounter);
+            throw new Exception("Cannot get next character in input at line " + lineCounter + " and position " + charCounter);
         }
 
         return nextChar;

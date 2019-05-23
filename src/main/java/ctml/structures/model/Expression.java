@@ -7,7 +7,7 @@ import java.util.List;
 
 import static ctml.structures.token.TokenType.*;
 
-public class Expression extends ReturnExecutable {
+public class Expression implements ReturnExecutable {
 
     private List<TokenType> operators = new ArrayList<>();
     private List<Expression> operands = new ArrayList<>();
@@ -26,17 +26,12 @@ public class Expression extends ReturnExecutable {
     }
 
     @Override
-    public void execute(CtmlBlock ctmlBlock) {
-
-    }
-
-    @Override
-    public Executable cloneExecutable() throws Exception {
+    public ReturnExecutable cloneReturnExecutable() {
         return this;
     }
 
     @Override
-    Variable getResult(CtmlBlock ctmlBlock) throws Exception {
+    public Variable getResult(CtmlBlock ctmlBlock) throws Exception {
         final Literal literal = new Literal();
 
         if (operands.size() == 0){

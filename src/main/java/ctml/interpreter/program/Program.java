@@ -21,6 +21,7 @@ public class Program {
         }
 
         functions.clear();
+        blocks.clear();
         stack.clear();
     }
 
@@ -41,10 +42,6 @@ public class Program {
             throw new Exception("There is no function of id: " + id);
 
         return function.cloneFunction();
-    }
-
-    public List<Block> getBlocks() {
-        return blocks;
     }
 
     public static void push(List<Variable> variables) {

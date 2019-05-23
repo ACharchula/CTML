@@ -13,7 +13,7 @@ public class Interpreter {
     public static PrintWriter writer;
 
     public static void run(final InputStream inputStream, String outputURL) throws Exception {
-        new PrintWriter(outputURL).close(); //clear output file
+        new PrintWriter(outputURL).close();
 
         FileWriter fileWriter = new FileWriter(outputURL, true);
         writer = new PrintWriter(fileWriter);

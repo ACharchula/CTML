@@ -7,23 +7,11 @@ import java.util.List;
 public class CtmlBlock implements Block {
 
     private CtmlBlock parentCtmlBlock = null;
-
     private HashMap<String, Variable> variables = new HashMap<>();
-
-    public HashMap<String, Variable> getVariables() {
-        return variables;
-    }
-
-    public List<Executable> getInstructions() {
-        return instructions;
-    }
-
     private List<Executable> instructions = new ArrayList<>();
-
     private Variable result;
 
     public void addVariable(Variable variable) throws Exception {
-
         if(variables.putIfAbsent(variable.getId(), variable) != null) {
             throw new Exception("There is already variable of id: " + variable.getId());
         }
@@ -33,19 +21,15 @@ public class CtmlBlock implements Block {
         instructions.add(executable);
     }
 
-    public CtmlBlock getParentCtmlBlock() {
-        return parentCtmlBlock;
-    }
-
-    public void setParentCtmlBlock(CtmlBlock parentCtmlBlock) {
+    void setParentCtmlBlock(CtmlBlock parentCtmlBlock) {
         this.parentCtmlBlock = parentCtmlBlock;
     }
 
-    public void setResult(Variable result) {
+    void setResult(Variable result) {
         this.result = result;
     }
 
-    public Variable getVariable(String id) throws Exception {
+    Variable getVariable(String id) throws Exception {
         Variable variable = variables.get(id);
 
         if(variable == null) {
@@ -62,9 +46,9 @@ public class CtmlBlock implements Block {
         if(v.getValue() == null && v.getId() != null) {
             Variable found = getVariable(v.getId());
             if(v.getIndex2() != null) {
-                return found.getValue(Integer.parseInt(v.getIndex1().getValue()), Integer.parseInt(v.getIndex2().getValue()));
+                return found.getValue(Integer.parseInt(getValue(v.getIndex1())), Integer.parseInt(getValue(v.getIndex2())));
             } else if(v.getIndex1() != null) {
-                return found.getValue(Integer.parseInt(v.getIndex1().getValue()), 0);
+                return found.getValue(Integer.parseInt(getValue(v.getIndex1())), 0);
             } else {
                 return found.getValue();
             }
@@ -73,7 +57,7 @@ public class CtmlBlock implements Block {
         }
     }
 
-    public List getTableValue(Variable v) throws Exception {
+    List getTableValue(Variable v) throws Exception {
         Variable found = getVariable(v.getId());
         return found.getTableValues();
     }
@@ -85,31 +69,22 @@ public class CtmlBlock implements Block {
         }
     }
 
-    @Override
-    public String getStructure() {
-        return "";
-    }
-
-    public Variable executeFunction() throws Exception {
+    Variable executeFunction() throws Exception {
 
         for(Executable instruction : instructions) {
             instruction.execute(this);
-
             if(result != null)
                 break;
-
-//            if(instruction.getClass() == Return.class)
-//                break;
         }
 
         return result;
     }
 
-    public CtmlBlock cloneCtmlBlock() throws Exception {
+    CtmlBlock cloneCtmlBlock() throws Exception {
         CtmlBlock ctmlBlock = new CtmlBlock();
 
         for(Variable v: variables.values()) {
-            ctmlBlock.addVariable(v.cloneParameter());
+            ctmlBlock.addVariable(v.cloneVariable());
         }
 
         for(Executable ex : instructions) {
