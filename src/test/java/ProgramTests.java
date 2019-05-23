@@ -1,5 +1,4 @@
 import ctml.interpreter.Interpreter;
-import ctml.structures.model.Executable;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +11,7 @@ import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ProgramTests {
+class ProgramTests {
 
     private static String testFileDir = "test.html";
 
@@ -198,8 +197,8 @@ public class ProgramTests {
 
     @Test
     void testVEEERYHardExpression() throws Exception {
-        runInterpreter("<? { float a = (((5/2.5)*2+2*3)-3)/7+2/3; par(a); } ?>");
-        assertTrue(getResult().contains("<p>1.6666667</p>"), getResult());
+        runInterpreter("<? { float a = (((5.763/2.5)*2+2.45*33/2)-3)/7.218+2/3; par(a); } ?>");
+        assertTrue(getResult().contains("<p>6.4903574</p>"), getResult());
     }
 
     @Test
@@ -383,6 +382,17 @@ public class ProgramTests {
     void testLoadToCsv() throws Exception {
         runInterpreter("<? { csv a = load(\"testCSV.csv\"); par(a[0][0]); par(a[1][0]); } ?>");
         assertTrue(getResult().contains("<p>test00</p>\n<p>test10</p>"), getResult());
+    }
+
+    @Test
+    void areSeparateCtmlBlocksSeesFunctions() throws Exception {
+        runInterpreter(
+                "<? func void i(int a) { int b = a + 1; par(b); } ?>\n" +
+                "<div>div1</div>\n" +
+                "<? { i(1); } ?>\n" +
+                "<div>div2</div>\n" +
+                "<? { i(2); } ?>");
+        assertTrue(getResult().contains("<div>div1</div>\n<p>2</p>\n<div>div2</div>\n<p>3</p>"), getResult());
     }
 
     private static InputStream convertStringToInputStreamReader(String string) {

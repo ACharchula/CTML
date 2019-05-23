@@ -211,9 +211,9 @@ public class Parser {
         assignment.setVariable(variable);
 
         if (currentToken.getType() == LOAD) {
-            if (variable.getType() != CSV_TYPE) {
-                throw Logger.error("Error at line... Cannot use load function with other variable than csv type");
-            }
+//            if (variable.getType() != CSV_TYPE) {
+//                throw Logger.error("Error at line... Cannot use load function with other variable than csv type");
+//            }
             assignment.setExecutable(parseLoad());
         } else if(currentToken.getType() == BRACKET_OPEN){
             assignment.setExecutable(arrayInitialization());
@@ -612,7 +612,7 @@ public class Parser {
         return expression;
     }
 
-    private Variable parseVariableOrMethodCall() throws Exception { /////sprawdzic czy jesli jest csv to dwa brackety
+    private Variable parseVariableOrMethodCall() throws Exception {
         accept(ID);
         String id = currentToken.getContent();
         Variable variable = new Variable();
