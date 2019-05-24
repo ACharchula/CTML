@@ -6,7 +6,7 @@ import java.io.ByteArrayInputStream;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ParserTest {
+class ParserTest {
 
     @Test
     void isFunctionProperlyParsed() throws Exception {
