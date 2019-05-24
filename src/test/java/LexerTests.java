@@ -471,15 +471,6 @@ class LexerTests {
     }
 
     @Test
-    void isStringFormatterRecognized() throws Exception {
-        String input = "stringFormatter";
-        Token token = getTokenFromStringForCtml(input);
-
-        assertEquals(TokenType.STRING_FORMATTER, token.getType());
-        assertEquals(input, token.getContent());
-    }
-
-    @Test
     void isArrayAppendRecognized() throws Exception {
         String input = "append";
         Token token = getTokenFromStringForCtml(input);

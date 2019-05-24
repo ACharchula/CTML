@@ -50,7 +50,6 @@ public enum TokenType {
     PARAGRAPH,
     LINK,
     IMAGE,
-    STRING_FORMATTER,
     ARRAY_APPEND,
     COMMENT,
     FLOAT_NUMBER,

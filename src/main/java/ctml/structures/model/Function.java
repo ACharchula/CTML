@@ -63,7 +63,8 @@ public class Function implements ReturnExecutable {
 
         if(v != null) {
             v.setType(returnType);
-            v.verifyIfValueHasProperType(v.getValue());
+            if(returnType != TokenType.CSV_TYPE)
+                v.verifyIfValueHasProperType(v.getValue());
         }
 
         return v;

@@ -44,6 +44,11 @@ public class Expression implements ReturnExecutable {
                         Variable found = new Variable();
                         found.setValue(ctmlBlock.getValue(variables.get(0)));
                         return found;
+                    } else if (ctmlBlock.getVariable(variables.get(0).getId()).getType() == CSV_TYPE)  {
+                        Variable csv = new Variable();
+                        csv.setValue(variables.get(0).getId());
+                        csv.setType(CSV_TYPE);
+                        return csv;
                     } else
                         return ctmlBlock.getVariable(variables.get(0).getId());
                 } else {
@@ -61,7 +66,10 @@ public class Expression implements ReturnExecutable {
             return executeCondition(ctmlBlock);
         } else {
 
-            literal.setValue(operands.get(0).getResult(ctmlBlock).getValue(ctmlBlock));
+            if(operands.get(0).getResult(ctmlBlock).getType() == CSV_TYPE) {
+                return operands.get(0).getResult(ctmlBlock);
+            } else
+                literal.setValue(operands.get(0).getResult(ctmlBlock).getValue(ctmlBlock));
 
             int index = 0;
             for (TokenType op : operators) {

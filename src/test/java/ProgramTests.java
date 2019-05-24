@@ -414,6 +414,13 @@ class ProgramTests {
         assertTrue(getResult().contains("<p>2</p>"), getResult());
     }
 
+    @Test
+    void isFunctionReturningCSV() throws Exception {
+        runInterpreter("<? func csv fun() { csv a = load(\"testCSV.csv\"); return a; } { csv a = fun(); " +
+                "par(a[0][0]); } ?>");
+        assertTrue(getResult().contains("<p>test00</p>"), getResult());
+    }
+
     private static InputStream convertStringToInputStreamReader(String string) {
         return new ByteArrayInputStream(string.getBytes());
     }

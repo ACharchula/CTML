@@ -216,9 +216,6 @@ public class Parser {
         } else if(currentToken.getType() == BRACKET_OPEN){
             assignment.setReturnExecutable(arrayInitialization());
             nextToken();
-        } else if(currentToken.getType()== STRING_FORMATTER) {
-            assignment.setReturnExecutable(parseStringFormatter());
-            nextToken();
         } else {
             assignment.setReturnExecutable(parseSimpleExpression());
         }
@@ -226,15 +223,6 @@ public class Parser {
         accept(SEMICOLON);
 
         return assignment;
-    }
-
-    private StringFormatter parseStringFormatter() throws Exception {
-        StringFormatter stringFormatter = new StringFormatter();
-        acceptNextToken(PARENTHESIS_OPEN);
-        stringFormatter.setVariableList(parseArgumentList(PARENTHESIS_CLOSE));
-        accept(PARENTHESIS_CLOSE);
-
-        return stringFormatter;
     }
 
     private ArrayInit arrayInitialization() throws Exception {

@@ -199,6 +199,4 @@ public class Variable {
 
         return v;
     }
-
-
 }
