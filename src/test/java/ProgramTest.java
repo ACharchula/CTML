@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ProgramTests {
+public class ProgramTest {
 
     private static String testFileDir = "test.html";
 

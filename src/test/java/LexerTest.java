@@ -12,10 +12,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-class LexerTests {
+public class LexerTest {
 
     @Test
-    void isReturningHtmlContentFromStart() throws Exception {
+    public void isReturningHtmlContentFromStart() throws Exception {
         String input = "<";
         Token token = getTokenFromStringForHtml(input);
 
@@ -24,7 +24,7 @@ class LexerTests {
     }
 
     @Test
-    void isCtmlStartRecognized() throws Exception {
+    public void isCtmlStartRecognized() throws Exception {
         String input = "<?";
         Token token = getTokenFromStringForHtml(input);
 
@@ -33,7 +33,7 @@ class LexerTests {
     }
 
     @Test
-    void isIdentifierRecognized() throws Exception {
+    public void isIdentifierRecognized() throws Exception {
         String input = "x";
         Token token = getTokenFromStringForCtml(input);
 
@@ -42,7 +42,7 @@ class LexerTests {
     }
 
     @Test
-    void isNumberRecognized() throws Exception {
+    public void isNumberRecognized() throws Exception {
         String input = "123";
         Token token = getTokenFromStringForCtml(input);
 
