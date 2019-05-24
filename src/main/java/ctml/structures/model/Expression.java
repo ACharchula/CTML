@@ -52,17 +52,12 @@ public class Expression implements ReturnExecutable {
                     } else
                         return ctmlBlock.getVariable(variables.get(0).getId());
                 } else {
-                    FunctionCall functionCall = new FunctionCall();
-                    functionCall.setArguments(variables.get(0).getFunctionArguments());
-                    functionCall.setId(variables.get(0).getId());
-                    return functionCall.executeFunction(ctmlBlock);
+                    return executeFunction(ctmlBlock);
                 }
             }
         }
 
-        if(operators.size() != 0 && (operators.get(0) == OR || operators.get(0) == AND || operators.get(0) == EQUALS || operators.get(0) == NOT_EQUALS
-                || operators.get(0) == GREATER || operators.get(0) == GREATER_EQUALS || operators.get(0) == LESS_EQUALS
-                || operators.get(0) == LESS)) {
+        if(operators.size() != 0 && isCondition()) {
             return executeCondition(ctmlBlock);
         } else {
 
@@ -93,97 +88,131 @@ public class Expression implements ReturnExecutable {
         }
     }
 
-    public Variable executeCondition(CtmlBlock ctmlBlock) throws Exception {
+    private Variable executeFunction(CtmlBlock ctmlBlock) throws Exception {
+        FunctionCall functionCall = new FunctionCall();
+        functionCall.setArguments(variables.get(0).getFunctionArguments());
+        functionCall.setId(variables.get(0).getId());
+        return functionCall.executeFunction(ctmlBlock);
+    }
+
+    private Variable executeCondition(CtmlBlock ctmlBlock) throws Exception {
         final Variable result = new Variable();
         switch (operators.get(0)) {
             case OR:
-                for (final Expression operand : operands) {
-                    if (operand.getResult(ctmlBlock).getValue().equals("1")) {
-                        result.setValue("1");
-                        return result;
-                    }
-                }
-                result.setValue("0");
-                return result;
+                or(result, ctmlBlock);
+                break;
             case AND:
-                for (final Expression operand : operands) {
-                    if (!operand.getResult(ctmlBlock).getValue().equals("1")) {
-                        result.setValue("0");
-                        return result;
-                    }
-                }
-                result.setValue("1");
-                return result;
+                and(result, ctmlBlock);
+                break;
             case EQUALS:
-                Variable left = operands.get(0).getResult(ctmlBlock);
-                Variable right = operands.get(1).getResult(ctmlBlock);
-                if (left.getValue().equals(right.getValue()))
-                    result.setValue("1");
-                else
-                    result.setValue("0");
+                equals(result, ctmlBlock);
                 break;
             case NOT_EQUALS:
-                left = operands.get(0).getResult(ctmlBlock);
-                right = operands.get(1).getResult(ctmlBlock);
-                if (left.getValue().equals(right.getValue()))
-                    result.setValue("0");
-                else
-                    result.setValue("1");
+                notEquals(result, ctmlBlock);
                 break;
             case LESS:
-                left = operands.get(0).getResult(ctmlBlock);
-                right = operands.get(1).getResult(ctmlBlock);
-
-                float leftSide = Float.parseFloat(left.getValue());
-                float righSide = Float.parseFloat(right.getValue());
-
-                if(leftSide < righSide)
-                    result.setValue("1");
-                else
-                    result.setValue("0");
-
+                less(result, ctmlBlock);
                 break;
             case LESS_EQUALS:
-                left = operands.get(0).getResult(ctmlBlock);
-                right = operands.get(1).getResult(ctmlBlock);
-
-                leftSide = Float.parseFloat(left.getValue());
-                righSide = Float.parseFloat(right.getValue());
-
-                if(leftSide <= righSide)
-                    result.setValue("1");
-                else
-                    result.setValue("0");
-
+                lessEquals(result, ctmlBlock);
                 break;
             case GREATER:
-                left = operands.get(0).getResult(ctmlBlock);
-                right = operands.get(1).getResult(ctmlBlock);
-
-                leftSide = Float.parseFloat(left.getValue());
-                righSide = Float.parseFloat(right.getValue());
-
-                if(leftSide > righSide)
-                    result.setValue("1");
-                else
-                    result.setValue("0");
-
+                greater(result, ctmlBlock);
                 break;
             case GREATER_EQUALS:
-                left = operands.get(0).getResult(ctmlBlock);
-                right = operands.get(1).getResult(ctmlBlock);
-
-                leftSide = Float.parseFloat(left.getValue());
-                righSide = Float.parseFloat(right.getValue());
-
-                if(leftSide >= righSide)
-                    result.setValue("1");
-                else
-                    result.setValue("0");
-
+                greaterEquals(result, ctmlBlock);
                 break;
         }
         return result;
+    }
+
+    private boolean isCondition() {
+        return operators.get(0) == OR || operators.get(0) == AND || operators.get(0) == EQUALS || operators.get(0) == NOT_EQUALS
+                || operators.get(0) == GREATER || operators.get(0) == GREATER_EQUALS || operators.get(0) == LESS_EQUALS
+                || operators.get(0) == LESS;
+    }
+
+    private void or(Variable result, CtmlBlock ctmlBlock) throws Exception {
+        for (final Expression operand : operands) {
+            if (operand.getResult(ctmlBlock).getValue().equals("1")) {
+                result.setValue("1");
+                return;
+            }
+        }
+        result.setValue("0");
+    }
+
+    private void and(Variable result, CtmlBlock ctmlBlock) throws Exception {
+        for (final Expression operand : operands) {
+            if (!operand.getResult(ctmlBlock).getValue().equals("1")) {
+                result.setValue("0");
+                return;
+            }
+        }
+        result.setValue("1");
+    }
+
+    private void equals(Variable result, CtmlBlock ctmlBlock) throws Exception {
+        Variable left = operands.get(0).getResult(ctmlBlock);
+        Variable right = operands.get(1).getResult(ctmlBlock);
+        if (left.getValue().equals(right.getValue()))
+            result.setValue("1");
+        else
+            result.setValue("0");
+    }
+
+    private void notEquals(Variable result, CtmlBlock ctmlBlock) throws Exception {
+        Variable left = operands.get(0).getResult(ctmlBlock);
+        Variable right = operands.get(1).getResult(ctmlBlock);
+        if (left.getValue().equals(right.getValue()))
+            result.setValue("0");
+        else
+            result.setValue("1");
+    }
+
+    private float getFloatValue(Expression expr, CtmlBlock ctmlBlock) throws Exception {
+        Variable result = expr.getResult(ctmlBlock);
+        return Float.parseFloat(result.getValue());
+    }
+
+    private void less(Variable result, CtmlBlock ctmlBlock) throws Exception {
+        float leftSide = getFloatValue(operands.get(0), ctmlBlock);
+        float rightSide = getFloatValue(operands.get(1), ctmlBlock);
+
+        if(leftSide < rightSide)
+            result.setValue("1");
+        else
+            result.setValue("0");
+    }
+
+    private void lessEquals(Variable result, CtmlBlock ctmlBlock) throws Exception {
+        float leftSide = getFloatValue(operands.get(0), ctmlBlock);
+        float rightSide = getFloatValue(operands.get(1), ctmlBlock);
+
+        if(leftSide <= rightSide)
+            result.setValue("1");
+        else
+            result.setValue("0");
+    }
+
+    private void greaterEquals(Variable result, CtmlBlock ctmlBlock) throws Exception {
+        float leftSide = getFloatValue(operands.get(0), ctmlBlock);
+        float rightSide = getFloatValue(operands.get(1), ctmlBlock);
+
+        if(leftSide >= rightSide)
+            result.setValue("1");
+        else
+            result.setValue("0");
+    }
+
+    private void greater(Variable result, CtmlBlock ctmlBlock) throws Exception {
+        float leftSide = getFloatValue(operands.get(0), ctmlBlock);
+        float rightSide = getFloatValue(operands.get(1), ctmlBlock);
+
+        if(leftSide > rightSide)
+            result.setValue("1");
+        else
+            result.setValue("0");
     }
 }
 
