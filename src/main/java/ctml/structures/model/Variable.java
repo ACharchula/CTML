@@ -89,13 +89,6 @@ public class Variable {
         return value;
     }
 
-    public String getValue(CtmlBlock ctmlBlock) throws Exception {
-        if(index1 != null )
-            return ctmlBlock.getValue(this);
-        else
-            return value;
-    }
-
     public String getValue(int i1, int i2) {
         if(isCsv()) {
             return ((List<String>) getTableValues().get(i1)).get(i2);

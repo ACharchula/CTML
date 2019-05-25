@@ -64,7 +64,7 @@ public class Expression implements ReturnExecutable {
             if(operands.get(0).getResult(ctmlBlock).getType() == CSV_TYPE) {
                 return operands.get(0).getResult(ctmlBlock);
             } else
-                literal.setValue(operands.get(0).getResult(ctmlBlock).getValue(ctmlBlock));
+                literal.setValue(ctmlBlock.getValue(operands.get(0).getResult(ctmlBlock)));
 
             int index = 0;
             for (TokenType op : operators) {
