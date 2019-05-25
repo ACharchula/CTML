@@ -72,10 +72,6 @@ public class Function implements ReturnExecutable {
 
     @Override
     public ReturnExecutable cloneReturnExecutable() throws Exception {
-        throw new Exception("Function should not be cloned with this function!");
-    }
-
-    public Function cloneFunction() throws Exception {
         Function function = new Function();
 
         function.setReturnType(returnType);

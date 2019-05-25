@@ -41,7 +41,7 @@ public class Program {
         if(function == null)
             throw new Exception("There is no function of id: " + id);
 
-        return function.cloneFunction();
+        return (Function) function.cloneReturnExecutable();
     }
 
     public static void push(List<Variable> variables) {
