@@ -8,27 +8,27 @@ public class CtmlArguments extends Variable{
     private List<Variable> argumentList;
 
     @Override
-    public String getValue() throws Exception {
+    public String getValue() {
         return null;
     }
 
     @Override
-    public String getValue(int i1, int i2) throws Exception {
+    public String getValue(int i1, int i2) {
         return null;
     }
 
     @Override
-    public List getTableValues() throws Exception {
+    public List getTableValues() {
         return argumentList;
     }
 
     @Override
-    public void addTableValue(String value) throws Exception {
+    public void addTableValue(String value) {
 
     }
 
     @Override
-    public void setValue(String value) throws Exception {
+    public void setValue(String value) {
 
     }
 
@@ -38,7 +38,7 @@ public class CtmlArguments extends Variable{
     }
 
     @Override
-    public Variable cloneVariable() throws Exception {
+    public Variable cloneVariable() {
         CtmlArguments cloned = new CtmlArguments();
 
         cloned.setId(getId());

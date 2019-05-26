@@ -9,22 +9,22 @@ public class CtmlString extends Variable {
     private List<String> list;
 
     @Override
-    public String getValue() throws Exception {
+    public String getValue() {
         return value;
     }
 
     @Override
-    public String getValue(int i1, int i2) throws Exception {
+    public String getValue(int i1, int i2) {
         return list.get(i1);
     }
 
     @Override
-    public List getTableValues() throws Exception {
+    public List getTableValues() {
         return list;
     }
 
     @Override
-    public void addTableValue(String value) throws Exception {
+    public void addTableValue(String value) {
         if(list == null)
             list = new ArrayList<>();
 
@@ -32,7 +32,7 @@ public class CtmlString extends Variable {
     }
 
     @Override
-    public void setValue(String value) throws Exception {
+    public void setValue(String value) {
         this.value = value;
     }
 
@@ -42,7 +42,7 @@ public class CtmlString extends Variable {
     }
 
     @Override
-    public Variable cloneVariable() throws Exception {
+    public Variable cloneVariable() {
         CtmlString cloned = new CtmlString();
 
         cloned.setId(getId());

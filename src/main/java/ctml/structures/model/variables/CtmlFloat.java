@@ -9,22 +9,22 @@ public class CtmlFloat extends Variable {
     private List<Float> list;
 
     @Override
-    public String getValue() throws Exception {
+    public String getValue() {
         return value.toString();
     }
 
     @Override
-    public String getValue(int i1, int i2) throws Exception {
+    public String getValue(int i1, int i2) {
         return list.get(i1).toString();
     }
 
     @Override
-    public List getTableValues() throws Exception {
+    public List getTableValues() {
         return list;
     }
 
     @Override
-    public void addTableValue(String value) throws Exception {
+    public void addTableValue(String value) {
         if(list == null)
             list = new ArrayList<>();
 
@@ -32,7 +32,7 @@ public class CtmlFloat extends Variable {
     }
 
     @Override
-    public void setValue(String value) throws Exception {
+    public void setValue(String value) {
         this.value = Float.parseFloat(value);
     }
 
@@ -42,7 +42,7 @@ public class CtmlFloat extends Variable {
     }
 
     @Override
-    public Variable cloneVariable() throws Exception {
+    public Variable cloneVariable() {
         CtmlFloat cloned = new CtmlFloat();
 
         cloned.setId(getId());

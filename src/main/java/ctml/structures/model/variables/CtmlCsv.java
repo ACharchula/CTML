@@ -12,27 +12,27 @@ public class CtmlCsv extends Variable {
     }
 
     @Override
-    public String getValue() throws Exception {
+    public String getValue() {
         return null;
     }
 
     @Override
-    public String getValue(int i1, int i2) throws Exception {
+    public String getValue(int i1, int i2) {
         return values.get(i1).get(i2);
     }
 
     @Override
-    public List getTableValues() throws Exception {
+    public List getTableValues() {
         return values;
     }
 
     @Override
-    public void addTableValue(String value) throws Exception {
+    public void addTableValue(String value) {
 
     }
 
     @Override
-    public void setValue(String value) throws Exception {
+    public void setValue(String value) {
 
     }
 
@@ -42,7 +42,7 @@ public class CtmlCsv extends Variable {
     }
 
     @Override
-    public Variable cloneVariable() throws Exception {
+    public Variable cloneVariable() {
         CtmlCsv cloned = new CtmlCsv();
 
         cloned.setId(getId());
