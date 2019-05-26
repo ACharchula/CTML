@@ -44,10 +44,16 @@ public class CtmlFloat extends Variable<Float> {
 
         cloned.setId(getId());
         cloned.setTable(isTable());
-        cloned.setValue(getValue().toString());
+        if(getValue() != null)
+            cloned.setValue(getValue().toString());
+
         cloned.setType(getType());
-        cloned.setIndex1((CtmlInt) getIndex1().cloneVariable());
-        cloned.setIndex2((CtmlInt) getIndex2().cloneVariable());
+
+        if(getIndex1() != null)
+            cloned.setIndex1((CtmlInt) getIndex1().cloneVariable());
+
+        if(getIndex2() != null)
+            cloned.setIndex2((CtmlInt) getIndex2().cloneVariable());
 
         if(list != null) {
             List<Float> clonedList = new ArrayList<>(list);

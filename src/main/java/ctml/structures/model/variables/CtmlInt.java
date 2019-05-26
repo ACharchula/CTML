@@ -30,7 +30,8 @@ public class CtmlInt extends Variable<Integer> {
 
     @Override
     public void setValue(String value) {
-        this.value = Integer.parseInt(value);
+        float floatValue = Float.parseFloat(value);
+        this.value = Math.round(floatValue);
     }
 
     @Override
@@ -44,10 +45,17 @@ public class CtmlInt extends Variable<Integer> {
 
         cloned.setId(getId());
         cloned.setTable(isTable());
-        cloned.setValue(getValue().toString());
+
+        if(getValue() != null)
+            cloned.setValue(getValue().toString());
+
         cloned.setType(getType());
-        cloned.setIndex1((CtmlInt) getIndex1().cloneVariable());
-        cloned.setIndex2((CtmlInt) getIndex2().cloneVariable());
+
+        if(getIndex1() != null)
+            cloned.setIndex1((CtmlInt) getIndex1().cloneVariable());
+
+        if(getIndex2() != null)
+            cloned.setIndex2((CtmlInt) getIndex2().cloneVariable());
 
         if(list != null) {
             List<Integer> clonedList = new ArrayList<>(list);

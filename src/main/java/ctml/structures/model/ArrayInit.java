@@ -1,5 +1,7 @@
 package ctml.structures.model;
 
+import ctml.structures.model.variables.CtmlInt;
+import ctml.structures.model.variables.CtmlString;
 import ctml.structures.model.variables.Variable;
 
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ public class ArrayInit implements ReturnExecutable {
             tableValues.add( Variable.getValue(v, ctmlBlock));
         }
 
-        Variable result = new Variable();
+        Variable result = new CtmlInt();
         result.setTableValues(tableValues);
 
         return result;

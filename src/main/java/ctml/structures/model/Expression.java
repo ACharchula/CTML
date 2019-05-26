@@ -1,6 +1,7 @@
 package ctml.structures.model;
 
 import ctml.structures.model.variables.CtmlCsv;
+import ctml.structures.model.variables.CtmlString;
 import ctml.structures.model.variables.Variable;
 import ctml.structures.token.TokenType;
 
@@ -43,12 +44,12 @@ public class Expression implements ReturnExecutable {
                 else if(variables.get(0).getType() != FUNCTION) {
 
                     if(variables.get(0).getIndex1() != null) {
-                        Variable found = new Variable();
-                        found.setValue(ctmlBlock.getValue(variables.get(0)));
+                        Variable found = new CtmlString();
+                        found.setValue(Variable.getStringValue(variables.get(0), ctmlBlock));
                         return found;
                     } else if (ctmlBlock.getVariable(variables.get(0).getId()).getType() == CSV_TYPE)  {
-                        Variable csv = new CtmlCsv();
-                        csv.setId(variables.get(0).getId());
+                        Variable csv = new CtmlString();
+                        csv.setValue(variables.get(0).getId());
                         csv.setType(CSV_TYPE);
                         return csv;
                     } else
@@ -66,7 +67,7 @@ public class Expression implements ReturnExecutable {
             if(operands.get(0).getResult(ctmlBlock).getType() == CSV_TYPE) {
                 return operands.get(0).getResult(ctmlBlock);
             } else
-                literal.setValue(ctmlBlock.getValue(operands.get(0).getResult(ctmlBlock)));
+                literal.setValue(Variable.getValue(operands.get(0).getResult(ctmlBlock), ctmlBlock).toString());
 
             int index = 0;
             for (TokenType op : operators) {
@@ -75,17 +76,17 @@ public class Expression implements ReturnExecutable {
 
 
                 if (op == ADD) {
-                    literal.plus(operand.getResult(ctmlBlock).getValue());
+                    literal.plus(operand.getResult(ctmlBlock).getValue().toString());
                 } else if (op == SUBTRACT) {
-                    literal.minus(operand.getResult(ctmlBlock).getValue());
+                    literal.minus(operand.getResult(ctmlBlock).getValue().toString());
                 } else if (op == MULTIPLY) {
-                    literal.multi(operand.getResult(ctmlBlock).getValue());
+                    literal.multi(operand.getResult(ctmlBlock).getValue().toString());
                 } else if (op == DIVIDE) {
-                    literal.div(operand.getResult(ctmlBlock).getValue());
+                    literal.div(operand.getResult(ctmlBlock).getValue().toString());
                 }
             }
 
-            Variable v = new Variable();
+            Variable v = new CtmlString();
             v.setValue(literal.getValue());
             return v;
         }
@@ -99,7 +100,7 @@ public class Expression implements ReturnExecutable {
     }
 
     private Variable executeCondition(CtmlBlock ctmlBlock) throws Exception {
-        final Variable result = new Variable();
+        final Variable result = new CtmlString();
         switch (operators.get(0)) {
             case OR:
                 or(result, ctmlBlock);
@@ -173,9 +174,9 @@ public class Expression implements ReturnExecutable {
             result.setValue("1");
     }
 
-    private T getFloatValue(Expression expr, CtmlBlock ctmlBlock) throws Exception {
-       return expr.getResult(ctmlBlock);
-        return Float.parseFloat(result.getValue());
+    private float getFloatValue(Expression expr, CtmlBlock ctmlBlock) throws Exception {
+       String result = expr.getResult(ctmlBlock).getValue().toString();
+        return Float.parseFloat(result);
     }
 
     private void less(Variable result, CtmlBlock ctmlBlock) throws Exception {

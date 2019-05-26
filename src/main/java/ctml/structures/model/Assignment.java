@@ -24,7 +24,9 @@ public class Assignment implements Executable {
 //            v.setAndVerifyTableValues(returnExecutable.getResult(ctmlBlock).getTableValues());
 //        else if(v.isCsv())
 //            v.setAndVerifyCsvAssignment(returnExecutable.getResult(ctmlBlock).getTableValues());
-        if(v.isTable())
+        if(v instanceof CtmlCsv)
+            ((CtmlCsv) v).setCsvTableValues(((CtmlCsv) returnExecutable.getResult(ctmlBlock)).getCsvTableValues());
+        else if(v.isTable())
             v.setTableValues(returnExecutable.getResult(ctmlBlock).getTableValues());
         else
             v.setValue((String) returnExecutable.getResult(ctmlBlock).getValue());

@@ -45,6 +45,10 @@ public class CtmlCsv extends Variable<String> {
         this.values.add(values);
     }
 
+    public void setCsvTableValues(List<List<String>> value) {
+        this.values = value;
+    }
+
     @Override
     public Variable<String> cloneVariable() {
         CtmlCsv cloned = new CtmlCsv();
@@ -52,8 +56,12 @@ public class CtmlCsv extends Variable<String> {
         cloned.setId(getId());
         cloned.setTable(isTable());
         cloned.setType(getType());
-        cloned.setIndex1((CtmlInt) getIndex1().cloneVariable());
-        cloned.setIndex2((CtmlInt) getIndex2().cloneVariable());
+
+        if(getIndex1() != null)
+            cloned.setIndex1((CtmlInt) getIndex1().cloneVariable());
+
+        if(getIndex2() != null)
+            cloned.setIndex2((CtmlInt) getIndex2().cloneVariable());
 
         if(values != null) {
             for(List<String> row : values) {

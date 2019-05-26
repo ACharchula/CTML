@@ -44,10 +44,16 @@ public class CtmlString extends Variable<String> {
 
         cloned.setId(getId());
         cloned.setTable(isTable());
-        cloned.setValue(getValue());
+        if(getValue() != null)
+            cloned.setValue(getValue());
+
         cloned.setType(getType());
-        cloned.setIndex1((CtmlInt) getIndex1().cloneVariable());
-        cloned.setIndex2((CtmlInt) getIndex2().cloneVariable());
+
+        if(getIndex1() != null)
+            cloned.setIndex1((CtmlInt) getIndex1().cloneVariable());
+
+        if(getIndex2() != null)
+            cloned.setIndex2((CtmlInt) getIndex2().cloneVariable());
 
         if(list != null) {
             List<String> clonedList = new ArrayList<>(list);

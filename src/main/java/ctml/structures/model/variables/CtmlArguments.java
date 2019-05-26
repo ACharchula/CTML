@@ -9,7 +9,7 @@ public class CtmlArguments extends Variable<Variable> {
 
     @Override
     public Variable getValue() throws Exception {
-        throw new Exception("It is impossible to get value from argument!");
+        return null;
     }
 
     @Override
@@ -43,8 +43,12 @@ public class CtmlArguments extends Variable<Variable> {
 
         cloned.setId(getId());
         cloned.setType(getType());
-        cloned.setIndex1((CtmlInt) getIndex1().cloneVariable());
-        cloned.setIndex2((CtmlInt) getIndex2().cloneVariable());
+
+        if(getIndex1() != null)
+            cloned.setIndex1((CtmlInt) getIndex1().cloneVariable());
+
+        if(getIndex2() != null)
+            cloned.setIndex2((CtmlInt) getIndex2().cloneVariable());
 
         if(argumentList != null) {
             List<Variable> clonedList = new ArrayList<>(argumentList);

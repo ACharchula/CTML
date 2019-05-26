@@ -17,7 +17,7 @@ public class Return implements Executable {
         Variable result = expression.getResult(ctmlBlock);
 
         if(result.getType() == TokenType.CSV_TYPE) {
-            result.setTableValues(((CtmlCsv) ctmlBlock.getVariable(result.getId())).getCsvTableValues());
+            result.setTableValues(((CtmlCsv) ctmlBlock.getVariable((String) result.getValue())).getCsvTableValues());
         }
 
         ctmlBlock.setResult(result);

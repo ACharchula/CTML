@@ -41,8 +41,8 @@ public class Load implements ReturnExecutable{
             line = br.readLine();
         }
 
-        Variable v = new CtmlCsv();
-        v.setTableValues(data);
+        CtmlCsv v = new CtmlCsv();
+        v.setCsvTableValues(data);
         return v;
     }
 }

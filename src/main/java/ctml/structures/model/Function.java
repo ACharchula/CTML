@@ -1,6 +1,7 @@
 package ctml.structures.model;
 
 import ctml.interpreter.program.Program;
+import ctml.structures.model.variables.CtmlCsv;
 import ctml.structures.model.variables.Variable;
 import ctml.structures.token.TokenType;
 
@@ -64,8 +65,6 @@ public class Function implements ReturnExecutable {
 
         if(v != null) {
             v.setType(returnType);
-//            if(returnType != TokenType.CSV_TYPE)
-//                v.verifyIfValueHasProperType(v.getValue());
         }
 
         return v;

@@ -421,6 +421,12 @@ class ProgramTest {
         assertTrue(getResult().contains("<p>test00</p>"), getResult());
     }
 
+    @Test
+    void testTableAsFunctionArgument() throws Exception {
+        runInterpreter("<? func void fun(int[] a) { par(a[0]); } { int[] a = {1, 2, 3}; fun(a); } ?>");
+        assertTrue(getResult().contains("<p>test00</p>"), getResult());
+    }
+
     private static InputStream convertStringToInputStreamReader(String string) {
         return new ByteArrayInputStream(string.getBytes());
     }
