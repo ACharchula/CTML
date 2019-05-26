@@ -1,6 +1,7 @@
 package ctml.structures.model;
 
 import ctml.interpreter.program.Program;
+import ctml.structures.model.variables.Variable;
 import ctml.structures.token.TokenType;
 
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class Function implements ReturnExecutable {
             if(v.isTable())
                 v.setTableValues(outerCtmlBlock.getTableValue(arguments.get(i)));
             else
-                v.setValue(outerCtmlBlock.getValue(arguments.get(i)));
+                v.setValue(Variable.getStringValue(arguments.get(i), ctmlBlock));
 
             ctmlBlock.addVariable(v);
         }
@@ -63,8 +64,8 @@ public class Function implements ReturnExecutable {
 
         if(v != null) {
             v.setType(returnType);
-            if(returnType != TokenType.CSV_TYPE)
-                v.verifyIfValueHasProperType(v.getValue());
+//            if(returnType != TokenType.CSV_TYPE)
+//                v.verifyIfValueHasProperType(v.getValue());
         }
 
         return v;

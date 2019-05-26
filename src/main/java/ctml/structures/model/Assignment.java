@@ -1,5 +1,8 @@
 package ctml.structures.model;
 
+import ctml.structures.model.variables.CtmlCsv;
+import ctml.structures.model.variables.Variable;
+
 public class Assignment implements Executable {
 
     private Variable variable;
@@ -17,12 +20,14 @@ public class Assignment implements Executable {
     public void execute(CtmlBlock ctmlBlock) throws Exception {
         Variable v = ctmlBlock.getVariable(variable.getId());
 
-        if(!v.isCsv() && v.isTable())
-            v.setAndVerifyTableValues(returnExecutable.getResult(ctmlBlock).getTableValues());
-        else if(v.isCsv())
-            v.setAndVerifyCsvAssignment(returnExecutable.getResult(ctmlBlock).getTableValues());
+//        if(!(v instanceof CtmlCsv) && v.isTable())
+//            v.setAndVerifyTableValues(returnExecutable.getResult(ctmlBlock).getTableValues());
+//        else if(v.isCsv())
+//            v.setAndVerifyCsvAssignment(returnExecutable.getResult(ctmlBlock).getTableValues());
+        if(v.isTable())
+            v.setTableValues(returnExecutable.getResult(ctmlBlock).getTableValues());
         else
-            v.setValue(returnExecutable.getResult(ctmlBlock).getValue());
+            v.setValue((String) returnExecutable.getResult(ctmlBlock).getValue());
     }
 
     @Override

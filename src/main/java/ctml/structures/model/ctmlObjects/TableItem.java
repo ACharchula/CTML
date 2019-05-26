@@ -3,7 +3,7 @@ package ctml.structures.model.ctmlObjects;
 import ctml.interpreter.Interpreter;
 import ctml.structures.model.CtmlBlock;
 import ctml.structures.model.Executable;
-import ctml.structures.model.Variable;
+import ctml.structures.model.variables.Variable;
 
 public class TableItem implements Executable {
 
@@ -15,7 +15,7 @@ public class TableItem implements Executable {
 
     @Override
     public void execute(CtmlBlock ctmlBlock) throws Exception {
-        String value = ctmlBlock.getValue(variable);
+        String value = Variable.getStringValue(variable, ctmlBlock);
         Interpreter.writer.println("<td>" + value + "</td>");
     }
 

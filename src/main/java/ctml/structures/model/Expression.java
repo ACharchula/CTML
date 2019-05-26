@@ -1,5 +1,7 @@
 package ctml.structures.model;
 
+import ctml.structures.model.variables.CtmlCsv;
+import ctml.structures.model.variables.Variable;
 import ctml.structures.token.TokenType;
 
 import java.util.ArrayList;
@@ -45,8 +47,8 @@ public class Expression implements ReturnExecutable {
                         found.setValue(ctmlBlock.getValue(variables.get(0)));
                         return found;
                     } else if (ctmlBlock.getVariable(variables.get(0).getId()).getType() == CSV_TYPE)  {
-                        Variable csv = new Variable();
-                        csv.setValue(variables.get(0).getId());
+                        Variable csv = new CtmlCsv();
+                        csv.setId(variables.get(0).getId());
                         csv.setType(CSV_TYPE);
                         return csv;
                     } else
@@ -71,6 +73,7 @@ public class Expression implements ReturnExecutable {
                 Expression operand = operands.get(index + 1);
                 index++;
 
+
                 if (op == ADD) {
                     literal.plus(operand.getResult(ctmlBlock).getValue());
                 } else if (op == SUBTRACT) {
@@ -90,7 +93,7 @@ public class Expression implements ReturnExecutable {
 
     private Variable executeFunction(CtmlBlock ctmlBlock) throws Exception {
         FunctionCall functionCall = new FunctionCall();
-        functionCall.setArguments(variables.get(0).getFunctionArguments());
+        functionCall.setArguments(variables.get(0).getTableValues());
         functionCall.setId(variables.get(0).getId());
         return functionCall.executeFunction(ctmlBlock);
     }
@@ -170,8 +173,8 @@ public class Expression implements ReturnExecutable {
             result.setValue("1");
     }
 
-    private float getFloatValue(Expression expr, CtmlBlock ctmlBlock) throws Exception {
-        Variable result = expr.getResult(ctmlBlock);
+    private T getFloatValue(Expression expr, CtmlBlock ctmlBlock) throws Exception {
+       return expr.getResult(ctmlBlock);
         return Float.parseFloat(result.getValue());
     }
 

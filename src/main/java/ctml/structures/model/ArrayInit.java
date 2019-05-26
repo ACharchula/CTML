@@ -1,5 +1,7 @@
 package ctml.structures.model;
 
+import ctml.structures.model.variables.Variable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +30,10 @@ public class ArrayInit implements ReturnExecutable {
 
     @Override
     public Variable getResult(CtmlBlock ctmlBlock) throws Exception {
-        List<String> tableValues = new ArrayList<>();
+        List<Variable> tableValues = new ArrayList<>();
 
         for(Variable v : variableList) {
-            String value = ctmlBlock.getValue(v);
-            tableValues.add(value);
+            tableValues.add( Variable.getValue(v, ctmlBlock));
         }
 
         Variable result = new Variable();

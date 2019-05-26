@@ -1,13 +1,19 @@
 <div>
     <?
-        func csv funkcja() {
-            csv d = load("/home/antoni/Desktop/CTML/tmp.csv");
-            return d;
+        func void funkcja(csv a) {
+            head(a[0][0]);
         }
 
+        func void funkcja2(int[] a) {
+            head(a[0]);
+            }
+
+
         {
-            csv a = funkcja();
-            head(a[0][0]);
+            csv d = load("/home/antoni/Desktop/CTML/tmp.csv");
+            funkcja(d);
+            int[] a = {1,2,3};
+            funkcja2(a);
     }
     ?>
 </div>

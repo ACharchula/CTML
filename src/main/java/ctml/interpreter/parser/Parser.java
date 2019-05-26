@@ -4,6 +4,7 @@ import ctml.interpreter.lexer.Lexer;
 import ctml.interpreter.program.Program;
 import ctml.structures.model.*;
 import ctml.structures.model.ctmlObjects.*;
+import ctml.structures.model.variables.*;
 import ctml.structures.token.Token;
 import ctml.structures.token.TokenType;
 
@@ -152,17 +153,14 @@ public class Parser {
     private Variable parseVariableDeclaration() throws Exception {
 
         acceptOneOfMany(INTEGER_TYPE, STRING_TYPE, FLOAT_TYPE, CSV_TYPE);
-        Variable variable = new Variable();
+        Variable variable = createNewVariable();
         variable.setType(currentToken.getType());
-
-        if(currentToken.getType() == TokenType.CSV_TYPE)
-            variable.setIsCsv(true);
 
         nextToken();
         if(currentToken.getType() == TokenType.SQUARE_BRACKET_OPEN) {
             acceptNextToken(TokenType.SQUARE_BRACKET_CLOSE);
             variable.setId(parseID());
-            variable.setIsTable(true);
+            variable.setTable(true);
         } else {
             accept(TokenType.ID);
             variable.setId(currentToken.getContent());
@@ -170,6 +168,21 @@ public class Parser {
 
         return variable;
 
+    }
+
+    private Variable createNewVariable(){
+        switch(currentToken.getType()) {
+            case INTEGER_TYPE:
+                return new CtmlInt();
+            case FLOAT_TYPE:
+                return new CtmlFloat();
+            case STRING_TYPE:
+                return new CtmlString();
+            case CSV_TYPE:
+                return new CtmlCsv();
+        }
+
+        return null;
     }
 
     private CtmlBlock parseBlock() throws Exception {
@@ -247,7 +260,8 @@ public class Parser {
 
     private Variable parseArgument() throws Exception {
         acceptOneOfMany(NUMBER, FLOAT_NUMBER, STRING_CONTENT, ID);
-        Variable variable = new Variable();
+        Variable variable = newLiteralOrId();
+        variable.setType(currentToken.getType());
         if(currentToken.getType() == ID) {
             variable.setId(currentToken.getContent());
             nextToken();
@@ -262,16 +276,33 @@ public class Parser {
         return variable;
     }
 
+    private Variable newLiteralOrId() {
+        switch(currentToken.getType()) {
+            case NUMBER:
+                return new CtmlInt();
+            case FLOAT_NUMBER:
+                return new CtmlFloat();
+            case STRING_CONTENT:
+                return new CtmlString();
+            case ID:
+                return new CtmlArguments();
+        }
+
+        return null;
+    }
+
+
+
     private void parseIndex(Variable variable) throws Exception {
         nextToken();
-        Variable index1 = new Variable();
+        CtmlInt index1 = new CtmlInt();
         acceptOneOfMany(NUMBER, ID);
         setIndexValue(index1);
         variable.setIndex1(index1);
         acceptNextToken(SQUARE_BRACKET_CLOSE);
         nextToken();
         if(currentToken.getType() == SQUARE_BRACKET_OPEN) {
-            Variable index2 = new Variable();
+            CtmlInt index2 = new CtmlInt();
             nextToken();
             acceptOneOfMany(NUMBER, ID);
             setIndexValue(index2);
@@ -496,7 +527,7 @@ public class Parser {
 
         FunctionCall functionCall = new FunctionCall();
         functionCall.setId(variable.getId());
-        functionCall.setArguments(variable.getFunctionArguments());
+        functionCall.setArguments(variable.getTableValues());
         accept(SEMICOLON);
         return functionCall;
 
@@ -608,7 +639,7 @@ public class Parser {
     private Variable parseVariableOrMethodCall() throws Exception {
         accept(ID);
         String id = currentToken.getContent();
-        Variable variable = new Variable();
+        Variable variable = newLiteralOrId();
         variable.setId(id);
         variable.setType(currentToken.getType());
         nextToken();
@@ -616,7 +647,7 @@ public class Parser {
             parseIndex(variable);
         } else if (currentToken.getType() == PARENTHESIS_OPEN) {
             variable.setType(FUNCTION);
-            variable.setFunctionArguments(parseArgumentList(PARENTHESIS_CLOSE));
+            variable.setTableValues(parseArgumentList(PARENTHESIS_CLOSE));
             accept(PARENTHESIS_CLOSE);
             nextToken();
         }
@@ -625,8 +656,8 @@ public class Parser {
     }
 
     private Variable parseLiteral() throws Exception {
-        Variable variable = new Variable();
         acceptOneOfMany(STRING_CONTENT, NUMBER, FLOAT_NUMBER);
+        Variable variable = newLiteralOrId();
         variable.setType(currentToken.getType());
         variable.setValue(currentToken.getContent());
         nextToken();

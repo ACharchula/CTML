@@ -1,5 +1,7 @@
 package ctml.structures.model;
 
+import ctml.structures.model.variables.CtmlCsv;
+import ctml.structures.model.variables.Variable;
 import ctml.structures.token.TokenType;
 
 public class Return implements Executable {
@@ -15,7 +17,7 @@ public class Return implements Executable {
         Variable result = expression.getResult(ctmlBlock);
 
         if(result.getType() == TokenType.CSV_TYPE) {
-            result.setTableValues(ctmlBlock.getVariable(result.getValue()).getTableValues());
+            result.setTableValues(((CtmlCsv) ctmlBlock.getVariable(result.getId())).getCsvTableValues());
         }
 
         ctmlBlock.setResult(result);

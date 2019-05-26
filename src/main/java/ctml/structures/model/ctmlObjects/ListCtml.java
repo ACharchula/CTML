@@ -4,7 +4,7 @@ package ctml.structures.model.ctmlObjects;
 import ctml.interpreter.Interpreter;
 import ctml.structures.model.CtmlBlock;
 import ctml.structures.model.Executable;
-import ctml.structures.model.Variable;
+import ctml.structures.model.variables.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public class ListCtml implements Executable {
         Interpreter.writer.println("<ul>");
 
         for (Variable v : variableList) {
-            String value = ctmlBlock.getValue(v);
+            String value = Variable.getStringValue(v, ctmlBlock);
             Interpreter.writer.println("<li>" + value + "</li>");
         }
 
