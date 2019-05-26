@@ -2,7 +2,7 @@ package ctml.interpreter.program;
 
 import ctml.structures.model.Block;
 import ctml.structures.model.Function;
-import ctml.structures.model.Variable;
+import ctml.structures.model.variables.Variable;
 
 import java.util.ArrayList;
 import java.util.HashMap;

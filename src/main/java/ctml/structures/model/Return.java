@@ -1,5 +1,6 @@
 package ctml.structures.model;
 
+import ctml.structures.model.variables.Variable;
 import ctml.structures.token.TokenType;
 
 public class Return implements Executable {

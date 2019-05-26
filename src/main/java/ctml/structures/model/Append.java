@@ -1,5 +1,8 @@
 package ctml.structures.model;
 
+import ctml.structures.model.variables.CtmlCsv;
+import ctml.structures.model.variables.Variable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +22,7 @@ public class Append implements Executable {
     public void execute(CtmlBlock ctmlBlock) throws Exception {
         Variable v = ctmlBlock.getVariable(variable.getId());
 
-        if(v.isCsv() || !v.isTable())
+        if(v instanceof CtmlCsv || !v.isTable())
             throw new Exception("You cannot append to csv type or none table types");
 
         for(Variable arg: arguments) {

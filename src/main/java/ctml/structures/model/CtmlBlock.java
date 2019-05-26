@@ -1,5 +1,7 @@
 package ctml.structures.model;
 
+import ctml.structures.model.variables.Variable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

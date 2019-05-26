@@ -336,8 +336,8 @@ class ProgramTest {
     @Test
     void areArgumentsInFunctionInvocationArePassed() throws Exception {
         runInterpreter("<? func void f(int a, string b, float[] c) { par(a); par(b); par(c[0]); } { int a = 1;" +
-                " string b = \"2\"; float[] c = {3}; f(a,b,c); } ?>");
-        assertTrue(getResult().contains("<p>1</p>\n<p>2</p>\n<p>3</p>"), getResult());
+                " string b = \"2\"; float[] c = {3.0}; f(a,b,c); } ?>");
+        assertTrue(getResult().contains("<p>1</p>\n<p>2</p>\n<p>3.0</p>"), getResult());
     }
 
     @Test
@@ -419,6 +419,18 @@ class ProgramTest {
         runInterpreter("<? func csv fun() { csv a = load(\"testCSV.csv\"); return a; } { csv a = fun(); " +
                 "par(a[0][0]); } ?>");
         assertTrue(getResult().contains("<p>test00</p>"), getResult());
+    }
+
+    @Test
+    void testTableAsArgument() throws Exception {
+        runInterpreter("<? func void fun(int[] a) { par(a[0]); } { int[] a = {1, 2, 3}; fun(a); } ?>");
+        assertTrue(getResult().contains("<p>1</p>"), getResult());
+    }
+
+    @Test
+    void testArrayLateInit() throws Exception {
+        runInterpreter("<? { int[] a; a = {1, 2}; par(a[0]); par(a[1]); } ?>");
+        assertTrue(getResult().contains("<p>1</p>\n<p>2</p>"), getResult());
     }
 
     private static InputStream convertStringToInputStreamReader(String string) {

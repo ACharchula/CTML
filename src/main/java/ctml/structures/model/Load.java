@@ -1,5 +1,8 @@
 package ctml.structures.model;
 
+import ctml.structures.model.variables.CtmlCsv;
+import ctml.structures.model.variables.Variable;
+
 import java.io.BufferedReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -38,8 +41,7 @@ public class Load implements ReturnExecutable{
             line = br.readLine();
         }
 
-        Variable v = new Variable();
-        v.setIsCsv(true);
+        Variable v = new CtmlCsv();
         v.setTableValues(data);
         return v;
     }

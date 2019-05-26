@@ -1,5 +1,7 @@
 package ctml.structures.model;
 
+import ctml.structures.model.variables.CtmlString;
+import ctml.structures.model.variables.Variable;
 import ctml.structures.token.TokenType;
 
 import java.util.ArrayList;
@@ -41,11 +43,11 @@ public class Expression implements ReturnExecutable {
                 else if(variables.get(0).getType() != FUNCTION) {
 
                     if(variables.get(0).getIndex1() != null) {
-                        Variable found = new Variable();
+                        Variable found = new CtmlString();
                         found.setValue(ctmlBlock.getValue(variables.get(0)));
                         return found;
                     } else if (ctmlBlock.getVariable(variables.get(0).getId()).getType() == CSV_TYPE)  {
-                        Variable csv = new Variable();
+                        Variable csv = new CtmlString();
                         csv.setValue(variables.get(0).getId());
                         csv.setType(CSV_TYPE);
                         return csv;
@@ -82,7 +84,7 @@ public class Expression implements ReturnExecutable {
                 }
             }
 
-            Variable v = new Variable();
+            Variable v = new CtmlString();
             v.setValue(literal.getValue());
             return v;
         }
@@ -90,13 +92,13 @@ public class Expression implements ReturnExecutable {
 
     private Variable executeFunction(CtmlBlock ctmlBlock) throws Exception {
         FunctionCall functionCall = new FunctionCall();
-        functionCall.setArguments(variables.get(0).getFunctionArguments());
+        functionCall.setArguments(variables.get(0).getTableValues());
         functionCall.setId(variables.get(0).getId());
         return functionCall.executeFunction(ctmlBlock);
     }
 
     private Variable executeCondition(CtmlBlock ctmlBlock) throws Exception {
-        final Variable result = new Variable();
+        final Variable result = new CtmlString();
         switch (operators.get(0)) {
             case OR:
                 or(result, ctmlBlock);

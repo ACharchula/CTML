@@ -1,10 +1,15 @@
 package ctml.structures.model;
 
+import ctml.interpreter.Interpreter;
 import ctml.interpreter.program.Program;
+import ctml.structures.model.variables.CtmlCsv;
+import ctml.structures.model.variables.Variable;
 import ctml.structures.token.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static ctml.structures.token.TokenType.*;
 
 public class Function implements ReturnExecutable {
 
@@ -62,12 +67,35 @@ public class Function implements ReturnExecutable {
         Variable v = ctmlBlock.executeFunction();
 
         if(v != null) {
+            checkAndPrepareProperReturnType(v);
             v.setType(returnType);
-            if(returnType != TokenType.CSV_TYPE)
-                v.verifyIfValueHasProperType(v.getValue());
         }
 
         return v;
+    }
+
+    private void checkAndPrepareProperReturnType(Variable result) throws Exception {
+        if(returnType == INTEGER_TYPE) {
+            checkIfTableIsNull(result);
+            float floatResult = Float.parseFloat(result.getValue());
+            result.setValue(Integer.toString(Math.round(floatResult)));
+        } else if (returnType == FLOAT_TYPE) {
+            checkIfTableIsNull(result);
+            Float.parseFloat(result.getValue());
+        } else if (returnType == STRING_TYPE) {
+            checkIfTableIsNull(result);
+        } else if (returnType == CSV_TYPE) {
+            List tableValues = result.getTableValues();
+            ((List<String>) tableValues.get(0)).get(0);//throws exception if csv is not returned
+        } else if (returnType == VOID) {
+            if(result.getValue() != null || result.getTableValues() != null)
+                throw new Exception("You cannot return a value when type is void");
+        }
+    }
+
+    private void checkIfTableIsNull(Variable variable) throws Exception {
+        if(variable.getTableValues() != null)
+            throw new Exception("It is impossible to return tables!");
     }
 
     @Override

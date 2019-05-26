@@ -1,6 +1,7 @@
 package ctml.structures.model;
 
 import ctml.interpreter.program.Program;
+import ctml.structures.model.variables.Variable;
 
 import java.util.ArrayList;
 import java.util.List;
