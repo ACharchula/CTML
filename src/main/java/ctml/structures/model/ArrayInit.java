@@ -1,5 +1,8 @@
 package ctml.structures.model;
 
+import ctml.structures.model.variables.*;
+import ctml.structures.token.TokenType;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,10 +13,15 @@ public class ArrayInit implements ReturnExecutable {
     }
 
     private List<Variable> variableList = new ArrayList<>();
+    private String variableId;
+
+    public ArrayInit(String variableId) {
+        this.variableId = variableId;
+    }
 
     @Override
     public ReturnExecutable cloneReturnExecutable() throws Exception {
-        ArrayInit arrayInit = new ArrayInit();
+        ArrayInit arrayInit = new ArrayInit(variableId);
 
         List<Variable> list = new ArrayList<>();
 
@@ -28,16 +36,29 @@ public class ArrayInit implements ReturnExecutable {
 
     @Override
     public Variable getResult(CtmlBlock ctmlBlock) throws Exception {
-        List<String> tableValues = new ArrayList<>();
+        Variable variable = createNewVariable(ctmlBlock.getVariable(variableId).getType());
 
         for(Variable v : variableList) {
             String value = ctmlBlock.getValue(v);
-            tableValues.add(value);
+            variable.addTableValue(value);
         }
-
-        Variable result = new Variable();
-        result.setTableValues(tableValues);
-
-        return result;
+        variable.setTable(true);
+        return variable;
     }
+
+    private Variable createNewVariable(TokenType type){
+        switch(type) {
+            case INTEGER_TYPE:
+                return new CtmlInt();
+            case FLOAT_TYPE:
+                return new CtmlFloat();
+            case STRING_TYPE:
+                return new CtmlString();
+            case CSV_TYPE:
+                return new CtmlCsv();
+        }
+        return null;
+    }
+
+
 }
