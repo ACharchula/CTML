@@ -88,7 +88,7 @@ public class Function implements ReturnExecutable {
             List tableValues = result.getTableValues();
             ((List<String>) tableValues.get(0)).get(0);//throws exception if csv is not returned
         } else if (returnType == VOID) {
-            if(result.getValue() != null || result.getTableValues() != null)
+            if(result.getValue() != null || result.getTableValues() != null || result.getType() != VOID)
                 throw new Exception("You cannot return a value when type is void");
         }
     }

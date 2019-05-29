@@ -15,7 +15,7 @@ public class ImageCtml implements Executable {
     @Override
     public void execute(CtmlBlock ctmlBlock) throws Exception {
         String value = ctmlBlock.getValue(link);
-        Interpreter.writer.println("<img src=\"" + value + "\">");
+        Interpreter.writer.println("<img width=\"100%\" src=\"" + value + "\">");
     }
 
     @Override

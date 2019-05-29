@@ -50,7 +50,7 @@ class ProgramTest {
     @Test
     void testImage() throws Exception {
         runInterpreter("<? { img(\"a\"); } ?>");
-        assertTrue(getResult().contains("<img src=\"a\">"), getResult());
+        assertTrue(getResult().contains("<img width=\"100%\" src=\"a\">"), getResult());
     }
 
     @Test

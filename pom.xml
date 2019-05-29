@@ -6,7 +6,7 @@
 
     <groupId>com.tkom.ctml</groupId>
     <artifactId>CTML</artifactId>
-    <version>1.0-RELEASE</version>
+    <version>1.0</version>
     <properties>
         <junit-jupiter.version>5.2.0</junit-jupiter.version>
         <maven.compiler.source>12</maven.compiler.source>

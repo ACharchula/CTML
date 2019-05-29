@@ -1,13 +1,73 @@
-<div>
+<br>
+    <h1>Ctml example!</h1>
+    <br>
     <?
-        func csv funkcja() {
-            csv d = load("/home/antoni/Desktop/CTML/tmp.csv");
-            return d;
+        func csv getCsv() {
+            csv a = load("example.csv");
+            return a;
         }
 
-        {
-            csv a = funkcja();
-            head(a[0][0]);
+        func void writeAllRowElemToPar(int numberOfElements, int rowNumber, int index) {
+            if(numberOfElements == 0) {
+                return;
+            }
+
+            csv file = getCsv();
+            par(file[rowNumber][index]);
+            numberOfElements = numberOfElements - 1;
+            index = index + 1;
+            writeAllRowElemToPar(numberOfElements, rowNumber, index);
+        }
+    {
+        head("Recursion");
+        writeAllRowElemToPar(3, 0, 0);
+
+        //comments are created like this
+
+        csv file = getCsv();
+
+        head("Image");
+        img(file[1][0]);
+
+        head("Link");
+        int i = 2;
+        while(i < 5) {
+            link(file[i][0], file[i][1]);
+            i = i + 1;
+        }
+
+        head("Table");
+
+        string name = "Anthony";
+        string surname = "Kowalsky";
+        float salary = 15000.50;
+
+        table {
+            row {
+                column("Name");
+                column("Surname");
+                column("Salary");
+            }
+            row {
+                table_item(name);
+                table_item(surname);
+                table_item(salary);
+            }
+            row {
+                table_item(file[5][0]);
+                table_item(file[5][1]);
+                table_item(file[5][2]);
+            }
+        }
+
+        head("List");
+        string[] contents = { "content 1", "content 2"};
+        contents.append("content 3");
+        list {
+            list_item(contents[0]);
+            list_item(contents[1]);
+            list_item(contents[2]);
+        }
     }
     ?>
 </div>

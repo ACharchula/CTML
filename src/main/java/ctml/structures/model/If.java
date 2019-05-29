@@ -41,7 +41,8 @@ public class If implements Executable {
         If ifSt = new If();
         ifSt.setExpression((Expression) expression.cloneReturnExecutable());
         ifSt.setCtmlBlock(ctmlBlock.cloneCtmlBlock());
-        ifSt.setElseCtmlBlock(elseCtmlBlock.cloneCtmlBlock());
+        if(elseCtmlBlock != null)
+            ifSt.setElseCtmlBlock(elseCtmlBlock.cloneCtmlBlock());
         return ifSt;
     }
 }

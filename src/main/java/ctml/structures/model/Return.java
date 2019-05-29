@@ -1,5 +1,6 @@
 package ctml.structures.model;
 
+import ctml.structures.model.variables.CtmlString;
 import ctml.structures.model.variables.Variable;
 import ctml.structures.token.TokenType;
 
@@ -13,6 +14,14 @@ public class Return implements Executable {
 
     @Override
     public void execute(CtmlBlock ctmlBlock) throws Exception {
+
+        if(expression == null) {
+            Variable v = new CtmlString();
+            v.setType(TokenType.VOID);
+            ctmlBlock.setResult(v);
+            return;
+        }
+
         Variable result = expression.getResult(ctmlBlock);
 
         if(result.getType() == TokenType.CSV_TYPE) {
@@ -25,7 +34,8 @@ public class Return implements Executable {
     @Override
     public Executable cloneExecutable() {
         Return ret= new Return();
-        ret.setExpression((Expression) expression.cloneReturnExecutable());
+        if(expression != null)
+            ret.setExpression((Expression) expression.cloneReturnExecutable());
         return ret;
     }
 }

@@ -38,9 +38,9 @@ public class Expression implements ReturnExecutable {
 
         if (operands.size() == 0){
             if (variables.size() != 0) {
-                if (variables.get(0).getId() == null)
+                if (variables.get(0).getId() == null) {
                     return variables.get(0);
-                else if(variables.get(0).getType() != FUNCTION) {
+                } else if(variables.get(0).getType() != FUNCTION) {
 
                     if(variables.get(0).getIndex1() != null) {
                         Variable found = new CtmlString();
